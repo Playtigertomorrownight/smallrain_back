@@ -5,7 +5,10 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.druid.util.StringUtils;
+import com.wangying.smallrain.entity.WxMessage;
 import com.wangying.smallrain.entity.enums.EventType;
+import com.wangying.smallrain.entity.enums.MessageType;
+import com.wangying.smallrain.utils.WechatUtil;
 
 
 /**
@@ -130,8 +133,10 @@ public class EventManager {
    * @return
    */
   private  String  dealClickEvent(Map<String,String> msg){
-    
-    return "";
+    WxMessage  wm = WechatUtil.initMessage(msg);
+    wm.setMsgType(MessageType.TEXT);
+    wm.setContent("你点击了按钮");
+    return wm.toMessageString();
   }
   
 }

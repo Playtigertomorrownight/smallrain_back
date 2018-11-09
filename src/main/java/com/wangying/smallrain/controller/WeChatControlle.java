@@ -1,6 +1,7 @@
 package com.wangying.smallrain.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -69,7 +70,13 @@ public class WeChatControlle {
         log.info("----微信接口验证失败，本地加密 =="+thereString+" 原先加密串== "+signature);
       }
     }else {   //收到来自用户的消息或者是事件，转交 service 处理
-      messageService.dealMessage(req, resp);
+      PrintWriter  out = resp.getWriter();
+      String returnMsg = messageService.dealMessage(req);
+      log.info("----即将要返回的消息是 =="+returnMsg);
+      out.write(returnMsg);
+      out.flush();
+      out.close();
+      return null;
     }
     return " ";
   }

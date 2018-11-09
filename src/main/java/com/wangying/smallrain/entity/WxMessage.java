@@ -42,17 +42,17 @@ public class WxMessage {
     if(null == MsgType) return "";
     switch(MsgType.code()) {
       case 0:
-         return String.format(TEMPLATE_TEXT,ToUserName,FromUserName,CreateTime,MsgType,Content);
+         return String.format(TEMPLATE_TEXT,ToUserName,FromUserName,CreateTime,MsgType.type(),Content);
       case 1:
-        return String.format(TEMPLATE_IMAGE,ToUserName,FromUserName,CreateTime,MsgType,MediaId);
+        return String.format(TEMPLATE_IMAGE,ToUserName,FromUserName,CreateTime,MsgType.type(),MediaId);
       case 2:
-        return String.format(TEMPLATE_VOICE,ToUserName,FromUserName,CreateTime,MsgType,MediaId);
+        return String.format(TEMPLATE_VOICE,ToUserName,FromUserName,CreateTime,MsgType.type(),MediaId);
       case 3:
-        return String.format(TEMPLATE_VIDEO,ToUserName,FromUserName,CreateTime,MsgType,MediaId,Title,Description);
+        return String.format(TEMPLATE_VIDEO,ToUserName,FromUserName,CreateTime,MsgType.type(),MediaId,Title,Description);
       case 4:
-        return String.format(TEMPLATE_MUSIC,ToUserName,FromUserName,CreateTime,MsgType,Title,Description,MusicURL,HQMusicUrl,ThumbMediaId);
+        return String.format(TEMPLATE_MUSIC,ToUserName,FromUserName,CreateTime,MsgType.type(),Title,Description,MusicURL,HQMusicUrl,ThumbMediaId);
       case 5:
-        return String.format(TEMPLATE_NEWS,ToUserName,FromUserName,CreateTime,MsgType,ArticleCount,Title,Description,PicUrl,Url);
+        return String.format(TEMPLATE_NEWS,ToUserName,FromUserName,CreateTime,MsgType.type(),ArticleCount,Title,Description,PicUrl,Url);
     }
     return "";
   }

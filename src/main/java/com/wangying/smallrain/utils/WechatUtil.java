@@ -17,6 +17,8 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import com.wangying.smallrain.entity.WxMessage;
+
 
 /**
  * 微信工具类
@@ -156,6 +158,20 @@ public class WechatUtil {
                       "<MsgType><![CDATA[text]]></MsgType>" +
                       "<Content><![CDATA[%s]]></Content>" + "</xml>",
               fromUserName, toUserName, getUtcTime(), content);
+  }
+  
+  /**
+   * 根据接收到的消息初始化返回的消息
+   * 主要公共的初始化 发送者，接受者和创建时间 
+   * @param msg
+   * @return
+   */
+  public static WxMessage initMessage(Map<String,String> msg) {
+    WxMessage result = new  WxMessage();
+    result.setFromUserName(msg.get("ToUserName"));
+    result.setToUserName(msg.get("FromUserName"));
+    result.setCreateTime(getUtcTime());
+    return result;
   }
 
   private static String getUtcTime() {

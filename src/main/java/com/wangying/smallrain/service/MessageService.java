@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.druid.util.StringUtils;
+import com.wangying.smallrain.entity.WxMessage;
 import com.wangying.smallrain.entity.enums.MessageType;
 import com.wangying.smallrain.manager.EventManager;
 import com.wangying.smallrain.utils.WechatUtil;
@@ -35,17 +35,17 @@ public class MessageService {
    * @param resp
    * @throws IOException
    */
-  public void dealMessage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+  public String dealMessage(HttpServletRequest req) throws IOException {
     try {
       log.info("--消息请求进入--");
       String result = "";
       //将请求中 HttpServletRequest 的得参数解析为 map 数据对象
       Map<String,String> map = WechatUtil.parseXml(req);
       //分析收到的消息，根据分析结果返回相应的结果
-      if(null == map||map.isEmpty()) return ;
+      if(null == map||map.isEmpty()) return "";
       String msgType = map.get("MsgType").toString();
       log.info("--接收到的消息类型是："+msgType);
-      if(StringUtils.isEmpty(msgType)) return ;
+      if(StringUtils.isEmpty(msgType)) return "";
       MessageType mtype = MessageType.valueOf(msgType.toUpperCase());
       switch(mtype) {
         case TEXT:
@@ -75,11 +75,12 @@ public class MessageService {
       default:
         break;
       }
-      resp.getWriter().println(result);
+      return result;
     } catch (Exception e) {
       e.printStackTrace();
       log.error("发生异常："+ e.getMessage());
     }
+    return "";
   }
   
   /**
@@ -94,8 +95,14 @@ public class MessageService {
    * @return
    */
   private String dealTextMessage(Map<String,String> msg) {
-    
-    return "";
+    WxMessage  wm = WechatUtil.initMessage(msg);
+    StringBuffer content = new StringBuffer("我们接收到你发过来的文本信息");
+    /*content.append(msg.get("Content").toString());
+    content.append("你的消息的id是:");
+    content.append(msg.get("MsgId").toString());*/
+    wm.setMsgType(MessageType.TEXT);
+    wm.setContent(content.toString());
+    return wm.toMessageString();
   }
   
   /**
@@ -182,6 +189,7 @@ public class MessageService {
    * @return
    */
   private String dealLocationMessage(Map<String,String> msg) {
+    
     
     return "";
   }
