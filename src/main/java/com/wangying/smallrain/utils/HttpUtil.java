@@ -5,6 +5,7 @@ import java.net.URI;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -119,6 +120,15 @@ public class HttpUtil {
    */
   public static String doPost(String url, Map<String, String> headerMap, Map<String, Object> params) {
     return send(url, headerMap, params, HttpMethods.POST);
+  }
+  
+  public static String doPostWithJSON(String url, Map<String, String> headerMap, Map<String, Object> params) {
+    Map<String, String> headers = new HashMap<String, String>();
+    if(null != headerMap && !headerMap.isEmpty()) {
+      headers.putAll(headerMap);
+    }
+    headers.put("Content-Type", "application/json");
+    return send(url, headers, params, HttpMethods.POST);
   }
 
   /**

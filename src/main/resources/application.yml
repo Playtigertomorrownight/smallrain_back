@@ -24,7 +24,12 @@ wechat:
   menusCreateUrl: https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN
   menusGetUrl: https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN
   menusDeleteUrl: https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN
-    
+
+#图灵机器人接口介入
+tuling:
+  apiUrl: http://openapi.tuling123.com/openapi/api/v2
+  apiKey: 6bb2f01f653e441887170ecdee3df869
+  userId: 347456
 
 #数据库连接池 druid 配置
 appdata:

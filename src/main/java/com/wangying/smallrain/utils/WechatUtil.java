@@ -18,6 +18,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import com.wangying.smallrain.entity.WxMessage;
+import com.wangying.smallrain.entity.enums.MessageType;
 
 
 /**
@@ -27,6 +28,10 @@ import com.wangying.smallrain.entity.WxMessage;
  *
  */
 public class WechatUtil {
+  
+  public static final String FIRST_FAIL_RESPONSE = "本宝宝累了，不想说话了,要碎觉碎觉，明天再来吧！";
+  
+  public static final String ERROR_RESPONSE = "本宝宝难受哦！";
   
   /**
    * 排序方法给 token 时间戳 和附件信息排序
@@ -166,11 +171,14 @@ public class WechatUtil {
    * @param msg
    * @return
    */
-  public static WxMessage initMessage(Map<String,String> msg) {
+  public static WxMessage initTextMessage(Map<String,String> msg,CharSequence text) {
+    if(null == msg)  return null;
     WxMessage result = new  WxMessage();
     result.setFromUserName(msg.get("ToUserName"));
     result.setToUserName(msg.get("FromUserName"));
     result.setCreateTime(getUtcTime());
+    result.setMsgType(MessageType.TEXT);
+    result.setContent(String.valueOf(text));
     return result;
   }
 

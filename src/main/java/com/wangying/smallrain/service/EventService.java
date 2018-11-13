@@ -1,13 +1,14 @@
-package com.wangying.smallrain.manager;
+package com.wangying.smallrain.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.alibaba.druid.util.StringUtils;
 import com.wangying.smallrain.entity.WxMessage;
 import com.wangying.smallrain.entity.enums.EventType;
-import com.wangying.smallrain.entity.enums.MessageType;
 import com.wangying.smallrain.utils.WechatUtil;
 
 
@@ -16,18 +17,18 @@ import com.wangying.smallrain.utils.WechatUtil;
  * @author wangying.dz3
  *
  */
-@Component
-public class EventManager {
+@Service
+public class EventService {
  
   /**
    * 根据不同的事件类型处理不同的事件消息
    * @param msg
    * @return
    */
-  public String dealEventMessage(Map<String,String> msg) {
-    if(null==msg||msg.isEmpty()) return "";
+  public List<WxMessage> dealEventMessage(Map<String,String> msg) {
+    if(null==msg||msg.isEmpty()) return null;
     String event =  msg.get("Event").toString();
-    if(StringUtils.isEmpty(event)) return "";
+    if(StringUtils.isEmpty(event)) return null;
     EventType etype = EventType.valueOf(event.toUpperCase());
     switch(etype) {
       case SUBSCRIBE:   //关注事件
@@ -43,7 +44,7 @@ public class EventManager {
       case VIEW:   //点击菜单跳转链接时的事件推送
         return  dealViewEvent(msg);
     }
-    return "";
+    return null;
   }
   
   /**
@@ -56,9 +57,9 @@ public class EventManager {
       EventKey  事件KEY值，设置的跳转URL
    * @return
    */
-  private  String  dealViewEvent(Map<String,String> msg){
-    
-    return "";
+  private  List<WxMessage>  dealViewEvent(Map<String,String> msg){
+    List<WxMessage> list = new ArrayList<WxMessage>();
+    return list;
   }
   
   /**
@@ -70,9 +71,9 @@ public class EventManager {
       Event 事件类型，subscribe(订阅)、unsubscribe(取消订阅)
    * @return
    */
-  private  String  dealSubscribeEvent(Map<String,String> msg){
-    
-    return "";
+  private  List<WxMessage>  dealSubscribeEvent(Map<String,String> msg){
+    List<WxMessage> list = new ArrayList<WxMessage>();
+    return list;
   }
   
   /**
@@ -84,9 +85,9 @@ public class EventManager {
       Event 事件类型，subscribe(订阅)、unsubscribe(取消订阅)
    * @return
    */
-  private  String  dealUnsubscribeEvent(Map<String,String> msg){
-    
-    return "";
+  private  List<WxMessage>  dealUnsubscribeEvent(Map<String,String> msg){
+    List<WxMessage> list = new ArrayList<WxMessage>();
+    return list;
   }
   
   /**
@@ -100,9 +101,9 @@ public class EventManager {
       Ticket  二维码的ticket，可用来换取二维码图片
    * @return
    */
-  private  String  dealScanEvent(Map<String,String> msg){
-    
-    return "";
+  private  List<WxMessage>  dealScanEvent(Map<String,String> msg){
+    List<WxMessage> list = new ArrayList<WxMessage>();
+    return list;
   }
   
   /**
@@ -117,9 +118,9 @@ public class EventManager {
       Precision 地理位置精度
    * @return
    */
-  private  String  dealLocationEvent(Map<String,String> msg){
-    
-    return "";
+  private  List<WxMessage>  dealLocationEvent(Map<String,String> msg){
+    List<WxMessage> list = new ArrayList<WxMessage>();
+    return list;
   }
    
   /**
@@ -132,11 +133,10 @@ public class EventManager {
       EventKey  事件KEY值，与自定义菜单接口中KEY值对应
    * @return
    */
-  private  String  dealClickEvent(Map<String,String> msg){
-    WxMessage  wm = WechatUtil.initMessage(msg);
-    wm.setMsgType(MessageType.TEXT);
-    wm.setContent("你点击了按钮");
-    return wm.toMessageString();
+  private  List<WxMessage>  dealClickEvent(Map<String,String> msg){
+    List<WxMessage> list = new ArrayList<WxMessage>();
+    list.add(WechatUtil.initTextMessage(msg,"你点击了按钮"));
+    return list;
   }
   
 }

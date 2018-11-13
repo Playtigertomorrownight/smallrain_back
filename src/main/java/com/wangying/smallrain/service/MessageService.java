@@ -1,9 +1,12 @@
 package com.wangying.smallrain.service;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +16,8 @@ import org.springframework.stereotype.Service;
 import com.alibaba.druid.util.StringUtils;
 import com.wangying.smallrain.entity.WxMessage;
 import com.wangying.smallrain.entity.enums.MessageType;
-import com.wangying.smallrain.manager.EventManager;
+import com.wangying.smallrain.external.TulingBotData;
+import com.wangying.smallrain.manager.WxMessageManager;
 import com.wangying.smallrain.utils.WechatUtil;
 
 /**
@@ -25,7 +29,11 @@ import com.wangying.smallrain.utils.WechatUtil;
 public class MessageService {
   
   @Autowired
-  private EventManager eventManager;
+  private EventService eventService;
+  @Autowired
+  private TulingBotData tulingBotData;
+  @Autowired
+  private WxMessageManager wxMessageManager;
   
   private Logger log = LoggerFactory.getLogger(MessageService.class);
   
@@ -35,17 +43,17 @@ public class MessageService {
    * @param resp
    * @throws IOException
    */
-  public String dealMessage(HttpServletRequest req) throws IOException {
+  public boolean responseMessage(HttpServletRequest req,HttpServletResponse resp) throws IOException {
     try {
       log.info("--消息请求进入--");
-      String result = "";
+      List<WxMessage> result = null;
       //将请求中 HttpServletRequest 的得参数解析为 map 数据对象
       Map<String,String> map = WechatUtil.parseXml(req);
       //分析收到的消息，根据分析结果返回相应的结果
-      if(null == map||map.isEmpty()) return "";
+      if(null == map||map.isEmpty()) return false;
       String msgType = map.get("MsgType").toString();
       log.info("--接收到的消息类型是："+msgType);
-      if(StringUtils.isEmpty(msgType)) return "";
+      if(StringUtils.isEmpty(msgType)) return false;
       MessageType mtype = MessageType.valueOf(msgType.toUpperCase());
       switch(mtype) {
         case TEXT:
@@ -70,17 +78,30 @@ public class MessageService {
           result = dealLinkMessage(map);
           break;
         case EVENT:
-          result = eventManager.dealEventMessage(map);
+          result = eventService.dealEventMessage(map);
           break;
       default:
         break;
       }
-      return result;
+      PrintWriter  out = resp.getWriter();
+      log.info("----即将要返回的消息是 =="+result);
+      if(null==result||result.isEmpty()) {
+        log.info("初始化回复消息为空。。");
+        return false;
+      }
+      for(WxMessage wm:result) {
+        String  message = wm.toMessageString();
+        log.info("回复消息: "+message);
+        out.write(wm.toMessageString());
+      }
+      out.flush();
+      out.close();
     } catch (Exception e) {
       e.printStackTrace();
       log.error("发生异常："+ e.getMessage());
+      return false;
     }
-    return "";
+    return true;
   }
   
   /**
@@ -94,15 +115,13 @@ public class MessageService {
    * @param msg
    * @return
    */
-  private String dealTextMessage(Map<String,String> msg) {
-    WxMessage  wm = WechatUtil.initMessage(msg);
-    StringBuffer content = new StringBuffer("我们接收到你发过来的文本信息");
-    /*content.append(msg.get("Content").toString());
-    content.append("你的消息的id是:");
-    content.append(msg.get("MsgId").toString());*/
-    wm.setMsgType(MessageType.TEXT);
-    wm.setContent(content.toString());
-    return wm.toMessageString();
+  private List<WxMessage> dealTextMessage(Map<String,String> msg) {
+    log.info("处理文本消息..");
+    String request = msg.get("Content").toString();
+    String userId = msg.get("FromUserName").toString();
+    String tulingResponse = tulingBotData.tulingRobotTxtResonse(request, userId, null);
+    List<WxMessage> messages =  wxMessageManager.dealTulingResult(tulingResponse, msg);
+    return messages;
   }
   
   /**
@@ -117,9 +136,9 @@ public class MessageService {
    * @param msg
    * @return
    */
-  private String dealImageMessage(Map<String,String> msg) {
+  private List<WxMessage> dealImageMessage(Map<String,String> msg) {
     
-    return "";
+    return null;
   }
   
   /**
@@ -135,9 +154,9 @@ public class MessageService {
    * @param msg
    * @return
    */
-  private String dealVoiceMessage(Map<String,String> msg) {
+  private List<WxMessage> dealVoiceMessage(Map<String,String> msg) {
     
-    return "";
+    return null;
   }
   
   /**
@@ -152,9 +171,9 @@ public class MessageService {
    * @param msg
    * @return
    */
-  private String dealVideoMessage(Map<String,String> msg) {
+  private List<WxMessage> dealVideoMessage(Map<String,String> msg) {
     
-    return "";
+    return null;
   }
   
   /**
@@ -169,9 +188,9 @@ public class MessageService {
    * @param msg
    * @return
    */
-  private String dealShortvideoMessage(Map<String,String> msg) {
+  private List<WxMessage> dealShortvideoMessage(Map<String,String> msg) {
     
-    return "";
+    return null;
   }
   
   /**
@@ -188,10 +207,10 @@ public class MessageService {
    * @param msg
    * @return
    */
-  private String dealLocationMessage(Map<String,String> msg) {
+  private List<WxMessage> dealLocationMessage(Map<String,String> msg) {
     
     
-    return "";
+    return null;
   }
   
   /**
@@ -207,9 +226,9 @@ public class MessageService {
    * @param msg
    * @return
    */
-  private String dealLinkMessage(Map<String,String> msg) {
+  private List<WxMessage> dealLinkMessage(Map<String,String> msg) {
     
-    return "";
+    return null;
   }
   
 }
