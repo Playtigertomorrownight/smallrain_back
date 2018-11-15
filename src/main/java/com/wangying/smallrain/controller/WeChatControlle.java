@@ -41,7 +41,7 @@ public class WeChatControlle {
   private Logger log = LoggerFactory.getLogger(WeChatControlle.class);
 
   /**
-   * 用于微信接口配置验证，以及消息回复
+   * 用于微信接口配置验证，以及处理微信服务的消息
    * @param signature
    * @param timestamp
    * @param nonce

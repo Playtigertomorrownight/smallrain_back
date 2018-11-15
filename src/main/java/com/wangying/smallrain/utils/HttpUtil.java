@@ -1,11 +1,13 @@
 package com.wangying.smallrain.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,7 +28,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClients;
@@ -95,9 +103,10 @@ public class HttpUtil {
   public static String doGet(String url, Map<String, String> headerMap, Map<String, Object> params) {
     return send(url, headerMap, params, HttpMethods.GET);
   }
-  
+
   /**
    * http PUT 请求
+   * 
    * @param url
    * @param headerMap
    * @param params
@@ -121,14 +130,97 @@ public class HttpUtil {
   public static String doPost(String url, Map<String, String> headerMap, Map<String, Object> params) {
     return send(url, headerMap, params, HttpMethods.POST);
   }
-  
+
   public static String doPostWithJSON(String url, Map<String, String> headerMap, Map<String, Object> params) {
     Map<String, String> headers = new HashMap<String, String>();
-    if(null != headerMap && !headerMap.isEmpty()) {
+    if (null != headerMap && !headerMap.isEmpty()) {
       headers.putAll(headerMap);
     }
     headers.put("Content-Type", "application/json");
     return send(url, headers, params, HttpMethods.POST);
+  }
+
+  public static String doPostWithFormData(String url, Map<String, String> headerMap, Map<String, Object> params) {
+    url = url.trim(); // 去收尾空格
+    log.info("向地址: " + url + " 发出表单数据！");
+    CloseableHttpResponse response = null;
+    try {
+      // 默认POST请求对象
+      HttpRequestBase request = getRequest(HttpMethods.POST);
+      // 设置请求地址
+      request.setURI(URI.create(url));
+      // 生成请求头信息
+      List<Header> headers = new ArrayList<Header>();
+      if (null != headerMap && !headerMap.isEmpty()) {
+        Set<String> headKeys = headerMap.keySet();
+        for (String key : headKeys) {
+          headers.add(new BasicHeader(key, (String) headerMap.get(key)));
+        }
+      }
+      headers.add(new BasicHeader("Content-Type", "multipart/form-data"));
+      // 设置请求头信息
+      Header[] headerList = headers.toArray(new Header[headers.size()]);
+      request.setHeaders(headerList);
+
+      // 设置参数
+      MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create().setMode(HttpMultipartMode.RFC6532)
+          .setCharset(java.nio.charset.Charset.forName(CHARSET));
+      if (null != params) {
+        Iterator<String> it = params.keySet().iterator();
+        while (it.hasNext()) {
+          String key = it.next();
+          Object item = params.get(key);
+          if (item instanceof File) { // 文件
+            File file = (File) item;
+            FileBody filebody = new FileBody(file, ContentType.MULTIPART_FORM_DATA);
+            multipartEntityBuilder.addPart(key + "", filebody);
+          } else if (item instanceof List) { //多文件
+            for (Object obj : (List<?>) item) {
+              if (obj instanceof File) {
+                File file = (File) obj;
+                FileBody filebody = new FileBody(file);
+                multipartEntityBuilder.addPart(key + "", filebody);
+              } else {
+                ContentBody comment = new StringBody(obj + "", ContentType.MULTIPART_FORM_DATA);
+                multipartEntityBuilder.addPart(key + "", comment);
+              }
+            }
+          } else {  //字符串参数
+            ContentBody comment = new StringBody(item + "", ContentType.MULTIPART_FORM_DATA);
+            multipartEntityBuilder.addPart(key + "", comment);
+          }
+        }
+      }
+      //设置参数
+      ((HttpEntityEnclosingRequestBase) request).setEntity(multipartEntityBuilder.build());
+      // 发送请求
+      if (url.startsWith("https")) {
+        response = httpSslClient.execute(request);
+      } else {
+        response = httpClient.execute(request);
+      }
+      int statusCode = response.getStatusLine().getStatusCode();
+      // 请求出现异常
+      if (statusCode != 200) {
+        request.abort();
+        log.error("HttpClient error , status code :" + statusCode);
+      }
+      // 获取相应结果
+      String result = null;
+      HttpEntity entity = response.getEntity();
+      if (entity != null) {
+        result = EntityUtils.toString(entity, CHARSET);
+        log.info("请求结果：" + result);
+      } else {
+        result = response.getStatusLine().toString();
+      }
+      EntityUtils.consume(entity);
+      return result;
+    } catch (ParseException | IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    return null;
   }
 
   /**
@@ -141,7 +233,8 @@ public class HttpUtil {
    * @return
    * @throws ApproveException
    */
-  private static String send(String url, Map<String, String> headerMap, Map<String, Object> params, HttpMethods method) {
+  private static String send(String url, Map<String, String> headerMap, Map<String, Object> params,
+      HttpMethods method) {
     // 请求地址不能为空
     url = url.trim(); // 去收尾空格
     log.info("http request url as: " + url);
@@ -162,12 +255,13 @@ public class HttpUtil {
           // 如果是requestBody请求体
           if (HttpEntityEnclosingRequestBase.class.isAssignableFrom(request.getClass())) {
             // 设置参数
-            if(null!=headerMap&&headerMap.containsKey("Content-Type")&&headerMap.get("Content-Type")!=null&&"application/json".equals(headerMap.get("Content-Type").toString())) {
-              StringEntity s = new StringEntity(JSONObject.toJSONString(params),CHARSET);
+            if (null != headerMap && headerMap.containsKey("Content-Type") && headerMap.get("Content-Type") != null
+                && "application/json".equals(headerMap.get("Content-Type").toString())) {
+              StringEntity s = new StringEntity(JSONObject.toJSONString(params), CHARSET);
               s.setContentEncoding(CHARSET);
-              s.setContentType("application/json");//发送json数据需要设置contentType
+              s.setContentType("application/json");// 发送json数据需要设置contentType
               ((HttpEntityEnclosingRequestBase) request).setEntity(s);
-            }else {
+            } else {
               ((HttpEntityEnclosingRequestBase) request).setEntity(new UrlEncodedFormEntity(pairs, CHARSET));
             }
           } else {
@@ -212,14 +306,11 @@ public class HttpUtil {
         result = response.getStatusLine().toString();
       }
       EntityUtils.consume(entity);
-
       return result;
-
     } catch (ParseException | IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-
     return null;
   }
 

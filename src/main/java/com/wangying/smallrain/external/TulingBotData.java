@@ -45,7 +45,16 @@ public class TulingBotData {
     return resultStr;
   }
   
- private Map<String,Object> initParam(int requestType,String userId,String text,String medisUrl,Location location){
+ /**
+  * 初始化图灵机器人请求参数
+ * @param requestType 请求类型 0-文本、1-音频、2-视频
+ * @param userId
+ * @param text
+ * @param medisUrl
+ * @param location
+ * @return
+ */
+private Map<String,Object> initParam(int requestType,String userId,String text,String medisUrl,Location location){
    Map<String,Object> param = new HashMap<String,Object>();
    param.put("reqType", requestType);
    //参数信息
