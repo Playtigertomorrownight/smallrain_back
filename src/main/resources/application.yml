@@ -31,6 +31,20 @@ tuling:
   apiKey: 6bb2f01f653e441887170ecdee3df869
   userId: 347456
 
+#ftp 服务器配置
+ftp:  
+  ip: 106.12.204.7 
+  port: 21  
+  username: smallrain  
+  password: wy16894255  
+  connectTimeOut: 5000 #ftp 连接超时时间 毫秒
+  bufferSize: 1024 #缓冲区大小
+  fileType: 2 #传输数据格式 2 --  binary 二进制数据
+  controlEncoding: "utf-8"
+  useEPSVwithIPv4: false
+  passiveMode: true
+
+
 #数据库连接池 druid 配置
 appdata:
   druid:
