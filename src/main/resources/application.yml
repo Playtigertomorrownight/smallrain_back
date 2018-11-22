@@ -4,6 +4,22 @@ spring:
     name: smallrain-back
   profile:
     active: local
+  freemarker:
+    # 设置模板后缀名
+    suffix: .html
+    # 设置文档类型
+    content-type: text/html
+    # 设置页面编码格式
+    charset: UTF-8
+    # 设置页面缓存
+    cache: false
+    template-encoding: UTF-8
+    # 设置ftl文件路径
+    template-loader-path:
+      - classpath:/templates
+  # 设置静态文件路径，js,css等
+  mvc:
+    static-path-pattern: /static/**
     
 #服务配置
 server:
@@ -30,22 +46,8 @@ tuling:
   apiUrl: http://openapi.tuling123.com/openapi/api/v2
   apiKey: 6bb2f01f653e441887170ecdee3df869
   userId: 347456
-
-#ftp 服务器配置
-ftp:  
-  ip: 106.12.204.7 
-  port: 21  
-  username: smallrain  
-  password: wy16894255  
-  connectTimeOut: 5000 #ftp 连接超时时间 毫秒
-  bufferSize: 1024 #缓冲区大小
-  fileType: 2 #传输数据格式 2 --  binary 二进制数据
-  controlEncoding: "utf-8"
-  useEPSVwithIPv4: false
-  passiveMode: true
-
-
-#数据库连接池 druid 配置
+ 
+ #数据库连接池 druid 配置
 appdata:
   druid:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -64,3 +66,25 @@ appdata:
     filters: stat,wall,slf4j  #配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000  #通过connectProperties属性来打开mergeSql功能；慢SQL记录
     useGlobalDataSourceStat: true  #合并多个DruidDataSource的监控数据
+    
+    
+ #自定义配置项
+app:
+  smallrain:
+    maxFileSize: 128 #最大文件上传大小
+    maxRequestSize: 512 #总上传数据总大小
+    
+    
+#ftp 服务器配置
+ftp:
+  host: 106.12.204.7
+  port: 21
+  username: smallrain
+  password: wy16894255
+  rootPath: /var/ftp/public_root/
+  connectTimeOut: 5000  #ftp 连接超时时间 毫秒
+  bufferSize: 1024  #缓冲区大小
+  fileType: 2 #传输数据格式 2 --  binary 二进制数据
+  controlEncoding: utf-8
+  useEPSVwithIPv4: false
+  passiveMode: true

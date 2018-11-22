@@ -21,12 +21,8 @@ public class FTPClientPool {
   @Autowired
   private FtpPoolConfig ftpPoolConfig;
   
-  /**
-   * 构造函数中 注入一个bean
-   * 
-   * @param clientFactory
-   */
-  public FTPClientPool() {
+  
+  public void initPool() {
     pool = new GenericObjectPool<FTPClient>(clientFactory, ftpPoolConfig);
   }
 

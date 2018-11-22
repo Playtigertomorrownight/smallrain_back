@@ -2,6 +2,7 @@ package com.wangying.smallrain.ftp;
 
 import java.io.IOException;
 
+import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.pool2.BasePooledObjectFactory;
@@ -31,23 +32,24 @@ public class FTPClientFactory extends BasePooledObjectFactory<FTPClient> {
 
       logger.info("连接ftp服务器:" + ftpPoolConfig.getHost() + ":" + ftpPoolConfig.getPort());
       ftpClient.connect(ftpPoolConfig.getHost(), ftpPoolConfig.getPort());
-
       int reply = ftpClient.getReplyCode();
       if (!FTPReply.isPositiveCompletion(reply)) {
         ftpClient.disconnect();
         logger.error("FTPServer 拒绝连接");
         return null;
       }
+      logger.error("ftpClient登录ftp 服务器!");
       boolean result = ftpClient.login(ftpPoolConfig.getUsername(), ftpPoolConfig.getPassword());
       if (!result) {
         logger.error("ftpClient登录失败!");
         throw new Exception(
             "ftpClient登录失败! userName:" + ftpPoolConfig.getUsername() + ", password:" + ftpPoolConfig.getPassword());
       }
-
+      logger.error("ftpClient登录ftp 服务器成功!");
       ftpClient.setControlEncoding(ftpPoolConfig.getControlEncoding());
       ftpClient.setBufferSize(ftpPoolConfig.getBufferSize());
-      ftpClient.setFileType(ftpPoolConfig.getFileType());
+      ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+      ftpClient.changeWorkingDirectory(ftpPoolConfig.getRootPath());
       ftpClient.setDataTimeout(ftpPoolConfig.getDataTimeout());
       ftpClient.setUseEPSVwithIPv4(ftpPoolConfig.isUseEPSVwithIPv4());
       if (ftpPoolConfig.isPassiveMode()) {

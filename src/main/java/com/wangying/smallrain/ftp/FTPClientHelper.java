@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.wangying.smallrain.utils.BaseUtils;
 
@@ -15,6 +17,7 @@ import com.wangying.smallrain.utils.BaseUtils;
  * @author wangying.dz3
  *
  */
+@Component
 public class FTPClientHelper {
 
   @Autowired
@@ -53,7 +56,7 @@ public class FTPClientHelper {
   }
 
   /**
-   * 创建目录 单个不可递归
+   * 创建目录 单个 检测是否存在，不存在则创建
    * 
    * @param pathname
    *          目录名称
@@ -65,7 +68,18 @@ public class FTPClientHelper {
     FTPClient client = null;
     try {
       client = ftpClientPool.borrowObject();
-      boolean result  =  client.makeDirectory(pathname);
+      FTPFile[]  ftpDirs = client.listDirectories();
+      boolean isExits = false;
+      if(null!=ftpDirs&&ftpDirs.length>0) {
+        for(FTPFile f:ftpDirs) {
+          if(f.getName().equals(pathname)) {
+            isExits = true;
+            log.info("目录已存在");
+            break;
+          }
+        }
+      }
+      boolean result  =  isExits?true:client.makeDirectory(pathname);
       log.info("在ftp服务器上创建单个目录结果："+(result?"成功":"失败"));
       return result;
     } finally {
@@ -121,7 +135,7 @@ public class FTPClientHelper {
    * @return
    * @throws Exception
    */
-  public boolean storeFile(String remote, InputStream local) throws Exception {
+  public boolean uploadFile(String remote, InputStream local) throws Exception {
     FTPClient client = null;
     try {
       log.info("上传文件到ftp服务器上。。");

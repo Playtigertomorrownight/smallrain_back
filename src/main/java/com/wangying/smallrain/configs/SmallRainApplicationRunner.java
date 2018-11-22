@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import com.wangying.smallrain.ftp.FTPClientPool;
 import com.wangying.smallrain.service.WechatService;
 
 /**
@@ -19,6 +20,9 @@ public class SmallRainApplicationRunner implements CommandLineRunner {
   @Autowired
   private WechatService wechatService;
   
+  @Autowired
+  private FTPClientPool ftpClientPool;
+  
   private Logger log = LoggerFactory.getLogger(SmallRainApplicationRunner.class);
 
   @Override
@@ -28,5 +32,8 @@ public class SmallRainApplicationRunner implements CommandLineRunner {
     log.info("-- 1. 获取 token 操作 --");
     String access_token = wechatService.getAccessToken();
     log.info("-- 1. 获取到的 token 是:"+access_token);
+    log.info("-- 开始初始化 ftp 连接池 --");
+    ftpClientPool.initPool();
+    log.info("-- 初始化 ftp 连接池完毕 --");
   }
 }

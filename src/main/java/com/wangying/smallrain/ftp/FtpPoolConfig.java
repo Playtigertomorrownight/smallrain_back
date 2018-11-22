@@ -12,7 +12,7 @@ public class FtpPoolConfig extends GenericObjectPoolConfig {
   private int port;// 端口
   private String username;// 用户名
   private String password;// 密码
-
+  private String rootPath; //文件存放路径
   private int connectTimeOut;// ftp 连接超时时间 毫秒
   private String controlEncoding;
   private int bufferSize;// 缓冲区大小
@@ -55,6 +55,14 @@ public class FtpPoolConfig extends GenericObjectPoolConfig {
 
   public String getPassword() {
     return password;
+  }
+
+  public String getRootPath() {
+    return rootPath;
+  }
+
+  public void setRootPath(String rootPath) {
+    this.rootPath = rootPath;
   }
 
   public void setPassword(String password) {

@@ -29,7 +29,7 @@ public class LocalConfigDataDao {
    * 根据配置文件生成微信菜单项
    * @return
    */
-  public Map<String,Object> loadMenuData() {
+  public Map<String,Object> loadWxMenuData() {
     log.info("初始化检查项配置，读取本地菜单配置文件并处理....");
     try {
       // 获取配置文件输入流

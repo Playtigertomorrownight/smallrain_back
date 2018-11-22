@@ -12,9 +12,17 @@ public class ResultUtil {
   public static Result success(Object data) {
     return new Result().setStatus(ResultCode.SUCCESS).setMessage(DEFAULT_SUCCESS_MESSAGE).setData(data);
   }
+  
+  public static Result success(String message,Object data) {
+    return new Result().setStatus(ResultCode.SUCCESS).setMessage(message).setData(data);
+  }
 
   public static Result fail(ResultCode code, String message) {
     return new Result().setStatus(code).setMessage(message);
+  }
+  
+  public static Result fail(String message) {
+    return new Result().setStatus(ResultCode.FAIL).setMessage(message).setData(null);
   }
 
   public static Result exception(String message) {

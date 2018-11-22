@@ -102,7 +102,7 @@ public class WechatService {
     String access_token = getAccessToken();
     createUrl = createUrl.replace("ACCESS_TOKEN",access_token);
     //获取本地菜单配置信息
-    Map<String,Object> menus = localConfigDataDao.loadMenuData();
+    Map<String,Object> menus = localConfigDataDao.loadWxMenuData();
     log.info("---本地菜单配置信息： "+menus);
     //发送请求
     Map<String, String> headers = new HashMap<String, String>();

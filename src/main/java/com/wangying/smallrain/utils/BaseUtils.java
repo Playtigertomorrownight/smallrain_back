@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
@@ -65,6 +66,11 @@ public class BaseUtils extends BeanUtils {
     }
   }
 
+  /**
+   * 将输入流转为字节数组
+   * @param in
+   * @return
+   */
   public static byte[] inputStreamToByteArray(InputStream in) {
     try {
       ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -80,6 +86,27 @@ public class BaseUtils extends BeanUtils {
       e.printStackTrace();
       return null;
     }
+  }
+  
+  /**
+   * 生成uuid
+   * @return
+   */
+  public static String createUUID() {
+    return UUID.randomUUID().toString().replace("-", "");
+  }
+  
+  /**
+   * 字符串拼接
+   * @return
+   */
+  public static String joinString(Object ...objects) {
+    StringBuilder sbf = new StringBuilder("");
+    if(null==objects||objects.length==0) return "";
+    for(Object obj: objects) {
+      sbf.append(obj);
+    }
+    return sbf.toString();
   }
 
 }
