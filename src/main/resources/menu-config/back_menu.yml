@@ -1,8 +1,10 @@
+#配置菜单列表时，一级菜单即parent为-1的，且按照配置顺序来的
 buttons:
   top:  #顶部菜单配置
     - name: 首页
       id: homepage
       class: homepage
+      icon: 
       text: 后台首页
       url: /manager/index
       parent: -1
@@ -10,6 +12,7 @@ buttons:
     - name: 用户管理
       id: user-manager
       class: user-manager
+      icon: 
       text: 用户管理
       url: /manager/user
       parent: -1
@@ -17,6 +20,7 @@ buttons:
     - name: 菜单管理
       id: menu-manager
       class: menu-manager
+      icon: 
       text: 菜单管理
       url: /manager/menu
       parent: -1
@@ -24,10 +28,151 @@ buttons:
     - name: 资源管理
       id: resource-manager
       class: resource-manager
-      text: 菜单管理
+      icon: 
+      text: 资源管理
       url: /manager/resource
       parent: -1
       order: 2
   left: #侧边栏菜单配置
-    
+    - name: 用户列表
+      id: user-list
+      class: user-list
+      icon: 
+      text: 用户列表
+      url: /manager/user/list
+      parent: -1
+      order: 0
+      topref: user-manager
+    - name: 添加用户
+      id: add-user
+      class: add-user
+      icon: 
+      text: 添加用户
+      url: /manager/user/add
+      parent: -1
+      order: 1
+      topref: user-manager
+      
+    - name: 后台管理菜单
+      id: manager-back-menu
+      class: manager-back-menu
+      icon: 
+      text: 后台管理菜单
+      url: /manager/menu/manager_back
+      parent: -1
+      order: 0
+      topref: menu-manager
+    - name: 前台页面菜单
+      id: brfore-menu
+      class: brfore-menu
+      icon: 
+      text: 后台管理菜单
+      url: /manager/menu/brfore
+      parent: -1
+      order: 1
+      topref: menu-manager
+    - name: 微信菜单
+      id: wecaht-menu
+      class: wecaht-menu
+      icon: 
+      text: 后台管理菜单
+      url: /manager/menu/wechat
+      parent: -1
+      order: 2
+      topref: menu-manager
+    - name: 微信网站菜单
+      id: wecaht-web-menu
+      class: wecaht-web-menu
+      icon: 
+      text: 后台管理菜单
+      url: /manager/menu/wechat_web
+      parent: -1
+      order: 3
+      topref: menu-manager
+      
+      
+      
+    - name: 文本资源
+      id: resource-text
+      class: resource-text
+      icon: 
+      text: 文本资源
+      url: /manager/resource/text/list
+      parent: -1
+      order: 0
+      topref: resource-manager
+    - name: 文本列表
+      id: resource-text-list
+      class: resource-text-list
+      icon: 
+      text: 文本列表
+      url: /manager/resource/text/list
+      parent: 0
+      order: 0
+      topref: resource-manager
+    - name: 上传文本
+      id: resource-text-add
+      class: resource-text-add
+      icon: 
+      text: 上传文本
+      url: /manager/resource/text/add
+      parent: 0
+      order: 1
+      topref: resource-manager
+      
+    - name: 图片资源
+      id: resource-image
+      class: resource-image
+      icon: 
+      text: 图片资源
+      url: /manager/resource/image/list
+      parent: -1
+      order: 1
+      topref: resource-manager
+    - name: 图片列表
+      id: resource-image-list
+      class: resource-image-list
+      icon: 
+      text: 图片列表
+      url: /manager/resource/image/list
+      parent: 1
+      order: 1
+      topref: resource-manager
+    - name: 上传图片
+      id: resource-image-add
+      class: resource-image-add
+      icon: 
+      text: 上传图片
+      url: /manager/resource/image/add
+      parent: 1
+      order: 2
+      topref: resource-manager
+      
+    - name: 媒体资源
+      id: resource-media
+      class: resource-media
+      icon: 
+      text: 媒体资源
+      url: /manager/resource/media/list
+      parent: -1
+      order: 2
+      topref: resource-manager
+    - name: 媒体列表
+      id: resource-media-list
+      class: resource-media-list
+      icon: 
+      text: 媒体资源
+      url: /manager/resource/media/list
+      parent: 2
+      order: 1
+      topref: resource-manager
+    - name: 上传媒体
+      id: resource-media-add
+      class: resource-media-add
+      icon: 
+      text: 上传媒体
+      url: /manager/resource/media/add
+      parent: 2
+      order: 2
+      topref: resource-manager
     
