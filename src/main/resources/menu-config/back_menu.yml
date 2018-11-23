@@ -1,0 +1,33 @@
+buttons:
+  top:  #顶部菜单配置
+    - name: 首页
+      id: homepage
+      class: homepage
+      text: 后台首页
+      url: /manager/index
+      parent: -1
+      order: 0
+    - name: 用户管理
+      id: user-manager
+      class: user-manager
+      text: 用户管理
+      url: /manager/user
+      parent: -1
+      order: 2
+    - name: 菜单管理
+      id: menu-manager
+      class: menu-manager
+      text: 菜单管理
+      url: /manager/menu
+      parent: -1
+      order: 1
+    - name: 资源管理
+      id: resource-manager
+      class: resource-manager
+      text: 菜单管理
+      url: /manager/resource
+      parent: -1
+      order: 2
+  left: #侧边栏菜单配置
+    
+    

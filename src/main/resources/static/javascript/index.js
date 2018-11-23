@@ -1,11 +1,9 @@
 new Vue({
-        el: '#index',
-        data: {
-        	
+        el: '#app',
+        data: function() {
+            return {};
         },
         methods: {
-            show: function () {
-
-            }
+        
         }
     })

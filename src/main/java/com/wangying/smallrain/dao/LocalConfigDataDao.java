@@ -21,7 +21,8 @@ import com.alibaba.fastjson.JSONObject;
 @Component
 public class LocalConfigDataDao {
 
-  private static final String MENU_CONFIG_PATH = "wx-config/menus.yml";
+  private static final String WX_MENU_CONFIG_PATH = "menu-config/wx_menus.yml";
+  private static final String BACK_MANAGER_MENU_CONFIG_PATH = "menu-config/back_menu.yml";
   
   private Logger log = LoggerFactory.getLogger(LocalConfigDataDao.class);
   
@@ -34,7 +35,7 @@ public class LocalConfigDataDao {
     try {
       // 获取配置文件输入流
       log.info("从本地加载微信菜单配置文件");
-      ClassPathResource resource = new ClassPathResource(MENU_CONFIG_PATH);
+      ClassPathResource resource = new ClassPathResource(WX_MENU_CONFIG_PATH);
       InputStream inputStream = resource.getInputStream();
       Yaml yaml = new Yaml();
       Map<String,Object> wxMenuConfig = yaml.load(inputStream);
