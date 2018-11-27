@@ -71,12 +71,14 @@ appdata:
  #自定义配置项
 app:
   smallrain:
+    dommainName: www.smallrain.top  #服务域名
     maxFileSize: 128 #最大文件上传大小
     maxRequestSize: 512 #总上传数据总大小
     
     
 #ftp 服务器配置
 ftp:
+  localFtp: true  #ftp服务器是否安装在本地
   host: 106.12.204.7
   port: 21
   username: smallrain

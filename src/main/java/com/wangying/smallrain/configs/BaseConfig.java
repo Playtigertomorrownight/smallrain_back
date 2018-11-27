@@ -9,6 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.unit.DataSize;
 import org.springframework.util.unit.DataUnit;
 
+/**
+ * @author wangying.dz3
+ *
+ */
 @Configuration
 @ConfigurationProperties(prefix = "app.smallrain")
 public class BaseConfig {
@@ -17,6 +21,8 @@ public class BaseConfig {
   private long maxFileSize;
   //设置总上传数据总大小
   private long maxRequestSize;
+  //服务域名
+  private String dommainName;
   
   public long getMaxFileSize() {
     return maxFileSize;
@@ -32,6 +38,14 @@ public class BaseConfig {
 
   public void setMaxRequestSize(long maxRequestSize) {
     this.maxRequestSize = maxRequestSize;
+  }
+
+  public String getDommainName() {
+    return dommainName;
+  }
+
+  public void setDommainName(String dommainName) {
+    this.dommainName = dommainName;
   }
 
   /**

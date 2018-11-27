@@ -15,7 +15,7 @@ public interface FileService {
    * @param Filename
    * @return
    */
-  public boolean uploadFileToFtp(MultipartFile files,String Filename);
+  public boolean uploadFile(MultipartFile file,String fileName);
   
   
   /**
@@ -24,4 +24,5 @@ public interface FileService {
    * @return
    */
   public String downloadFile(String path);
+  
 }

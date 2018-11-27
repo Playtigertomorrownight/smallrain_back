@@ -38,7 +38,7 @@ public class FileController {
    */
   @RequestMapping(value = "file/upload", method = RequestMethod.POST)
   public Result uploadfile(@RequestParam("file") MultipartFile files) {
-    boolean isSuccess = fileService.uploadFileToFtp(files,null);
+    boolean isSuccess = fileService.uploadFile(files,null);
     if(isSuccess)  return ResultUtil.success("上传成功！");
     return ResultUtil.fail("上传失败！");
   }
@@ -53,7 +53,7 @@ public class FileController {
 
     List<MultipartFile> mfiles =((MultipartHttpServletRequest)request).getFiles("file"); 
     for(MultipartFile mfile:mfiles) {
-      fileService.uploadFileToFtp(mfile,null);
+      fileService.uploadFile(mfile,null);
     }
     return ResultUtil.success("上传成功！");
     
