@@ -23,8 +23,9 @@ spring:
     
 #服务配置
 server:
-  port: 80
+  port: 8888
   address: 0.0.0.0
+  contextPath: /manager/index
 
 #公共配置与profiles选择无关
 mybatis:
@@ -78,7 +79,7 @@ app:
     
 #ftp 服务器配置
 ftp:
-  localFtp: true  #ftp服务器是否安装在本地
+  localFtp: false  #ftp服务器是否安装在本地
   host: 106.12.204.7
   port: 21
   username: smallrain

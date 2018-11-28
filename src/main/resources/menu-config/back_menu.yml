@@ -3,7 +3,7 @@ buttons:
   top:  #顶部菜单配置
     - name: 首页
       id: homepage
-      class: homepage
+      clazz: homepage
       icon: 
       text: 后台首页
       url: /manager/index
@@ -11,7 +11,7 @@ buttons:
       order: 0
     - name: 用户管理
       id: user-manager
-      class: user-manager
+      clazz: user-manager
       icon: 
       text: 用户管理
       url: /manager/user
@@ -19,7 +19,7 @@ buttons:
       order: 2
     - name: 菜单管理
       id: menu-manager
-      class: menu-manager
+      clazz: menu-manager
       icon: 
       text: 菜单管理
       url: /manager/menu
@@ -27,7 +27,7 @@ buttons:
       order: 1
     - name: 资源管理
       id: resource-manager
-      class: resource-manager
+      clazz: resource-manager
       icon: 
       text: 资源管理
       url: /manager/resource
@@ -36,7 +36,7 @@ buttons:
   left: #侧边栏菜单配置
     - name: 用户列表
       id: user-list
-      class: user-list
+      clazz: user-list
       icon: 
       text: 用户列表
       url: /manager/user/list
@@ -45,7 +45,7 @@ buttons:
       topref: user-manager
     - name: 添加用户
       id: add-user
-      class: add-user
+      clazz: add-user
       icon: 
       text: 添加用户
       url: /manager/user/add
@@ -55,7 +55,7 @@ buttons:
       
     - name: 后台管理菜单
       id: manager-back-menu
-      class: manager-back-menu
+      clazz: manager-back-menu
       icon: 
       text: 后台管理菜单
       url: /manager/menu/manager_back
@@ -64,7 +64,7 @@ buttons:
       topref: menu-manager
     - name: 前台页面菜单
       id: brfore-menu
-      class: brfore-menu
+      clazz: brfore-menu
       icon: 
       text: 后台管理菜单
       url: /manager/menu/brfore
@@ -73,7 +73,7 @@ buttons:
       topref: menu-manager
     - name: 微信菜单
       id: wecaht-menu
-      class: wecaht-menu
+      clazz: wecaht-menu
       icon: 
       text: 后台管理菜单
       url: /manager/menu/wechat
@@ -82,7 +82,7 @@ buttons:
       topref: menu-manager
     - name: 微信网站菜单
       id: wecaht-web-menu
-      class: wecaht-web-menu
+      clazz: wecaht-web-menu
       icon: 
       text: 后台管理菜单
       url: /manager/menu/wechat_web
@@ -94,7 +94,7 @@ buttons:
       
     - name: 文本资源
       id: resource-text
-      class: resource-text
+      clazz: resource-text
       icon: 
       text: 文本资源
       url: /manager/resource/text/list
@@ -103,7 +103,7 @@ buttons:
       topref: resource-manager
     - name: 文本列表
       id: resource-text-list
-      class: resource-text-list
+      clazz: resource-text-list
       icon: 
       text: 文本列表
       url: /manager/resource/text/list
@@ -112,7 +112,7 @@ buttons:
       topref: resource-manager
     - name: 上传文本
       id: resource-text-add
-      class: resource-text-add
+      clazz: resource-text-add
       icon: 
       text: 上传文本
       url: /manager/resource/text/add
@@ -122,7 +122,7 @@ buttons:
       
     - name: 图片资源
       id: resource-image
-      class: resource-image
+      clazz: resource-image
       icon: 
       text: 图片资源
       url: /manager/resource/image/list
@@ -131,7 +131,7 @@ buttons:
       topref: resource-manager
     - name: 图片列表
       id: resource-image-list
-      class: resource-image-list
+      clazz: resource-image-list
       icon: 
       text: 图片列表
       url: /manager/resource/image/list
@@ -140,7 +140,7 @@ buttons:
       topref: resource-manager
     - name: 上传图片
       id: resource-image-add
-      class: resource-image-add
+      clazz: resource-image-add
       icon: 
       text: 上传图片
       url: /manager/resource/image/add
@@ -150,29 +150,12 @@ buttons:
       
     - name: 媒体资源
       id: resource-media
-      class: resource-media
+      clazz: resource-media
       icon: 
       text: 媒体资源
       url: /manager/resource/media/list
       parent: -1
       order: 2
       topref: resource-manager
-    - name: 媒体列表
-      id: resource-media-list
-      class: resource-media-list
-      icon: 
-      text: 媒体资源
-      url: /manager/resource/media/list
-      parent: 2
-      order: 1
-      topref: resource-manager
-    - name: 上传媒体
-      id: resource-media-add
-      class: resource-media-add
-      icon: 
-      text: 上传媒体
-      url: /manager/resource/media/add
-      parent: 2
-      order: 2
-      topref: resource-manager
+    
     

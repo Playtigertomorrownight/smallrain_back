@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<#include "/common/head.html"/>
+<link rel="stylesheet" type="text/css" href="../static/css/index.css">
+<title>${title}</title>
+</head>
+<body>
+	<div id="app">
+		<Modal v-model="isShow" ok-text="" :closable="false" :mask-closable="false" :scrollable="false" @on-ok="ok" @on-cancel="cancel">
+			<p>Content of dialog</p>
+			<p>Content of dialog</p>
+			<p>Content of dialog</p>
+		</Modal>
+	</div>
+	<script type="text/javascript">
+		new Vue({
+			el : '#app',
+			data : {
+                isShow: false,
+                okText: ""
+            },
+			created : function() { //创建时
+				// `this` 指向 vm 实例
+				console.log('a is: ' + this)
+				this.isShow = true;
+			},
+            methods: {
+                ok () {
+                    this.$Message.info('Clicked ok');
+                },
+                cancel () {
+                    this.$Message.info('Clicked cancel');
+                }
+            }
+
+		})
+	</script>
+</body>
+</html>

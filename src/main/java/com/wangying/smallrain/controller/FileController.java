@@ -25,7 +25,7 @@ import com.wangying.smallrain.utils.ResultUtil;
  *
  */
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/file/")
 public class FileController {
 
   @Autowired
@@ -36,7 +36,7 @@ public class FileController {
    * @param files
    * @return
    */
-  @RequestMapping(value = "file/upload", method = RequestMethod.POST)
+  @RequestMapping(value = "upload", method = RequestMethod.POST)
   public Result uploadfile(@RequestParam("file") MultipartFile files) {
     boolean isSuccess = fileService.uploadFile(files,null);
     if(isSuccess)  return ResultUtil.success("上传成功！");
@@ -48,7 +48,7 @@ public class FileController {
    * @param files
    * @return
    */
-  @RequestMapping(value = "file/upload/multiple", method = RequestMethod.POST)
+  @RequestMapping(value = "upload/multiple", method = RequestMethod.POST)
   public Result uploadfile(HttpServletRequest request) {
 
     List<MultipartFile> mfiles =((MultipartHttpServletRequest)request).getFiles("file"); 

@@ -36,7 +36,7 @@ public class FileServiceImpl implements FileService {
   private boolean localFtp;
   
   @Value("${ftp.rootPath}")
-  private boolean ftpRootPath;
+  private String ftpRootPath;
 
   private Logger log = LoggerFactory.getLogger(FileServiceImpl.class);
 

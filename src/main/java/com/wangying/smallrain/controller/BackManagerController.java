@@ -23,6 +23,7 @@ public class BackManagerController {
     Map<String, Object>  menus = backManagerService.managerBackMenu("resource-manager");
     //加入菜单数据
     mv.addObject("menus",JSONObject.toJSONString(menus));
+    mv.addObject("title","smallrain back manager");
     return mv;
   }
   

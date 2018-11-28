@@ -3,16 +3,19 @@
 <head>
   <#include "/common/head.html"/>
   <link rel="stylesheet" type="text/css" href="../static/css/index.css">
+  <title>${title}</title>
 </head>
  <body>
  <div id="app">
    <div class="layout">
         <Layout>
             <Header>
-                <i-menu mode="horizontal" theme="dark" active-name="1">
+             <!-- 头部菜单列表 以及 logo-->
+                <i-menu mode="horizontal" theme="dark" :active-name="menus.top[0].id"  @on-select="clickTopMenu">
                     <div class="layout-logo"></div>
                     <div class="layout-nav">
-                        <menu-item v-for="menu in menus.top" :name="menu.id" :class="menu.class" :key="menu.id">
+                    
+                        <menu-item v-for="menu in menus.top" :name="menu.id" :class="menu.clazz" :key="menu.id" >
                             <Icon :type="menu.icon"></Icon>
                             {{menu.text}}
                         </menu-item>
@@ -21,28 +24,32 @@
             </Header>
             <Layout>
                 <Sider v-if="hasSider" hide-trigger :style="{background: '#fff'}">
-                    <i-menu active-name="" theme="light" width="auto" :open-names="['']">
-                        <Submenu v-for="menu in menus.left" :name="menu.id">
-                            <template slot="title">
-                                <Icon :type="menu.icon"></Icon>
-                                {{menu.text}}
-                            </template> 
-                            <template v-if="menu.sub&&menu.sub.length ">
-	                            <menu-item v-for="sub in menu.sub" :name="sub.id" :key="sub.id">
-	                               {{sub.text}}
-	                            </menu-item>
-                            </template>
-                        </Submenu>
+                    <i-menu active-name="" theme="light" width="auto" :open-names="['']" @on-select="clickLeftMenu">
+                        <template v-for="menu in menus.left">
+	                        <Submenu v-if="menu.sub&&menu.sub.length"  :name="menu.id">
+	                            <template slot="title">
+	                                <Icon :type="menu.icon"></Icon>
+	                                {{menu.text}}
+	                            </template> 
+		                            <menu-item v-for="sub in menu.sub" :name="sub.id" :key="sub.id">
+		                               {{sub.text}}
+		                            </menu-item>
+	                        </Submenu>
+	                        <menu-item  v-else :name="menu.id" :class="menu.clazz" :key="menu.id" >
+	                            <Icon :type="menu.icon"></Icon>
+	                            {{menu.text}}
+                            </menu-item>
+                        </template>
                     </i-menu>
                 </Sider>
                 <Layout :style="{padding: '0 24px 24px'}">
-                    <Breadcrumb :style="{margin: '24px 0'}">
+                  <!--   <Breadcrumb :style="{margin: '24px 0'}">
                         <breadcrumb-item>Home</breadcrumb-item>
                         <breadcrumb-item>Components</breadcrumb-item>
                         <breadcrumb-item>Layout</breadcrumb-item>
-                    </Breadcrumb>
-                    <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
-                        Content
+                    </Breadcrumb> -->
+                    <Content :style="{padding: '24px', minHeight: '580px', background: '#fff'}">
+                        
                     </Content>
                 </Layout>
             </Layout>
@@ -63,7 +70,12 @@ new Vue({
     	}
     },
     methods: {
-      
+    	clickTopMenu: function(name){
+    		console.info("点击了头部按钮："+name);
+    	},
+    	clickLeftMenu: function(name){
+    		console.info("点击了左部按钮："+name);
+    	}
     },
     watch: {
     	

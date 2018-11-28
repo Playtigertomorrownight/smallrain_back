@@ -233,6 +233,13 @@ public class FileUtils {
 		return size;
 	}
 	
+	/**
+	 * 将流写入到文件中
+	 * @param source
+	 * @param aimPath
+	 * @return
+	 * @throws Exception
+	 */
 	public static long writeStreamToFile(InputStream source, String aimPath) throws Exception {
 	  if(null == source || null == aimPath) throw new Exception("File Object is Null!");
 	  File aim = new File(aimPath);
