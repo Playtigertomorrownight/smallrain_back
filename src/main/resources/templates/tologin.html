@@ -7,10 +7,18 @@
 </head>
 <body>
 	<div id="app">
-		<Modal v-model="isShow" ok-text="" :closable="false" :mask-closable="false" :scrollable="false" @on-ok="ok" @on-cancel="cancel">
-			<p>Content of dialog</p>
-			<p>Content of dialog</p>
-			<p>Content of dialog</p>
+		<Modal v-model="isShow" :width="width" :ok-text="okText" :closable="false" :mask-closable="false" :scrollable="false">
+			 <p slot="header" style="color:#f60;text-align:center">
+            <Icon type="information-circled"></Icon>
+            <span>Delete confirmation</span>
+	        </p>
+	        <div style="text-align:center">
+	            <p>After this task is deleted, the downstream 10 tasks will not be implemented.</p>
+	            <p>Will you delete it?</p>
+	        </div>
+	        <div slot="footer">
+	            <i-button type=primary size="large" long :loading="modal_loading" @click="login">{{okText}}</i-button>
+	        </div>
 		</Modal>
 	</div>
 	<script type="text/javascript">
@@ -18,7 +26,9 @@
 			el : '#app',
 			data : {
                 isShow: false,
-                okText: ""
+                okText: "登录",
+                width: 360,
+                modal_loading: false
             },
 			created : function() { //创建时
 				// `this` 指向 vm 实例
@@ -26,11 +36,8 @@
 				this.isShow = true;
 			},
             methods: {
-                ok () {
-                    this.$Message.info('Clicked ok');
-                },
-                cancel () {
-                    this.$Message.info('Clicked cancel');
+                login: function(){
+                	console.log("登录 。。。 ");
                 }
             }
 
