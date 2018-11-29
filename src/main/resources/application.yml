@@ -69,13 +69,6 @@ appdata:
     useGlobalDataSourceStat: true  #合并多个DruidDataSource的监控数据
     
     
- #自定义配置项
-app:
-  smallrain:
-    dommainName: www.smallrain.top  #服务域名
-    maxFileSize: 128 #最大文件上传大小
-    maxRequestSize: 512 #总上传数据总大小
-    
     
 #ftp 服务器配置
 ftp:

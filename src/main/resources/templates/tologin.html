@@ -4,20 +4,59 @@
 <#include "/common/head.html"/>
 <link rel="stylesheet" type="text/css" href="../static/css/index.css">
 <title>${title}</title>
+<style>
+  .modal-header {
+    text-align: center;
+    padding: 40px 7px;
+  }
+   .modal-header h1.webname{
+     margin-top:30px;
+   }
+  .ivu-modal-footer{
+    border:none;
+   padding: 26px 14px;
+  }
+  .ivu-modal-header {
+    color: white;
+    background: #1c2438;
+    margin-bottom: 30px;
+  }
+  .ivu-modal-content {
+      border: none; 
+      border-radius: 0px;
+   }
+  .ivu-checkbox-wrapper.ivu-checkbox-large {
+    float: right;
+  }
+  .ivu-form .ivu-form-item-label, .ivu-checkbox-wrapper.ivu-checkbox-large {
+    font-size: 15px;
+    font-weight: 700;
+  }
+</style>
 </head>
 <body>
 	<div id="app">
-		<Modal v-model="isShow" :width="width" :ok-text="okText" :closable="false" :mask-closable="false" :scrollable="false">
-			 <p slot="header" style="color:#f60;text-align:center">
-            <Icon type="information-circled"></Icon>
-            <span>Delete confirmation</span>
-	        </p>
+		<Modal v-model="isShow"  :width="width" :ok-text="okText" :closable="false" :mask-closable="false" :scrollable="false">
+			<div slot="header" class="modal-header" >
+	            <h1>Hello, welcome come to sign in</h1>
+	            <h1 class="webname">SmallRain</h1>
+	        </div>
 	        <div style="text-align:center">
-	            <p>After this task is deleted, the downstream 10 tasks will not be implemented.</p>
-	            <p>Will you delete it?</p>
+	            <i-form ref="loginFprm" :model="formTop" :rules="ruleValidate" label-position="left">
+			        <form-item label="用户名：" prop="username">
+			            <i-input v-model="formTop.username"  placeholder="请输入用户名">></i-input>
+			        </form-item>
+			        <form-item label="密码：" prop="password">
+			            <i-input type="password" v-model="formTop.password" placeholder="请输入用户密码"></i-input>
+			        </form-item>
+			        <form-item>
+			             <Checkbox v-model="formTop.remberMe" size="large" style="float:reight;">记住我的登录状态</Checkbox>
+			        </form-item>
+			        
+			    </i-form>
 	        </div>
 	        <div slot="footer">
-	            <i-button type=primary size="large" long :loading="modal_loading" @click="login">{{okText}}</i-button>
+	            <i-button type=primary size="large" long :loading="modal_loading" @click="login('loginFprm')">{{okText}}</i-button>
 	        </div>
 		</Modal>
 	</div>
@@ -27,17 +66,48 @@
 			data : {
                 isShow: false,
                 okText: "登录",
-                width: 360,
-                modal_loading: false
+                width: 410,
+                modal_loading: false,
+                formTop: {
+                    username: '',
+                    password: '',
+                    remberMe: false
+                },
+                ruleValidate: {
+                	username: [
+                        { required: true, message: '用户名不能为空!', trigger: 'blur' }
+                    ],
+                    password: [
+                        { required: true, message: '密码不能为空!', trigger: 'blur' }
+                       // { required: true, pattern: /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[.!@#$%^&*? ]).*$/, message: '密码最少6位，包括至少1个大写字母、小写字母、数字、特殊字符', trigger: 'blur' }
+                    ]
+                }
             },
 			created : function() { //创建时
-				// `this` 指向 vm 实例
-				console.log('a is: ' + this)
 				this.isShow = true;
 			},
             methods: {
-                login: function(){
-                	console.log("登录 。。。 ");
+                login: function(name){
+                	this.$refs[name].validate((valid) => {    //表单校验
+                        if (valid) {   //校验通过，请求后台进行登录
+                        	var params = new URLSearchParams();
+                        	params.append('username', this.formTop.username);
+                        	params.append('password', this.formTop.password);
+                        	params.append('remberMe', this.formTop.remberMe);
+                        	axios({
+	                        	    method: "post",
+	                        	    url: "./login",
+	                        	    data: params
+                        	    }).then(function (response) {
+	                        		console.log("wdha");
+	                        	    console.log(response);
+                        	   }).catch(function (error) {
+                        		   console.log(error);
+                        	   });
+                        } else {   //校验不通过
+                            this.$Message.error('登录信息有误，请完善！');
+                        }
+                    })
                 }
             }
 
