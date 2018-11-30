@@ -14,9 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wangying.smallrain.configs.BaseConfig;
+import com.wangying.smallrain.entity.Result;
 import com.wangying.smallrain.utils.BaseUtils;
 
 @Controller
@@ -37,6 +39,7 @@ public class UserController {
   }
 
   @RequestMapping(value = "login", method = { RequestMethod.POST })
+  @ResponseBody
   public String login(@RequestParam("username") String username, @RequestParam("password") String password,
       @RequestParam("remberMe") boolean remberMe, HttpServletRequest request) {
     try {
@@ -44,7 +47,7 @@ public class UserController {
       // 先获取到Subject对象
       Subject subject = SecurityUtils.getSubject();
       // 创建UsernamePasswordToken对象，封装用户名和密码
-      UsernamePasswordToken token = new UsernamePasswordToken(username, password, remberMe);
+      UsernamePasswordToken token = new UsernamePasswordToken(username, BaseUtils.md5(password.trim(), ""), remberMe);
       // 使用shiro框架进行校验
       subject.login(token);
       // 获取返回的结果

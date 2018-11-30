@@ -3,36 +3,8 @@
 <head>
 <#include "/common/head.html"/>
 <link rel="stylesheet" type="text/css" href="../static/css/index.css">
+<script type="text/javascript" src="../static/javascript/md5.js" charset="utf-8"></script>
 <title>${title}</title>
-<style>
-  .modal-header {
-    text-align: center;
-    padding: 40px 7px;
-  }
-   .modal-header h1.webname{
-     margin-top:30px;
-   }
-  .ivu-modal-footer{
-    border:none;
-   padding: 26px 14px;
-  }
-  .ivu-modal-header {
-    color: white;
-    background: #1c2438;
-    margin-bottom: 30px;
-  }
-  .ivu-modal-content {
-      border: none; 
-      border-radius: 0px;
-   }
-  .ivu-checkbox-wrapper.ivu-checkbox-large {
-    float: right;
-  }
-  .ivu-form .ivu-form-item-label, .ivu-checkbox-wrapper.ivu-checkbox-large {
-    font-size: 15px;
-    font-weight: 700;
-  }
-</style>
 </head>
 <body>
 	<div id="app">
@@ -92,7 +64,7 @@
                         if (valid) {   //校验通过，请求后台进行登录
                         	var params = new URLSearchParams();
                         	params.append('username', this.formTop.username);
-                        	params.append('password', this.formTop.password);
+                        	params.append('password', hex_md5(this.formTop.password));  //MD5 加密
                         	params.append('remberMe', this.formTop.remberMe);
                         	axios({
 	                        	    method: "post",

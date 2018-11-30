@@ -25,3 +25,30 @@
     float: right;
     padding: 0 20px;
 }
+.modal-header {
+    text-align: center;
+    padding: 40px 7px;
+  }
+   .modal-header h1.webname{
+     margin-top:30px;
+   }
+  .ivu-modal-footer{
+    border:none;
+   padding: 26px 14px;
+  }
+  .ivu-modal-header {
+    color: white;
+    background: #1c2438;
+    margin-bottom: 30px;
+  }
+  .ivu-modal-content {
+      border: none; 
+      border-radius: 0px;
+   }
+  .ivu-checkbox-wrapper.ivu-checkbox-large {
+    float: right;
+  }
+  .ivu-form .ivu-form-item-label, .ivu-checkbox-wrapper.ivu-checkbox-large {
+    font-size: 15px;
+    font-weight: 700;
+  }

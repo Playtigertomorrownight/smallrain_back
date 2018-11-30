@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
@@ -68,6 +69,7 @@ public class BaseUtils extends BeanUtils {
 
   /**
    * 将输入流转为字节数组
+   * 
    * @param in
    * @return
    */
@@ -79,7 +81,7 @@ public class BaseUtils extends BeanUtils {
       while ((n = in.read(buffer)) > 0) {
         out.write(buffer, 0, n);
       }
-      byte[] result =  out.toByteArray();
+      byte[] result = out.toByteArray();
       out.close();
       return result;
     } catch (Exception e) {
@@ -87,26 +89,72 @@ public class BaseUtils extends BeanUtils {
       return null;
     }
   }
-  
+
   /**
    * 生成uuid
+   * 
    * @return
    */
   public static String createUUID() {
     return UUID.randomUUID().toString().replace("-", "");
   }
-  
+
   /**
    * 字符串拼接
+   * 
    * @return
    */
-  public static String joinString(Object ...objects) {
+  public static String joinString(Object... objects) {
     StringBuilder sbf = new StringBuilder("");
-    if(null==objects||objects.length==0) return "";
-    for(Object obj: objects) {
+    if (null == objects || objects.length == 0)
+      return "";
+    for (Object obj : objects) {
       sbf.append(obj);
     }
     return sbf.toString();
+  }
+
+  /**
+   * 判断字符串是否为空，包括全空格
+   * 
+   * @param str
+   * @return
+   */
+  public static boolean isEmptyString(String str) {
+    return null == str || str.trim().length() == 0;
+  }
+
+  /**
+   * MD5方法
+   * 
+   * @param text
+   *          明文
+   * @param key
+   *          密钥
+   * @return 密文
+   * @throws Exception
+   */
+  public static String md5(String text, String key) throws Exception {
+    // 加密后的字符串
+    return DigestUtils.md5Hex(joinString(text,key));
+  }
+
+  /**
+   * MD5验证方法
+   * 
+   * @param text
+   *          明文
+   * @param key
+   *          密钥
+   * @param md5
+   *          密文
+   * @return true/false
+   * @throws Exception
+   */
+  public static boolean md5Verify(String text, String key, String md5) throws Exception {
+    // 根据传入的密钥进行验证
+    String md5Text = md5(text, key);
+    return md5Text.equalsIgnoreCase(md5);
   }
 
 }
