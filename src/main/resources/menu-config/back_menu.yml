@@ -1,22 +1,14 @@
 #配置菜单列表时，一级菜单即parent为-1的，且按照配置顺序来的
 buttons:
   top:  #顶部菜单配置
-    - name: 首页
-      id: homepage
-      clazz: homepage
+    - name: 退出登录
+      id: logout
+      clazz: logout
       icon: 
-      text: 后台首页
-      url: /manager/index
+      text: 退出登录
+      url: /logout
       parent: -1
       order: 0
-    - name: 用户管理
-      id: user-manager
-      clazz: user-manager
-      icon: 
-      text: 用户管理
-      url: /manager/user
-      parent: -1
-      order: 2
     - name: 菜单管理
       id: menu-manager
       clazz: menu-manager
@@ -25,34 +17,7 @@ buttons:
       url: /manager/menu
       parent: -1
       order: 1
-    - name: 资源管理
-      id: resource-manager
-      clazz: resource-manager
-      icon: 
-      text: 资源管理
-      url: /manager/resource
-      parent: -1
-      order: 2
   left: #侧边栏菜单配置
-    - name: 用户列表
-      id: user-list
-      clazz: user-list
-      icon: 
-      text: 用户列表
-      url: /manager/user/list
-      parent: -1
-      order: 0
-      topref: user-manager
-    - name: 添加用户
-      id: add-user
-      clazz: add-user
-      icon: 
-      text: 添加用户
-      url: /manager/user/add
-      parent: -1
-      order: 1
-      topref: user-manager
-      
     - name: 后台管理菜单
       id: manager-back-menu
       clazz: manager-back-menu
@@ -62,100 +27,4 @@ buttons:
       parent: -1
       order: 0
       topref: menu-manager
-    - name: 前台页面菜单
-      id: brfore-menu
-      clazz: brfore-menu
-      icon: 
-      text: 后台管理菜单
-      url: /manager/menu/brfore
-      parent: -1
-      order: 1
-      topref: menu-manager
-    - name: 微信菜单
-      id: wecaht-menu
-      clazz: wecaht-menu
-      icon: 
-      text: 后台管理菜单
-      url: /manager/menu/wechat
-      parent: -1
-      order: 2
-      topref: menu-manager
-    - name: 微信网站菜单
-      id: wecaht-web-menu
-      clazz: wecaht-web-menu
-      icon: 
-      text: 后台管理菜单
-      url: /manager/menu/wechat_web
-      parent: -1
-      order: 3
-      topref: menu-manager
-      
-      
-      
-    - name: 文本资源
-      id: resource-text
-      clazz: resource-text
-      icon: 
-      text: 文本资源
-      url: /manager/resource/text/list
-      parent: -1
-      order: 0
-      topref: resource-manager
-    - name: 文本列表
-      id: resource-text-list
-      clazz: resource-text-list
-      icon: 
-      text: 文本列表
-      url: /manager/resource/text/list
-      parent: 0
-      order: 0
-      topref: resource-manager
-    - name: 上传文本
-      id: resource-text-add
-      clazz: resource-text-add
-      icon: 
-      text: 上传文本
-      url: /manager/resource/text/add
-      parent: 0
-      order: 1
-      topref: resource-manager
-      
-    - name: 图片资源
-      id: resource-image
-      clazz: resource-image
-      icon: 
-      text: 图片资源
-      url: /manager/resource/image/list
-      parent: -1
-      order: 1
-      topref: resource-manager
-    - name: 图片列表
-      id: resource-image-list
-      clazz: resource-image-list
-      icon: 
-      text: 图片列表
-      url: /manager/resource/image/list
-      parent: 1
-      order: 1
-      topref: resource-manager
-    - name: 上传图片
-      id: resource-image-add
-      clazz: resource-image-add
-      icon: 
-      text: 上传图片
-      url: /manager/resource/image/add
-      parent: 1
-      order: 2
-      topref: resource-manager
-      
-    - name: 媒体资源
-      id: resource-media
-      clazz: resource-media
-      icon: 
-      text: 媒体资源
-      url: /manager/resource/media/list
-      parent: -1
-      order: 2
-      topref: resource-manager
-    
     

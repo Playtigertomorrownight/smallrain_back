@@ -12,6 +12,6 @@ logging:
 #自定义配置项
 app:
   smallrain:
-    dommainName: www.smallrain.top  #服务域名
+    dommainName: http://www.smallrain.top  #服务域名
     maxFileSize: 128 #最大文件上传大小
     maxRequestSize: 512 #总上传数据总大小

@@ -60,6 +60,7 @@
 			},
             methods: {
                 login: function(name){
+                	let that = this;
                 	this.$refs[name].validate((valid) => {    //表单校验
                         if (valid) {   //校验通过，请求后台进行登录
                         	var params = new URLSearchParams();
@@ -71,10 +72,23 @@
 	                        	    url: "./login",
 	                        	    data: params
                         	    }).then(function (response) {
-	                        		console.log("wdha");
-	                        	    console.log(response);
+	                        		var data = response.data;
+	                        		console.log(data)
+	                        		if(data.status == 0){  //登录成功,重定向页面
+	                        			console.log('跳转到页面：'+data.data);
+	                        			window.location.href = data.data; 
+	                        		}else{
+	                        			that.$Notice.error({
+	                                        title: '登录失败',
+	                                        desc:  data.message
+	                                    });
+	                        		}
                         	   }).catch(function (error) {
                         		   console.log(error);
+                        		   that.$Notice.error({
+                                       title: '登录失败',
+                                       desc:  '发生了某些异常: '+error
+                                   });
                         	   });
                         } else {   //校验不通过
                             this.$Message.error('登录信息有误，请完善！');

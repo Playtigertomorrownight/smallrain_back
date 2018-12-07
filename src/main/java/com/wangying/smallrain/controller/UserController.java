@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.wangying.smallrain.configs.BaseConfig;
 import com.wangying.smallrain.entity.Result;
 import com.wangying.smallrain.utils.BaseUtils;
+import com.wangying.smallrain.utils.ResultUtil;
 
 @Controller
 @RequestMapping("/user/")
@@ -40,7 +41,7 @@ public class UserController {
 
   @RequestMapping(value = "login", method = { RequestMethod.POST })
   @ResponseBody
-  public String login(@RequestParam("username") String username, @RequestParam("password") String password,
+  public Result login(@RequestParam("username") String username, @RequestParam("password") String password,
       @RequestParam("remberMe") boolean remberMe, HttpServletRequest request) {
     try {
       log.info(BaseUtils.joinString("进入用户登录。。。。。。 参数是： 用户名--",username," 密码--",password," remberMe--",remberMe));
@@ -56,13 +57,12 @@ public class UserController {
       // 返回原始页
       String latUrl = BaseUtils.joinString(baseConfig.getDommainName(), savedRequest.getRequestUrl());
       log.info("跳转回原地址："+latUrl);
-      return latUrl;
+      return  ResultUtil.success(latUrl);
     } catch (Exception e) {
       e.printStackTrace();
       log.error("用户登录失败!");
-      return "error";
+      return ResultUtil.fail("用户登录失败，用户名或者密码错误！");
     }
-
   }
 
 }
