@@ -54,8 +54,10 @@ public class UserController {
       // 获取返回的结果
       // User user = (User) subject.getPrincipal();
       SavedRequest savedRequest = WebUtils.getSavedRequest(request);
+      String savedRequestUrl = null==savedRequest?"/manager/index":savedRequest.getRequestUrl();
+      savedRequestUrl = savedRequestUrl.length()<3?"/manager/index":savedRequestUrl;
       // 返回原始页
-      String latUrl = BaseUtils.joinString(baseConfig.getDommainName(), savedRequest.getRequestUrl());
+      String latUrl = BaseUtils.joinString(baseConfig.getDommainName(), savedRequestUrl);
       log.info("跳转回原地址："+latUrl);
       return  ResultUtil.success(latUrl);
     } catch (Exception e) {

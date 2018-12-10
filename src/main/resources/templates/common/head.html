@@ -4,3 +4,25 @@
     <link rel="stylesheet" type="text/css" href="../static/iview/styles/iview.css">
     <script type="text/javascript" src="../static/iview/iview.js"></script>
     <script type="text/javascript" src="../static/javascript/axio.js"></script>
+
+    <script type="text/javascript">
+        //获取当前地址域名
+	    function getAimUrl(relativeUrl){
+		  　　　　var url = document.location.toString();
+		  　　　　var arrUrl = url.split("//");
+		  　　　　var start = arrUrl[1].indexOf("/");
+		  　　　　var relUrl = start==-1?arrUrl[1]:arrUrl[1].substring(0,start);
+		      relativeUrl = relativeUrl.toString().startWith("/")?relativeUrl:"/"+relativeUrl;
+		  　　　　return arrUrl[0]+"//"+relUrl+relativeUrl;
+		  　　}
+        
+	    String.prototype.startWith=function(str){
+	    	if(str==null||str==""||this.length==0||str.length>this.length)
+	    	  return false;
+	    	if(this.substr(0,str.length)==str)
+	    	  return true;
+	    	else
+	    	  return false;
+	    	return true;
+	    	}
+    </script>

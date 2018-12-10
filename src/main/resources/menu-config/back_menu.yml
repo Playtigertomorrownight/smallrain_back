@@ -14,7 +14,7 @@ buttons:
       clazz: menu-manager
       icon: 
       text: 菜单管理
-      url: /manager/menu
+      url: /manager/index
       parent: -1
       order: 1
   left: #侧边栏菜单配置
@@ -23,7 +23,7 @@ buttons:
       clazz: manager-back-menu
       icon: 
       text: 后台管理菜单
-      url: /manager/menu/manager_back
+      url: /manager/index
       parent: -1
       order: 0
       topref: menu-manager
