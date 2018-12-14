@@ -1,4 +1,4 @@
 通过 maven build 构建实体类之后：
   1、请在 dao 层中加入 @Mapper 注解
   2、更改 Resource 类的属性： type 为枚举 FileDataType
-  3、更改 Menu 类中的 platform 为枚举 MenuPlatform ；更改 type 为 WxMenuType。
+  3、更改 Menu 类中的 platform 为枚举 MenuPlatform ；更改 type 为 WxMenuType。增加: List<Menu> subMenus

@@ -55,6 +55,9 @@
   }
   
  .ivu-tree ul{
-    font-size: 24px;
+    font-size: 21px;
  }
   
+ .ivu-select-item {
+     font-size: 16px!important;
+ }
