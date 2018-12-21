@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<#include "/common/head.html"/>
+<link rel="stylesheet" type="text/css" href="../static/css/resource.css">
+<title>${title}</title>
+</head>
+<body>
+    <#include "/common/top-sider-header.html"/>
+    <div id="app"> 
+        <top-sider-bottom>
+            <Layout :style="{padding: '0 24px 24px'}"> 
+            <!--<Breadcrumb :style="{margin: '24px 0'}">
+                    <breadcrumb-item>Home</breadcrumb-item>
+                    <breadcrumb-item>Components</breadcrumb-item>
+                    <breadcrumb-item>Layout</breadcrumb-item>
+                </Breadcrumb> -->
+                <Content :style="{padding: '24px', minHeight: '780px', background: '#fff'}">
+                    <i-table border :columns="columns12" :data="data6">
+				        <template slot-scope="{ row }" slot="name">
+				            <strong>{{ row.name }}</strong>
+				        </template>
+				        <template slot-scope="{ row, index }" slot="action">
+				            <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">View</Button>
+				            <Button type="error" size="small" @click="remove(index)">Delete</Button>
+				        </template>
+				    </i-table>
+                 </Content>
+              </Layout>
+          </top-sider-bottom>
+    </div>
+    <script type="text/javascript"> 
+     new Vue({
+            el: '#app',
+            data: function(){
+                return {
+                }
+            },
+            methods: {
+            	
+            },
+            mounted : function() { //创建时
+               
+            }
+        })
+</script>
+
+</body>
+</html>

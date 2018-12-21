@@ -16,6 +16,14 @@ public interface MenuService {
   public Menu getMenuById(String menuId);
   
   /**
+   * 添加按钮
+   * @param menuId
+   * @return
+   */
+  
+  public int addMenu(Menu menu);
+  
+  /**
    * 根据当前顶部按钮选取次级按钮组
    * @param paltform  顶部菜单平台
    * @param topMenuId

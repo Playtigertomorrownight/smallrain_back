@@ -16,21 +16,30 @@
                     <breadcrumb-item>Layout</breadcrumb-item>
                 </Breadcrumb> -->
                 <Content :style="{padding: '24px', minHeight: '780px', background: '#fff'}">
+                    <div v-if="menuPlatform.name== 'BACKLEFT'">
+	                    <label v-cloak style="font-size: 13px;font-weight: 600;margin-right: 2em;">对应顶部菜单（topref）： </label>
+		                <radio-group v-model="topref" @on-change="changeTopref">
+					        <Radio v-for="top in topMenus" v-if="top.name != 'logout'" :label="top.name" :key="top.id" >
+					            <Icon :type="top.icon"></Icon>
+					            <span v-cloak>{{top.text}}</span>
+					        </Radio>
+					    </radio-group>
+				    </div>
                    <Row> 
                        <i-col span="10">
                             <Tree :data="menuTree" :render="renderContent"> </Tree>
                        </i-col>
                        <i-col span="14" :style="{padding: '10px 50px'}">
-                       <i-form :model="menuFormData" label-position="right" :label-width="300">
-                           <form-item v-if="hasFiled('name')" label="名称（按钮名称）：">
-                               <i-input v-model="menuFormData.name"></i-input>
+                       <i-form ref="menuForm" :model="menuFormData" :rules="menuDataRule" label-position="right" :label-width="300">
+                           <form-item v-if="hasFiled('name')" label="名称（按钮名称）：" prop="name">
+                               <i-input ref="menuName" v-model="menuFormData.name"></i-input>
                            </form-item>
-                           <form-item v-if="hasFiled('text')" label="显示文本：">
+                           <form-item v-if="hasFiled('text')" label="显示文本：" prop="text">
                                <i-input v-model="menuFormData.text"></i-input>
                            </form-item>
                            <form-item v-if="hasFiled('icon')" label="图标：">
                                <i-select v-model="menuFormData.icon" filterable clearable >
-                                    <i-option v-for="item in icons" :value="item" :label="item" :key="item">
+                                    <i-option v-for="item in icons" :value="item" :label="item" :key="item" v-cloak>
                                         <Icon :type="item" style="margin-right:2rem;"></Icon>
 							            {{item}}
 							        </i-option>
@@ -46,19 +55,20 @@
                            </form-item>
                            <form-item v-if="hasFiled('platform')" label="所属平台：">
                                <i-select v-model="menuFormData.platform" >
-							        <i-option v-for="platform in platformSelects" :value="platform.name" :label="platform.name" :key="platform.code">
+							        <i-option v-for="platform in platformSelects" :value="platform.name" :label="platform.name" :key="platform.code" v-cloak>
 							            <span>{{platform.name}}</span>
 							            <span style="float:right;color:#ccc">-- {{platform.description}}</span>
 							        </i-option>
 							    </i-select>
                            </form-item>
                            <form-item v-if="hasFiled('topref')" label="所属顶级按钮（二级按钮专用）：">
-                                <i-select v-model="menuFormData.topref" >
-                                    <i-option v-for="topMenu in topMenus" v-if="topMenu.name!='logout'" :value="topMenu.name" :label="topMenu.name" :key="topMenu.id">
+                               <i-input v-model="menuFormData.topref" disabled></i-input>
+                                <!-- <i-select v-model="menuFormData.topref" >
+                                    <i-option v-for="topMenu in topMenus" v-if="topMenu.name!='logout'" :value="topMenu.name" :label="topMenu.name" :key="topMenu.id" v-cloak>
                                         <span>{{topMenu.name}}</span>
                                         <span style="float:right;color:#ccc">-- {{topMenu.text}}</span>
                                     </i-option>
-                                </i-select>
+                                </i-select> -->
                            </form-item>
                            <form-item v-if="hasFiled('type')" label="类型（WeChat专用） ：">
                                <i-input v-model="menuFormData.type"></i-input>
@@ -73,7 +83,8 @@
                                <i-input v-model="menuFormData.pagepath"></i-input>
                            </form-item>
                             <form-item>
-					            <i-button type="primary" style="float:right;" @click="submitMenuData">提交</i-button>
+					            <i-button type="primary" style="float:right;margin-left:2rem;" @click="submitMenuData">提交</i-button>
+					             <i-button type="error" style="float:right;" @click="cancleEdit">取消</i-button>
 					        </form-item>
                          </i-form>
                        </i-col>
@@ -82,37 +93,40 @@
               </Layout>
           </top-sider-bottom>
     </div>
-    <script type="text/javascript">
+    <script type="text/javascript"> 
+     // 表单验证规则
+	  const formRule = {
+		        name: [
+		            { required: true, message: '菜单名不能为空!', trigger: 'blur' }
+		        ],
+		        text: [
+		            { required: true, message: '菜单文本不能为空!', trigger: 'blur' }
+		           // { required: true, pattern: /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[.!@#$%^&*? ]).*$/, message: '密码最少6位，包括至少1个大写字母、小写字母、数字、特殊字符', trigger: 'blur' }
+		        ]
+		    };
      new Vue({
             el: '#app',
             data: function(){
                 return {
+                	topref: "menu-manager",
                 	editMenus: ${editMenus},
-                    menuPlatform: '${menuPlatform}',
+                    menuPlatform: ${menuPlatform},
                     fileds: '${effectiveFileds}',
                     platformSelects: ${platforms},
                     topMenus: ${topMenus},
                     icons: [],
-                    menuFormData: {
-                        name: "",
-                        text: "",
-                        icon: "",
-                        clazz: "",
-                        url: "",
-                        parent: "",
-                        orderNum: 0,
-                        type: "",
-                        mediaId: "",
-                        appid: "",
-                        pagepath: "",
-                        platform: "",
-                        topref: ""
+                    operate: {
+                    	action: "ready",
+                    	tempTreeData: null
                     },
+                    menuFormData: {name:'',text:'',icon:"",clazz:"",url:"",parent:"",orderNum:0,type:"",mediaId:"",appid:"",pagepath:"",platform:"",topref:""},
+                    menuDataRule: {},
                     treeData: {},
                     menuTree: [
                         {
                             title: '${treeRoot}',
                             expand: true,
+                            ref: -1,
                             render: (h, { root, node, data }) => {    //根节点渲染器
                             	this.treeData = data;
                                 return h('span', {
@@ -161,25 +175,102 @@
                 }
             },
             methods: {
-            	submitMenuData:function(){   //提交按钮数据
-            		
+            	changeTopref: function(label){   //选中单选按钮
+            		console.log(label);
+            		this.menuFormData.topref=label;
+            		this.filterEditMenu(label);
             	},
-            	append: function(data) {
-                    console.log(data)
-                    const children = data.children || [];
+            	cancleEdit: function(){   //取消编辑
+            		this.menuDataRule = {};
+            		this.operate = {action: "ready",tempTreeData: null};
+            		this.menuFormData = {name: "",text: "",icon: "",clazz: "",url: "",parent: "",orderNum: 0,type: "",mediaId: "",appid: "",pagepath: "",platform: "",topref: ""}
+            	},
+            	submitMenuData:function(){   //提交按钮数据
+            		if(this.operate.action == "ready"){
+            			 this.$Message.info('无对应的操作！');
+            			 return ;
+            		}
+            	    const that = this;
+            		this.$refs["menuForm"].validate((valid) => {    //表单校验
+                        if (valid) {   //校验通过，请求后台进行提交数据
+                        	axios({     //提交数据到后台
+                                method: "post",
+                                url: "./menu/add",
+                                data: this.menuFormData
+                            }).then(function (response) {
+                                var data = response.data;
+                                console.log(data)
+                                if(data.status == 0){  //提交数据成功
+                                    if(that.operate.action != "append" ){   //添加菜单
+                                        console.log("添加成功");
+                                     }else if(that.operate.action != "edit"){
+                                    	 console.log("编辑成功");
+                                     }
+                                    that.$Notice.success({
+                                        title: "success",
+                                        desc:  that.operate.action == "append"?'添加':'编辑'+'菜单成功！'
+                                    });
+                                    window.location.reload();
+                                }else{
+                                    that.$Notice.error({
+                                        title: that.operate.action == "append"?'添加':'编辑'+'菜单失败！',
+                                        desc:  data.message
+                                    });
+                                }
+                           }).catch(function (error) {
+                               console.log(error);
+                               that.$Notice.error({
+                                   title: '提交失败',
+                                   desc:  '发生了某些异常: '+error
+                               });
+                           });
+                          //完成后
+                          that.operate = {
+                                action: "ready",
+                                tempTreeData: null
+                            };
+                        
+                        }
+            		});
+            	},
+            	append: function(data) {     //添加菜单
+            		if(this.operate.action != "ready"){   //处于编辑转台
+            			this.$Message.error('请先完成当前'+this.operate.action+'操作！');
+            			this.$refs["menuName"].focus();
+            		   return ;
+            		}
+            		this.menuDataRule = formRule;
+            		this.operate = {   //记录当前数据
+                            action: "append",
+                            tempTreeData: data
+                        };
+            		this.$refs["menuName"].focus();
+            		this.menuFormData.parent = data.ref || "-1";
+                    /* const children = data.children || [];
                     children.push({
                         title: 'appended node',
                         expand: true
                     });
-                    this.$set(data, 'children', children);
+                    this.$set(data, 'children', children); */
                 },
                 remove: function(root, node, data) {
+                	if(this.operate.action != "ready"){   //处于编辑转台
+                        this.$Message.error('请先完成当前'+this.operate.action+'操作！');
+                        this.$refs["menuName"].focus();
+                       return ;
+                    }
                     const parentKey = root.find(el => el === node).parent;
                     const parent = root.find(el => el.nodeKey === parentKey).node;
                     const index = parent.children.indexOf(data);
                     parent.children.splice(index, 1);
                 },
-                editMenu: function(root, node, data){
+                editMenu: function(root, node, data){      //编辑菜单
+                	if(this.operate.action != "ready"){   //处于编辑转台
+                        this.$Message.error('请先完成当前'+this.operate.action+'操作！');
+                        this.$refs["menuName"].focus();
+                       return ;
+                    }
+                	this.menuDataRule = formRule;
                     const ref = node.node.ref;
                     let edits = this.editMenus;
                     let refMenu = null ;
@@ -197,10 +288,12 @@
                     		if(ref == menu.id)  refMenu = menu;
                     	}
                     }
-                    console.log(refMenu);
-                    console.log(this.menuFormData);
                     Object.assign(this.menuFormData,refMenu);
-                    
+                    this.operate = {   //记录当前数据
+                            action: "edit",
+                            tempTreeData: node
+                        };
+                    this.$refs["menuName"].focus();
                 },
                 hasFiled: function(filed){   //屏蔽某些字段
                 	return this.fileds.indexOf(filed)!=-1;
@@ -263,6 +356,37 @@
                         ])
                     ]);
                 },
+                filterEditMenu: function(filter){
+                	console.log("filter=="+filter);
+                	//初始化待编辑菜单
+                    const children = [];
+                    let edits = this.editMenus;
+                    if(edits && edits.length){
+                        for(let i=0,len=edits.length;i<len;i++){
+                            let menu = edits[i];
+                            if(filter && filter!=menu.topref) continue;
+                            let subs = [];
+                            if(menu.subMenus&&menu.subMenus.length){
+                                for(let i=0,len=menu.subMenus.length;i<len;i++){
+                                   let sub = menu.subMenus[i];
+                                   if(filter && filter!=menu.topref) continue;
+                                   subs.push({
+                                       title: sub.text,
+                                       expand: true,
+                                       ref: sub.id
+                                   });
+                                }
+                            }
+                            children.push({
+                                title: menu.text,
+                                expand: true,
+                                ref: menu.id,
+                                children: subs
+                            });
+                        }
+                    }
+                    this.$set(this.treeData, 'children', children);
+                }
             },
             mounted : function() { //创建时
             	let that = this;
@@ -270,32 +394,9 @@
             	setTimeout(function(){
             		that.icons = iview_icons;   //图标下拉列表
             	}, 1000);
+            	this.menuFormData.topref=this.topref;
                 //初始化待编辑菜单
-                const children = this.treeData.children || [];
-                let edits = this.editMenus;
-                if(edits && edits.length){
-                    for(let i=0,len=edits.length;i<len;i++){
-                        let menu = edits[i];
-                        let subs = [];
-                        if(menu.subMenus&&menu.subMenus.length){
-                            for(let i=0,len=menu.subMenus.length;i<len;i++){
-                                let sub = menu.subMenus[i];
-                               subs.push({
-                                   title: sub.text,
-                                   expand: true,
-                                   ref: sub.id
-                               });
-                            }
-                        }
-                        children.push({
-                            title: menu.text,
-                            expand: true,
-                            ref: menu.id,
-                            children: subs
-                        });
-                    }
-                }
-                this.$set(this.treeData, 'children', children);
+                this.filterEditMenu(this.menuPlatform.name == 'BACKLEFT'?this.topref:"");
             }
         })
 </script>

@@ -24,7 +24,7 @@ public class LocalConfigDataDao {
 
   private static final String WX_MENU_CONFIG_PATH = "menu-config/wx_menus.yml";
   private static final String BACK_MANAGER_MENU_CONFIG_PATH = "menu-config/back_menu.yml";
-  private static List<Menu> localBackMenusList = null;
+  public static List<Menu> localBackMenusList = null;
 
   private Logger log = LoggerFactory.getLogger(LocalConfigDataDao.class);
 

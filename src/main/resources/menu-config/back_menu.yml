@@ -13,7 +13,7 @@ buttons:
     - name: menu-manager
       id: 837a3d97f1184096ba3038f99191fbda
       clazz: menu-manager
-      icon: 
+      icon: md-menu
       text: 菜单管理
       url: /manager/index
       parent: -1
@@ -27,7 +27,7 @@ buttons:
       text: 管理后台顶部菜单
       url: /manager/menu?platform=BACKTOP&current=manager-back-menu-top
       parent: -1
-      orderNum: 0
+      orderNum: 1
       platform: BACKLEFT
       topref: menu-manager
     - name: manager-back-menu-left
@@ -37,7 +37,7 @@ buttons:
       text: 管理后台左部菜单
       url: /manager/menu?platform=BACKLEFT&current=manager-back-menu-left
       parent: -1
-      orderNum: 0
+      orderNum: 2
       platform: BACKLEFT
       topref: menu-manager
     

@@ -54,12 +54,12 @@
     -->
     insert into menu (id, name, text, 
       icon, clazz, url, parent, 
-      order, type, media_id, 
+      orderNum, type, media_id, 
       appid, pagepath, platform, 
       topref)
     values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{text,jdbcType=VARCHAR}, 
       #{icon,jdbcType=VARCHAR}, #{clazz,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{parent,jdbcType=INTEGER}, 
-      #{order,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{mediaId,jdbcType=VARCHAR}, 
+      #{orderNum,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{mediaId,jdbcType=VARCHAR}, 
       #{appid,jdbcType=VARCHAR}, #{pagepath,jdbcType=VARCHAR}, #{platform,jdbcType=VARCHAR}, 
       #{topref,jdbcType=VARCHAR})
   </insert>
@@ -91,8 +91,8 @@
       <if test="parent != null">
         parent,
       </if>
-      <if test="order != null">
-        order,
+      <if test="orderNum != null">
+        orderNum,
       </if>
       <if test="type != null">
         type,
@@ -135,8 +135,8 @@
       <if test="parent != null">
         #{parent,jdbcType=INTEGER},
       </if>
-      <if test="order != null">
-        #{order,jdbcType=INTEGER},
+      <if test="orderNum != null">
+        #{orderNum,jdbcType=INTEGER},
       </if>
       <if test="type != null">
         #{type,jdbcType=VARCHAR},
@@ -183,8 +183,8 @@
       <if test="parent != null">
         parent = #{parent,jdbcType=INTEGER},
       </if>
-      <if test="order != null">
-        order = #{order,jdbcType=INTEGER},
+      <if test="orderNum != null">
+        orderNum = #{orderNum,jdbcType=INTEGER},
       </if>
       <if test="type != null">
         type = #{type,jdbcType=VARCHAR},
@@ -219,7 +219,7 @@
       clazz = #{clazz,jdbcType=VARCHAR},
       url = #{url,jdbcType=VARCHAR},
       parent = #{parent,jdbcType=INTEGER},
-      order = #{order,jdbcType=INTEGER},
+      orderNum = #{orderNum,jdbcType=INTEGER},
       type = #{type,jdbcType=VARCHAR},
       media_id = #{mediaId,jdbcType=VARCHAR},
       appid = #{appid,jdbcType=VARCHAR},

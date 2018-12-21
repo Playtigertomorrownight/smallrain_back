@@ -7,15 +7,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wangying.smallrain.entity.Menu;
+import com.wangying.smallrain.entity.Result;
 import com.wangying.smallrain.entity.enums.MenuPlatform;
 import com.wangying.smallrain.service.MenuService;
 import com.wangying.smallrain.utils.BaseUtils;
+import com.wangying.smallrain.utils.ResultUtil;
 
 @Controller
 @RequestMapping("/manager/")
@@ -44,8 +48,8 @@ public class BackManagerController {
    */
   @RequestMapping("/menu")
   public ModelAndView  menu(@RequestParam(value = "platform", required = false)String platform,
-                            @RequestParam(value = "", required = false)String current) {
-    log.info("");
+                            @RequestParam(value = "current", required = false)String current) {
+    log.info("后台菜单管理。。。。");
     ModelAndView  mv = new ModelAndView("menu_manager");  //指定viewname
     mv.addObject("topMenu","menu-manager");   //顶部按钮名称
     if(BaseUtils.isEmptyString(current)) current = "manager-back-menu-top";
@@ -85,6 +89,45 @@ public class BackManagerController {
     //加入菜单数据
     mv.addObject("menus",JSONObject.toJSONString(menus));
     //当前管理菜单的平台
+    return mv;
+  }
+  
+  
+  /**
+   * 添加或者更新菜单
+   * @param menu
+   * @return
+   */
+  @RequestMapping("/menu/add")
+  @ResponseBody
+  public Result addMenu(@RequestBody Menu menu) {
+    log.error("添加菜单数据！");
+    if(null == menu) {
+      log.error("接收到菜单数据为空！");
+      return ResultUtil.exception("接收到菜单数据为空！");
+    }
+    int count  =  menuService.addMenu(menu);
+    if(count <= 0 ) {
+      return ResultUtil.fail("添加或更新菜单失败");
+    }else {
+      return ResultUtil.success("添加或更新菜单成功",menu);
+    }
+  }
+  
+  /**
+   * 后台资源管理
+   * @param platform  待编辑按钮平台
+   * @param current   当前按钮
+   * @return
+   */
+  @RequestMapping("/resource")
+  public ModelAndView  resource() {
+    log.info("后台资源管理。。。。");
+    ModelAndView  mv = new ModelAndView("resource_manager");  //指定viewname
+    mv.addObject("topMenu","resource-manager");   //顶部按钮名称
+    mv.addObject("currentMenu","manager-back-resource-list");   //当前左部按钮名称
+    mv.addObject("title","资源管理");
+    
     return mv;
   }
   

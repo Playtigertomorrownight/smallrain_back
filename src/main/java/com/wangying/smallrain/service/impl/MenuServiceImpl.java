@@ -1,19 +1,24 @@
 package com.wangying.smallrain.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wangying.smallrain.dao.LocalConfigDataDao;
 import com.wangying.smallrain.dao.MenuExtendMapper;
 import com.wangying.smallrain.entity.Menu;
 import com.wangying.smallrain.service.MenuService;
+import com.wangying.smallrain.utils.BaseUtils;
 
 @Service
+@Transactional
 public class MenuServiceImpl implements MenuService {
 
   @Autowired
@@ -40,8 +45,8 @@ public class MenuServiceImpl implements MenuService {
     List<Menu> leftMenus = new ArrayList<Menu>();
     List<Menu> localList = localConfigDataDao.getlocalBackMenusList();  //加载本地配置的初始化菜单列表
     List<Menu> dbList = menuMapper.selectsMenusByTop(topMenuName, paltform);  //查询数据库里的菜单项
-    localList.addAll(dbList);
-    for(Menu menu :  localList) {
+    dbList.addAll(localList);
+    for(Menu menu :  dbList) {
       if(null == menu) continue;
       if(paltform.equals(menu.getPlatform().name())) {
         topMenus.add(menu);
@@ -50,6 +55,8 @@ public class MenuServiceImpl implements MenuService {
         leftMenus.add(menu);
       }
     }
+    Collections.sort(topMenus);
+    Collections.sort(leftMenus);
     result.put("top", dealList(topMenus));
     result.put("left", dealList(leftMenus));
     return result;
@@ -70,6 +77,7 @@ public class MenuServiceImpl implements MenuService {
     List<Menu> dbList = menuMapper.selectsMenusByPlatform(platform);  //查询数据库里的菜单项
     if(null!=dbList&&!dbList.isEmpty())
       result.addAll(dbList);
+     Collections.sort(result);
     return dealList(result);
   }
 
@@ -104,6 +112,26 @@ public class MenuServiceImpl implements MenuService {
       menu.setSubMenus(sub);;
     }
     return result;
+  }
+
+  @Override
+  public int addMenu(Menu menu) {
+    // TODO Auto-generated method stub
+    if(BaseUtils.isEmptyString(menu.getId())) {   //新建
+      menu.setId(BaseUtils.createUUID());
+      return menuMapper.insert(menu);
+    }
+    List<Menu> local = LocalConfigDataDao.localBackMenusList;
+    if(null!=local&&!local.isEmpty()) {   //如果是配置文件生成，更新到缓存
+      for(Menu m:local) {
+        if(menu.getId().equals(m.getId())) {
+           BaseUtils.copyProperties(menu, m);
+           return 1;
+        }
+      }
+    }
+    //更新
+    return menuMapper.updateByPrimaryKeySelective(menu);
   }
 
 
