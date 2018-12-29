@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wangying.smallrain.dao.LocalConfigDataDao;
-import com.wangying.smallrain.dao.MenuExtendMapper;
+import com.wangying.smallrain.dao.extend.MenuExtendMapper;
 import com.wangying.smallrain.entity.Menu;
 import com.wangying.smallrain.service.MenuService;
 import com.wangying.smallrain.utils.BaseUtils;

@@ -1,67 +1,77 @@
-.layout{
-    border: 1px solid #d7dde4;
-    background: #f5f7f9;
-    position: relative;
-    border-radius: 4px;
-    overflow: hidden;
-}
-.layout-logo{
-    width: 100px;
-    height: 30px;
-    background: #5b6270;
-    border-radius: 3px;
-    float: left;
-    position: relative;
-    top: 15px;
-    left: 20px;
-}
-.layout-nav{
-    width: 80%;
-    margin: 0 auto;
-    margin-right: 20px;
+.layout {
+	border: 1px solid #d7dde4;
+	background: #f5f7f9;
+	position: relative;
+	border-radius: 4px;
+	overflow: hidden;
 }
 
-.layout-nav .ivu-menu-item{
-    float: right;
-    padding: 0 20px;
-    font-size: 15px;
+.layout-logo {
+	width: 100px;
+	height: 30px;
+	background: #5b6270;
+	border-radius: 3px;
+	float: left;
+	position: relative;
+	top: 15px;
+	left: 20px;
 }
+
+.layout-nav {
+	width: 80%;
+	margin: 0 auto;
+	margin-right: 20px;
+}
+
+.layout-nav .ivu-menu-item {
+	float: right;
+	padding: 0 20px;
+	font-size: 15px;
+}
+
 .modal-header {
-    text-align: center;
-    padding: 40px 7px;
-  }
-   .modal-header h1.webname{
-     margin-top:30px;
-   }
-  .ivu-modal-footer{
-    border:none;
-   padding: 26px 14px;
-  }
-  .ivu-modal-header {
-    color: white;
-    background: #1c2438;
-    margin-bottom: 30px;
-  }
-  .ivu-modal-content {
-      border: none; 
-      border-radius: 0px;
-   }
-  .ivu-checkbox-wrapper.ivu-checkbox-large {
-    float: right;
-  }
-  .ivu-form .ivu-form-item-label, .ivu-checkbox-wrapper.ivu-checkbox-large {
-    font-size: 15px;
-    font-weight: 700;
-  }
-  
- .ivu-tree ul{
-    font-size: 21px;
- }
-  
- .ivu-select-item {
-     font-size: 16px!important;
- }
+	text-align: center;
+	padding: 40px 7px;
+}
 
- [v-cloak]{  
-    display: none;  
- }  
+.modal-header h1.webname {
+	margin-top: 30px;
+}
+
+.ivu-modal-footer {
+	border: none;
+	padding: 26px 14px;
+}
+
+.ivu-modal-header {
+	color: white;
+	background: #1c2438;
+	margin-bottom: 30px;
+}
+
+.ivu-modal-content {
+	border: none;
+	border-radius: 0px;
+}
+
+.ivu-checkbox-wrapper.ivu-checkbox-large {
+	float: right;
+}
+
+.ivu-form .ivu-form-item-label, .ivu-checkbox-wrapper.ivu-checkbox-large
+	{
+	font-size: 15px;
+	font-weight: 700;
+}
+
+.ivu-tree ul {
+	font-size: 21px;
+}
+
+.ivu-select-item {
+	font-size: 16px !important;
+}
+
+[v-cloak] {
+	display: none;
+}

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -37,8 +38,11 @@ public class FileController {
    * @return
    */
   @RequestMapping(value = "upload", method = RequestMethod.POST)
-  public Result uploadfile(@RequestParam("file") MultipartFile files) {
-    boolean isSuccess = fileService.uploadFile(files,null);
+  public Result uploadfile(@RequestParam("file") MultipartFile files,
+                           @RequestParam(value="name", required=false) String name,
+                           @RequestParam(value="description", required=false) String description,
+                           @RequestParam(value="label", required=false) String label) {
+    boolean isSuccess = fileService.uploadFile(files,name,description,label);
     if(isSuccess)  return ResultUtil.success("上传成功！");
     return ResultUtil.fail("上传失败！");
   }
@@ -53,9 +57,22 @@ public class FileController {
 
     List<MultipartFile> mfiles =((MultipartHttpServletRequest)request).getFiles("file"); 
     for(MultipartFile mfile:mfiles) {
-      fileService.uploadFile(mfile,null);
+      fileService.uploadFile(mfile,null,null,null);
     }
     return ResultUtil.success("上传成功！");
+    
+  }
+  
+  /**
+   * 根据资源ID加载相应的文件
+   * @param files
+   * @return
+   */
+  @RequestMapping(value = "load/{resId}", method = RequestMethod.GET)
+  @ResponseBody
+  public Result loadFile(@PathVariable("resId") String resId) {
+
+    return fileService.loadFile(resId);
     
   }
   

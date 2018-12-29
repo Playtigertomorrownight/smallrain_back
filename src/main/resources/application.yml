@@ -30,7 +30,7 @@ server:
 #公共配置与profiles选择无关
 mybatis:
   typeAliasesPackage: com.wangying.samllrain.entity
-  mapperLocations: classpath*:/mapper/*Mapper.xml
+  mapperLocations: classpath*:/mapper/*Mapper.xml,/mapper/extend/*Mapper.xml
 
 #微信基本信息配置
 wechat: 
@@ -84,3 +84,4 @@ ftp:
   controlEncoding: utf-8
   useEPSVwithIPv4: false
   passiveMode: true
+  ftpFileDmain: http://www.smallrain.top/   #文件服务器域名

@@ -45,7 +45,7 @@ public class FTPClientFactory extends BasePooledObjectFactory<FTPClient> {
         throw new Exception(
             "ftpClient登录失败! userName:" + ftpPoolConfig.getUsername() + ", password:" + ftpPoolConfig.getPassword());
       }
-      logger.error("ftpClient登录ftp 服务器成功!");
+      logger.info("ftpClient登录ftp 服务器成功!");
       ftpClient.setControlEncoding(ftpPoolConfig.getControlEncoding());
       ftpClient.setBufferSize(ftpPoolConfig.getBufferSize());
       ftpClient.setFileType(FTP.BINARY_FILE_TYPE);

@@ -15,20 +15,25 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.druid.util.StringUtils;
-import com.wangying.smallrain.dao.ResourceMapper;
+import com.alibaba.fastjson.JSONObject;
+import com.wangying.smallrain.dao.extend.ResourceExtendMapper;
 import com.wangying.smallrain.entity.Resource;
+import com.wangying.smallrain.entity.Result;
 import com.wangying.smallrain.entity.enums.FileDataType;
 import com.wangying.smallrain.ftp.FTPClientHelper;
+import com.wangying.smallrain.markdown.MarkDown2HtmlWrapper;
+import com.wangying.smallrain.markdown.MarkdownEntity;
 import com.wangying.smallrain.service.FileService;
 import com.wangying.smallrain.utils.BaseUtils;
 import com.wangying.smallrain.utils.FileUtils;
+import com.wangying.smallrain.utils.ResultUtil;
 
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
 @Service
 public class FileServiceImpl implements FileService {
 
   @Autowired
-  private ResourceMapper resourceMapper;
+  private ResourceExtendMapper resourceMapper;
   @Autowired
   private FTPClientHelper fTPClientHelper;
 
@@ -41,7 +46,7 @@ public class FileServiceImpl implements FileService {
   private Logger log = LoggerFactory.getLogger(FileServiceImpl.class);
 
   @Override
-  public boolean uploadFile(MultipartFile file, String fileName) {
+  public boolean uploadFile(MultipartFile file, String fileName, String description, String label) {
     // TODO Auto-generated method stub
     log.info("上传文件。。。。");
     Resource res = new Resource(); // new resource 对象
@@ -59,6 +64,10 @@ public class FileServiceImpl implements FileService {
     long filesize = file.getSize(); // 获取并设置文件大小
     res.setSize(filesize);
     log.info("上传的文件大小为：" + filesize);
+    res.setDescription(description);
+    log.info("上传的文件描述：" + description);
+    res.setLabel(label);
+    log.info("上传的文件标签：" + label);
     res.setType(FileDataType.valueOfType(suffixName)); // 生成文件类型
     try {
       boolean isUpload = false;
@@ -138,6 +147,44 @@ public class FileServiceImpl implements FileService {
   public String downloadFile(String path) {
     // TODO Auto-generated method stub
     return null;
+  }
+
+  @Override
+  public Result loadFile(String resourceId) {
+    log.info("根据资源ID加载相关的文件，资源ID ："+ resourceId);
+    Resource res = resourceMapper.selectByPrimaryKey(resourceId);
+    String path = res.getPath();
+    if(null == res || BaseUtils.isEmptyString(path)) {
+      log.warn("无对应的资源");
+      return ResultUtil.fail("无对应的资源");
+    }
+    try {
+      byte [] fileData =  fTPClientHelper.downloadFileToBytes(path);
+      JSONObject result = new JSONObject();
+      if(FileDataType.TXT == res.getType()) {    //文本文件，直接转 String
+         String fileContent = new String(fileData, "UTF-8");
+         if(path.endsWith("html")||path.endsWith("htm")) {
+           result.put("type", "html");
+         }else {
+           result.put("type", "txt");
+         }
+         result.put("content", fileContent);
+         return ResultUtil.success(result.toJSONString());
+      }else if(FileDataType.MARKDOWN  == res.getType()) {    //markDown 文件，解析为 HTML 之后返回
+         String fileContent = new String(fileData, "UTF-8");
+         MarkdownEntity html = MarkDown2HtmlWrapper.ofContent(fileContent); 
+         result.put("type", "html");
+         result.put("content", html.toString());
+         return ResultUtil.success(result.toJSONString());
+      }else {
+        return ResultUtil.fail("文件类型："+ res.getType() +" 暂时不支持转换！");
+      }
+      
+    } catch (Exception e) {
+      log.error("从ftp 加载资源时发生异常！");
+      e.printStackTrace();
+      return ResultUtil.fail("从ftp 加载资源时发生异常:"+ e.getMessage());
+    }
   }
 
 }

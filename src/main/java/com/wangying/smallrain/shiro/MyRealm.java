@@ -15,9 +15,9 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.wangying.smallrain.dao.MenuExtendMapper;
 import com.wangying.smallrain.dao.RoleMapper;
-import com.wangying.smallrain.dao.UserExtendMapper;
+import com.wangying.smallrain.dao.extend.MenuExtendMapper;
+import com.wangying.smallrain.dao.extend.UserExtendMapper;
 import com.wangying.smallrain.entity.Menu;
 import com.wangying.smallrain.entity.Role;
 import com.wangying.smallrain.entity.User;

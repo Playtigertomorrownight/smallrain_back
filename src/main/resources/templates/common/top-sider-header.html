@@ -8,7 +8,7 @@
                     <div class="layout-nav">
                     
                         <menu-item v-for="menu in menus.top" :name="menu.name" :class="menu.clazz" :key="menu.name" >
-                            <Icon :type="menu.icon"></Icon>
+                            <Icon :type="menu.icon" size="28"></Icon>
                             {{menu.text}}
                         </menu-item>
                     </div>
@@ -20,7 +20,7 @@
                         <template v-for="menu in menus.left">
                             <Submenu v-if="menu.subMenus&&menu.subMenus.length"  :name="menu.name">
                                 <template slot="title">
-                                    <Icon :type="menu.icon"></Icon>
+                                    <Icon :type="menu.icon" size="25"></Icon>
                                     {{menu.text}}
                                 </template> 
                                     <menu-item v-for="sub in menu.subMenus" :name="sub.id" :key="sub.id">
@@ -28,7 +28,7 @@
                                     </menu-item>
                             </Submenu>
                             <menu-item  v-else :name="menu.name" :class="menu.clazz" :key="menu.name" >
-                                <Icon :type="menu.icon"></Icon>
+                                <Icon :type="menu.icon" size="20"></Icon>
                                 {{menu.text}}
                             </menu-item>
                         </template>

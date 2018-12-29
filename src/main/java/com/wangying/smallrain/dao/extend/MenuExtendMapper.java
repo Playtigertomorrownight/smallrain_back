@@ -1,10 +1,11 @@
-package com.wangying.smallrain.dao;
+package com.wangying.smallrain.dao.extend;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.wangying.smallrain.dao.MenuMapper;
 import com.wangying.smallrain.entity.Menu;
 
 /**

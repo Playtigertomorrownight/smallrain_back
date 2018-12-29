@@ -1,5 +1,7 @@
 package com.wangying.smallrain.ftp;
 
+import java.io.IOException;
+
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class FTPClientPool {
   public FTPClient borrowObject() throws Exception {
 
     FTPClient client = pool.borrowObject();
+    while(!client.isConnected()||!client.isAvailable()) {
+      client = pool.borrowObject();
+    }
 
     // if(!client.sendNoOp()){
     // //使池中的对象无效

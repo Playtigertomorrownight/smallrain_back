@@ -6,18 +6,25 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wangying.smallrain.entity.Menu;
+import com.wangying.smallrain.entity.PageBean;
+import com.wangying.smallrain.entity.Resource;
 import com.wangying.smallrain.entity.Result;
+import com.wangying.smallrain.entity.enums.FileDataType;
 import com.wangying.smallrain.entity.enums.MenuPlatform;
+import com.wangying.smallrain.entity.query.ResourceQueryEntity;
 import com.wangying.smallrain.service.MenuService;
+import com.wangying.smallrain.service.ResourceService;
 import com.wangying.smallrain.utils.BaseUtils;
 import com.wangying.smallrain.utils.ResultUtil;
 
@@ -27,6 +34,12 @@ public class BackManagerController {
 
   @Autowired
   private MenuService menuService;
+  
+  @Autowired
+  private ResourceService resourceService;
+  
+  @Value("${ftp.ftpFileDmain}")
+  private String ftpFileDmain;
   
   private Logger log = LoggerFactory.getLogger(BackManagerController.class);
   
@@ -71,7 +84,7 @@ public class BackManagerController {
     List<Menu> editMenus = menuService.getMenusOfPlatForm(platform);
     //添加待编辑菜单列表
     mv.addObject("editMenus",JSONObject.toJSONString(editMenus));
-    //获取该青苔所有顶部列表
+    //获取该平台所有顶部列表
     String topPlatForm = "";
     switch (mPlatForm) {
         case BEFORELEFT:
@@ -121,15 +134,54 @@ public class BackManagerController {
    * @return
    */
   @RequestMapping("/resource")
-  public ModelAndView  resource() {
+  public ModelAndView  resource(@RequestParam(value = "current", required = false)String current) {
     log.info("后台资源管理。。。。");
     ModelAndView  mv = new ModelAndView("resource_manager");  //指定viewname
     mv.addObject("topMenu","resource-manager");   //顶部按钮名称
-    mv.addObject("currentMenu","manager-back-resource-list");   //当前左部按钮名称
-    mv.addObject("title","资源管理");
+    current = BaseUtils.isEmptyString(current)?"manager-back-resource-list":current;
+    mv.addObject("currentMenu",current);   //当前左部按钮名称
+    //根据顶部所菜单选取需要返回的菜单项
+    Map<String, Object>  menus = menuService.getMenuListBytop(MenuPlatform.BACKTOP.name(),"resource-manager");
+    //加入菜单数据
+    mv.addObject("menus",JSONObject.toJSONString(menus));
+    String action = current.substring(current.lastIndexOf("-")+1,current.length());
+    mv.addObject("action",action);
+    mv.addObject("pageData","{}");
+    mv.addObject("resType","{}"); //类型数据
+    mv.addObject("ftpFileDmain",ftpFileDmain); //文件服务器域名
+    if("list".equals(action)) {   //资源列表
+      mv.addObject("title","资源管理-资源列表");
+      Result pageDate = getResourceList(new ResourceQueryEntity());
+      mv.addObject("pageData",JSONObject.toJSONString(pageDate.getData())); //资源数据
+      mv.addObject("resType",JSONObject.toJSONString(FileDataType.list())); //类型数据
+      
+    }else if("add".equals(action)){   //资源上传
+      mv.addObject("title","资源管理-资源上传");
+    }else {
+      
+    }
     
     return mv;
   }
+  
+  /**
+   * 后台资源管理
+   * @param platform  待编辑按钮平台
+   * @param current   当前按钮
+   * @return
+   */
+  @RequestMapping(value="/resource/list",method = RequestMethod.POST)
+  @ResponseBody
+  public Result  getResourceList(@RequestBody(required=false) ResourceQueryEntity resQuery) {
+    PageBean<Resource> pageDate = new PageBean<Resource>();
+    try {
+      pageDate = resourceService.getResourceList(resQuery);
+    }catch(Exception e) {
+      return ResultUtil.fail("查询资源列表失败："+e.getMessage());
+    }
+    return ResultUtil.success(pageDate);
+  }
+  
   
   
 }

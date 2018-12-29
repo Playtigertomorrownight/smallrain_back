@@ -53,4 +53,5 @@ public interface ResourceMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(Resource record);
+    
 }

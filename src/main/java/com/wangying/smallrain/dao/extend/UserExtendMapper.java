@@ -1,4 +1,4 @@
-package com.wangying.smallrain.dao;
+package com.wangying.smallrain.dao.extend;
 
 import com.wangying.smallrain.dao.UserMapper;
 import com.wangying.smallrain.entity.User;

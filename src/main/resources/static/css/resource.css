@@ -1,0 +1,127 @@
+.layout {
+	border: 1px solid #d7dde4;
+	background: #f5f7f9;
+	position: relative;
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+.layout-logo {
+	width: 100px;
+	height: 30px;
+	background: #5b6270;
+	border-radius: 3px;
+	float: left;
+	position: relative;
+	top: 15px;
+	left: 20px;
+}
+
+.layout-nav {
+	width: 80%;
+	margin: 0 auto;
+	margin-right: 20px;
+}
+
+.layout-nav .ivu-menu-item {
+	float: right;
+	padding: 0 20px;
+	font-size: 15px;
+}
+
+.modal-header {
+	text-align: center;
+	padding: 40px 7px;
+}
+
+.modal-header h1.webname {
+	margin-top: 30px;
+}
+
+.ivu-modal-footer {
+	border: none;
+	padding: 26px 14px;
+}
+
+.ivu-modal-header {
+	color: white;
+	background: #1c2438;
+	margin-bottom: 30px;
+}
+
+.ivu-modal-content {
+	border: none;
+	border-radius: 0px;
+}
+
+div.file-list {
+	margin-top: 50px;
+}
+
+div.file-list ul, li {
+	list-style: none;
+}
+
+div.file-list li.file {
+	list-style: none;
+	margin-top: 12px;
+	padding: 7px;
+	border: 1px dashed #dcdee2;
+	border-radius: 4px;
+	padding: 8px 4px;
+}
+
+div.file-list li.file:hover {
+	list-style: none;
+	margin-top: 12px;
+	padding: 7px;
+	border: 1px dashed #00c0ffe3;
+	border-radius: 4px;
+	padding: 8px 4px;
+}
+
+div.file-list li.file-filed {
+	display: inline-block;
+	float: left;
+	margin-left: 2em;
+	width: 220px;
+}
+
+div.file-info {
+	padding: 10px;
+	margin-right: 2em;
+	display: inline-block;
+	min-width: 700px;
+	float: left;
+}
+
+div.file-filed-form {
+	display: inline-block;
+	margin-top: 5px;;
+}
+
+div.file-info label {
+	padding: 5px;
+	margin-right: 1em;
+	font-size: 14px;
+}
+
+.ivu-form-item-content {
+	display: inline-block;
+}
+
+.modal_content_img {
+	text-align: center;
+	vertical-align: center;
+	padding: 50px 20px;
+}
+
+.modal_content_img img {
+	min-width: 20em;
+	max-width: 50rem;
+	height: auto;
+}
+
+[v-cloak] {
+	display: none;
+}
