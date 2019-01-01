@@ -46,12 +46,10 @@ public class FTPClientHelper {
       if (in != null) {
         in.close();
       }
-      if (!client.completePendingCommand()) {
-        client.logout();
-        client.disconnect();
-        ftpClientPool.invalidateObject(client);
+      if(client.completePendingCommand()) {
+    	  ftpClientPool.returnObject(client);
       }
-      ftpClientPool.returnObject(client);
+      
     }
   }
 

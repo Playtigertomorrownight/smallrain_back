@@ -24,7 +24,7 @@ public class MarkDown2HtmlWrapper {
 
   private static String MD_CSS = null;
   
-  private static final String MARKDOWN_CSS_PATH = "markdown-style/huimarkdown.css";
+  private static final String MARKDOWN_CSS_PATH = "markdown-style/markdown.css";
 
   static {
       try {

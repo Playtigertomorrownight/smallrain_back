@@ -62,12 +62,12 @@
 					          </div>
 					       </Content>
 					       <Content v-else-if="resourceModalContent.type == 'txt'">  <!-- 渲染图像 -->
-                              <div class="modal_content_img" v-text="resourceModalContent.content">
+                              <div class="modal_content_text" v-text="resourceModalContent.content">
                                
                               </div>
                            </Content>
                            <Content v-else-if="resourceModalContent.type == 'html'">  <!-- 渲染图像 -->
-                              <div class="modal_content_img" v-html="resourceModalContent.content">
+                              <div class="modal_content_html" v-html="resourceModalContent.content">
                                
                               </div>
                            </Content>

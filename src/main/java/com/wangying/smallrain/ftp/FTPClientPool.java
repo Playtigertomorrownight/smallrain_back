@@ -61,8 +61,8 @@ public class FTPClientPool {
    */
   public void returnObject(FTPClient ftpClient) {
 
-    if (ftpClient != null) {
-      pool.returnObject(ftpClient);
+    if (ftpClient != null) {   //直接销毁该连接
+    	invalidateObject(ftpClient);
     }
   }
   

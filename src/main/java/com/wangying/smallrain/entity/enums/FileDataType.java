@@ -15,7 +15,7 @@ import com.wangying.smallrain.utils.BaseUtils;
  */
 public enum FileDataType {
 
-  TXT(0,"text","txt-","文本文件",".txt",".js",".css",".htm",".html",".java",".cpp",".xml",".yaml",".json","conf"),//文本文件
+  TXT(0,"text","txt-","文本文件",".txt",".js",".css",".htm",".html",".java",".cpp",".xml",".yaml",".json",".conf"),//文本文件
   OFFICE(1,"office","ofe-","OFFICE 文件",".doc",".docx",".ppt",".pptx",".wps",".pdf"),//文件
   COMPRESS(2,"compress","cps-","压缩文件",".zip",".rar",".arj",".gz",".z"),//压缩文件
   IMAGE(3,"image","img-","图片文件",".bmp",".gif",".jpg",".jpeg",".pic",".png",".tif"), //图片文件

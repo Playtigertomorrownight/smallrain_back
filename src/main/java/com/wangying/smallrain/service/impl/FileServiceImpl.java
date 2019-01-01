@@ -169,13 +169,13 @@ public class FileServiceImpl implements FileService {
            result.put("type", "txt");
          }
          result.put("content", fileContent);
-         return ResultUtil.success(result.toJSONString());
+         return ResultUtil.success(result);
       }else if(FileDataType.MARKDOWN  == res.getType()) {    //markDown 文件，解析为 HTML 之后返回
          String fileContent = new String(fileData, "UTF-8");
          MarkdownEntity html = MarkDown2HtmlWrapper.ofContent(fileContent); 
          result.put("type", "html");
          result.put("content", html.toString());
-         return ResultUtil.success(result.toJSONString());
+         return ResultUtil.success(result);
       }else {
         return ResultUtil.fail("文件类型："+ res.getType() +" 暂时不支持转换！");
       }
