@@ -168,18 +168,44 @@ public class FileServiceImpl implements FileService {
          }else {
            result.put("type", "txt");
          }
-         result.put("content", fileContent);
+         result.put("content", fileContent.replaceAll("(\r\n|\r|\n|\n\r)", "<br>"));
          return ResultUtil.success(result);
       }else if(FileDataType.MARKDOWN  == res.getType()) {    //markDown 文件，解析为 HTML 之后返回
          String fileContent = new String(fileData, "UTF-8");
          MarkdownEntity html = MarkDown2HtmlWrapper.ofContent(fileContent); 
          result.put("type", "html");
-         result.put("content", html.toString());
+         result.put("content", html.toString(false));
          return ResultUtil.success(result);
       }else {
         return ResultUtil.fail("文件类型："+ res.getType() +" 暂时不支持转换！");
       }
       
+    } catch (Exception e) {
+      log.error("从ftp 加载资源时发生异常！");
+      e.printStackTrace();
+      return ResultUtil.fail("从ftp 加载资源时发生异常:"+ e.getMessage());
+    }
+  }
+
+  @Override
+  public Result deleteFile(String resourceId) {
+    // TODO Auto-generated method stub
+    log.info(BaseUtils.joinString("根据资源ID加载相关的文件，资源ID ：", resourceId));
+    Resource res = resourceMapper.selectByPrimaryKey(resourceId);
+    String path = res.getPath();
+    if(null == res || BaseUtils.isEmptyString(path)) {
+      log.warn("无对应的资源");
+      return ResultUtil.fail("无对应的资源");
+    }
+    try {
+       boolean isRemoved =  fTPClientHelper.removeFile(path);
+       if(!isRemoved) {
+         log.warn(BaseUtils.joinString("移除ftp服务器上的资源：",path," 失败！"));
+         return ResultUtil.fail("删除资源失败");
+       }
+       resourceMapper.deleteByPrimaryKey(resourceId);  //删除数据库记录
+       return ResultUtil.success("删除资源成功！");
+       
     } catch (Exception e) {
       log.error("从ftp 加载资源时发生异常！");
       e.printStackTrace();

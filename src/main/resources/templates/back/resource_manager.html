@@ -62,7 +62,7 @@
 					          </div>
 					       </Content>
 					       <Content v-else-if="resourceModalContent.type == 'txt'">  <!-- 渲染图像 -->
-                              <div class="modal_content_text" v-text="resourceModalContent.content">
+                              <div class="modal_content_text" v-html="resourceModalContent.content">
                                
                               </div>
                            </Content>
@@ -216,7 +216,31 @@
             	},
                 remove: function(param){   //移除列表
                 	const data = param.row;
-                    console.log(JSON.stringify(data));
+                	const that = this;
+                    axios({     //提交数据到后台
+                        method: "DELETE",
+                        url: "../file/delete/"+data.id,
+                    }).then(function (response) {
+                        var resData = response.data;
+                        console.log(resData)
+                        if(resData&&resData.status == 0){   //删除成功
+                        	that.$Notice.success({
+                                title: '成功',
+                                desc:  '资源 '+ data.name + ' 删除成功'
+                            });
+                        	that.tableData.splice(data._index, 1);
+                        }else{
+                        	that.$Notice.error({
+                                title: '资源 '+ data.name + ' 删除失败',
+                                desc:  '原因: '+ resData.message
+                            });
+                        }
+                    }).catch(function (error) {
+                        that.$Notice.error({
+                            title: '资源 '+ data.name + ' 删除失败',
+                            desc:  '发生了某些异常: '+error
+                        });
+                    });     
                 },
                 removeFile: function(index){   //移除文件
                 	this.fileList.splice(index,1);

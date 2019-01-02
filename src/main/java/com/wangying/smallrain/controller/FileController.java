@@ -77,6 +77,19 @@ public class FileController {
   }
   
   /**
+   * 根据资源ID加载相应的文件
+   * @param files
+   * @return
+   */
+  @RequestMapping(value = "delete/{resId}", method = RequestMethod.DELETE)
+  @ResponseBody
+  public Result deleteFile(@PathVariable("resId") String resId) {
+
+    return fileService.deleteFile(resId);
+    
+  }
+  
+  /**
    * 将图片资源输出到客户端
    * @param resId
    * @param response

@@ -34,4 +34,13 @@ public interface FileService {
    */
   public Result loadFile(String resourceId);
   
+  /**
+   * 根据资源ID删除相关的文件及其记录
+   * @param resourceId
+   * @return
+   */
+  public Result deleteFile(String resourceId);
+  
+  
+  
 }

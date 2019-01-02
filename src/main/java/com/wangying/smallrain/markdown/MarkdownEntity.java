@@ -27,6 +27,13 @@ public class MarkdownEntity {
     public String toString() {
         return css + "\n<div " + parseDiv() + ">\n" + html + "\n</div>";
     }
+    
+    public String toString(boolean useDefaultCss) {
+      if(useDefaultCss)
+         return toString();
+      else
+        return "\n<div " + parseDiv() + ">\n" + html + "\n</div>";
+    }
 
 
     private String parseDiv() {

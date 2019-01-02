@@ -63,7 +63,7 @@ public class BackManagerController {
   public ModelAndView  menu(@RequestParam(value = "platform", required = false)String platform,
                             @RequestParam(value = "current", required = false)String current) {
     log.info("后台菜单管理。。。。");
-    ModelAndView  mv = new ModelAndView("menu_manager");  //指定viewname
+    ModelAndView  mv = new ModelAndView("back/menu_manager");  //指定viewname
     mv.addObject("topMenu","menu-manager");   //顶部按钮名称
     if(BaseUtils.isEmptyString(current)) current = "manager-back-menu-top";
     mv.addObject("currentMenu",current);   //当前左部按钮名称
@@ -136,7 +136,7 @@ public class BackManagerController {
   @RequestMapping("/resource")
   public ModelAndView  resource(@RequestParam(value = "current", required = false)String current) {
     log.info("后台资源管理。。。。");
-    ModelAndView  mv = new ModelAndView("resource_manager");  //指定viewname
+    ModelAndView  mv = new ModelAndView("back/resource_manager");  //指定viewname
     mv.addObject("topMenu","resource-manager");   //顶部按钮名称
     current = BaseUtils.isEmptyString(current)?"manager-back-resource-list":current;
     mv.addObject("currentMenu",current);   //当前左部按钮名称
