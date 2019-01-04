@@ -16,6 +16,7 @@ import com.wangying.smallrain.configs.WeChatConfig;
 import com.wangying.smallrain.dao.LocalConfigDataDao;
 import com.wangying.smallrain.entity.Result;
 import com.wangying.smallrain.entity.enums.ResultCode;
+import com.wangying.smallrain.utils.BaseUtils;
 import com.wangying.smallrain.utils.HttpUtil;
 import com.wangying.smallrain.utils.ResultUtil;
 
@@ -24,6 +25,8 @@ public class WechatService {
 
   @Autowired
   private WeChatConfig weChatConfig;
+  @Autowired
+  private MenuService menuService;
   @Autowired
   LocalConfigDataDao localConfigDataDao;
 
@@ -93,7 +96,7 @@ public class WechatService {
    * 向微信服务发送请求初始化菜单项
    * @return
    */
-  public Result initWxMenus() {
+  public Result initWxMenus(String source) {
     log.info("---开始设置微信公众号菜单---");
     //合成请求地址
     String createUrl = weChatConfig.getMenusCreateUrl();
@@ -101,9 +104,16 @@ public class WechatService {
     //获取accesstoken
     String access_token = getAccessToken();
     createUrl = createUrl.replace("ACCESS_TOKEN",access_token);
-    //获取本地菜单配置信息
-    Map<String,Object> menus = localConfigDataDao.loadWxMenuData();
-    log.info("---本地菜单配置信息： "+menus);
+    Map<String,Object> menus = null;
+    if(BaseUtils.isEmptyString(source)||"local".equals(source)) {  //加载本地配置
+      //获取本地菜单配置信息
+      menus = localConfigDataDao.loadWxMenuData();
+      log.info("---本地菜单配置信息： "+JSONObject.toJSONString(menus));
+    }else if("dbdata".equals(source)) {   //加载数据库配置
+      menus = menuService.dealAndLoadWxMenus();
+      log.info("---数据库菜单配置信息： "+menus);
+    }
+    
     //发送请求
     Map<String, String> headers = new HashMap<String, String>();
     headers.put("Content-Type", "application/json");
@@ -143,13 +153,13 @@ public class WechatService {
   public Result deleteWxMenus() {
     log.info("---开始删除微信公众号菜单---");
     //合成请求地址
-    String createUrl = weChatConfig.getMenusDeleteUrl();
-    if(StringUtils.isEmpty(createUrl)) return ResultUtil.fail(ResultCode.ERROR,"删除菜单项失败，请求地址为空！");
+    String deleteUrl = weChatConfig.getMenusDeleteUrl();
+    if(StringUtils.isEmpty(deleteUrl)) return ResultUtil.fail(ResultCode.ERROR,"删除菜单项失败，请求地址为空！");
     //获取accesstoken
     String access_token = getAccessToken();
-    createUrl = createUrl.replace("ACCESS_TOKEN",access_token);
+    deleteUrl = deleteUrl.replace("ACCESS_TOKEN",access_token);
     //发送请求
-    String resultStr = HttpUtil.doGet(createUrl, null, null);  //请求微信
+    String resultStr = HttpUtil.doGet(deleteUrl, null, null);  //请求微信
     log.info("删除菜单项的结果为： "+ resultStr);
     //根据结果返回
     return ResultUtil.success(resultStr);

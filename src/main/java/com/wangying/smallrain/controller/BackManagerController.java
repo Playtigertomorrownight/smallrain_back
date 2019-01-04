@@ -22,6 +22,7 @@ import com.wangying.smallrain.entity.Resource;
 import com.wangying.smallrain.entity.Result;
 import com.wangying.smallrain.entity.enums.FileDataType;
 import com.wangying.smallrain.entity.enums.MenuPlatform;
+import com.wangying.smallrain.entity.enums.WxMenuType;
 import com.wangying.smallrain.entity.query.ResourceQueryEntity;
 import com.wangying.smallrain.service.MenuService;
 import com.wangying.smallrain.service.ResourceService;
@@ -74,6 +75,10 @@ public class BackManagerController {
     if(BaseUtils.isEmptyString(platform)) {    //设置默认管理菜单平台
       platform  = MenuPlatform.BACKTOP.name();
     }
+    mv.addObject("WxMenuType","{}");
+    if(platform.equals(MenuPlatform.WECHAT.name())) {     //管理微信公众号按钮需要加上按钮类型
+      mv.addObject("WxMenuType",JSONObject.toJSONString(WxMenuType.list()));
+    }
     MenuPlatform mPlatForm = MenuPlatform.valueOf(platform);
     mv.addObject("menuPlatform",mPlatForm);
     mv.addObject("treeRoot",mPlatForm.platform());
@@ -124,6 +129,27 @@ public class BackManagerController {
       return ResultUtil.fail("添加或更新菜单失败");
     }else {
       return ResultUtil.success("添加或更新菜单成功",menu);
+    }
+  }
+  
+  /**
+   * 添加或者更新菜单
+   * @param menu
+   * @return
+   */
+  @RequestMapping(value="/menu/delete" , method = RequestMethod.DELETE)
+  @ResponseBody
+  public Result deleteMenu(@RequestParam(value = "menuId", required = true)String menuId) {
+    log.error("删除菜单数据！");
+    if(null == menuId) {
+      log.error("接收到菜单ID为空！");
+      return ResultUtil.exception("接收到菜单ID为空！");
+    }
+    int count  =  menuService.deleteByMenuiId(menuId);
+    if(count <= 0 ) {
+      return ResultUtil.fail("删除菜单失败，菜单不存在或默认菜单不可删除");
+    }else {
+      return ResultUtil.success("删除菜单成功！");
     }
   }
   

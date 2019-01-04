@@ -39,6 +39,7 @@ public class ShiroConfig {
         // 拦截器.
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         //配置记住我或认证通过可以访问的地址(配置不会被拦截的链接 顺序判断)
+        filterChainDefinitionMap.put("/v1/wx/**", "anon");   //微信相关的访问不用拦截
         filterChainDefinitionMap.put("/**/favicon.ico", "anon");
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");

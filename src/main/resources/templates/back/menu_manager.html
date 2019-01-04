@@ -25,6 +25,9 @@
 					        </Radio>
 					    </radio-group>
 				    </div>
+				    <div v-if="menuPlatform.name== 'WECHAT'">
+				        <i-button type="primary" @click="updateMenusToWechat">更新菜单到公众号</i-button>
+				    </div>
                    <Row> 
                        <i-col span="10">
                             <Tree :data="menuTree" :render="renderContent"> </Tree>
@@ -71,15 +74,20 @@
                                 </i-select> -->
                            </form-item>
                            <form-item v-if="hasFiled('type')" label="类型（WeChat专用） ：">
-                               <i-input v-model="menuFormData.type"></i-input>
+                               <i-select v-model="menuFormData.type" >
+                                    <i-option v-for="wxType in wxMenuType" :value="wxType.name" :label="wxType.name" :key="wxType.code" v-cloak>
+                                        <span>{{wxType.name}}</span>
+                                        <span style="float:right;color:#ccc">-- {{wxType.description}}</span>
+                                    </i-option>
+                                </i-select>
                            </form-item>
                            <form-item v-if="hasFiled('mediaId')" label="媒体Id（WeChat专用） ：">
                                <i-input v-model="menuFormData.mediaId"></i-input>
                            </form-item>
-                           <form-item v-if="hasFiled('appid')" label="小程序Id（WeChat专用） ：">
+                           <form-item v-if="hasFiled('appid')" label="小程序Id（小程序专用） ：">
                                  <i-input v-model="menuFormData.appid"></i-input>
                            </form-item>
-                           <form-item v-if="hasFiled('pagepath')" label="页面路径（WeChat专用） ：">
+                           <form-item v-if="hasFiled('pagepath')" label="页面路径（小程序专用） ：">
                                <i-input v-model="menuFormData.pagepath"></i-input>
                            </form-item>
                             <form-item>
@@ -111,6 +119,7 @@
                 	topref: "menu-manager",
                 	editMenus: ${editMenus},
                     menuPlatform: ${menuPlatform},
+                    wxMenuType: ${WxMenuType},
                     fileds: '${effectiveFileds}',
                     platformSelects: ${platforms},
                     topMenus: ${topMenus},
@@ -193,23 +202,9 @@
             	    const that = this;
             		this.$refs["menuForm"].validate((valid) => {    //表单校验
                         if (valid) {   //校验通过，请求后台进行提交数据
-                        	axios({     //提交数据到后台
-                                method: "post",
-                                url: "./menu/add",
-                                data: this.menuFormData
-                            }).then(function (response) {
-                                var data = response.data;
-                                console.log(data)
+                        	sendRequest(this,"./menu/add","POST",this.menuFormData,function(response){
+                        		var data = response.data;
                                 if(data.status == 0){  //提交数据成功
-                                    if(that.operate.action != "append" ){   //添加菜单
-                                        console.log("添加成功");
-                                     }else if(that.operate.action != "edit"){
-                                    	 console.log("编辑成功");
-                                     }
-                                    that.$Notice.success({
-                                        title: "success",
-                                        desc:  that.operate.action == "append"?'添加':'编辑'+'菜单成功！'
-                                    });
                                     window.location.reload();
                                 }else{
                                     that.$Notice.error({
@@ -217,13 +212,7 @@
                                         desc:  data.message
                                     });
                                 }
-                           }).catch(function (error) {
-                               console.log(error);
-                               that.$Notice.error({
-                                   title: '提交失败',
-                                   desc:  '发生了某些异常: '+error
-                               });
-                           });
+                        	});
                           //完成后
                           that.operate = {
                                 action: "ready",
@@ -262,7 +251,23 @@
                     const parentKey = root.find(el => el === node).parent;
                     const parent = root.find(el => el.nodeKey === parentKey).node;
                     const index = parent.children.indexOf(data);
-                    parent.children.splice(index, 1);
+                    console.log(data);
+                    let that = this;
+                    sendRequest(this,"./menu/delete?menuId="+data.ref,"DELETE",null,function(response){
+                        var data = response.data;
+                        if(data.status == 0){  //提交数据成功
+                        	that.$Notice.success({
+                                title: 'success',
+                                desc:  '删除菜单成功！'
+                            });
+                        	parent.children.splice(index, 1);
+                        }else{
+                            that.$Notice.error({
+                                title: '删除菜单失败！',
+                                desc:  data.message
+                            });
+                        }
+                    });
                 },
                 editMenu: function(root, node, data){      //编辑菜单
                 	if(this.operate.action != "ready"){   //处于编辑转台
@@ -386,6 +391,23 @@
                         }
                     }
                     this.$set(this.treeData, 'children', children);
+                },
+                updateMenusToWechat: function(){    //更新菜单到微信公众号
+                	let that = this;
+                	sendRequest(this,"../v1/wx/menu/init?source=dbdata","GET",null,function(response){
+                        var data = response.data;
+                        if(data.status == 0){  //提交数据成功
+                            that.$Notice.success({
+                                title: "success",
+                                desc:  '更新菜单到微信公众号成功！'
+                            });
+                        }else{
+                            that.$Notice.error({
+                                title: "fail",
+                                desc:  '更新菜单到微信公众号失败！'
+                            });
+                        }
+                   });
                 }
             },
             mounted : function() { //创建时
@@ -394,7 +416,7 @@
             	setTimeout(function(){
             		that.icons = iview_icons;   //图标下拉列表
             	}, 1000);
-            	this.menuFormData.topref=this.topref;
+            	this.menuFormData.topref = this.menuPlatform.name== 'WECHAT'?"":this.topref;
                 //初始化待编辑菜单
                 this.filterEditMenu(this.menuPlatform.name == 'BACKLEFT'?this.topref:"");
             }

@@ -1,5 +1,10 @@
 package com.wangying.smallrain.entity.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.alibaba.fastjson.JSONObject;
+
 public enum MessageType {
 
   TEXT(0,"text"),   //文本消息
@@ -30,4 +35,21 @@ public enum MessageType {
     return type;
   }
   
+  
+  public String  toString(){
+    JSONObject result = new JSONObject();
+    result.put("code", code);
+    result.put("name", this.name());
+    result.put("type", this.type());
+    return result.toJSONString();
+  }
+  
+  public static List<JSONObject> list(){
+    List<JSONObject> result = new ArrayList<JSONObject>();
+    MessageType []  types = MessageType.values();
+    for(MessageType type : types) {
+      result.add(JSONObject.parseObject(type.toString()));
+    }
+    return result;
+  }
 }

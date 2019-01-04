@@ -40,7 +40,7 @@ public class LocalConfigDataDao {
     JSONObject wxMenuConfig = loadConfigFile(WX_MENU_CONFIG_PATH);
     List<JSONObject> buttons = dealList(wxMenuConfig.getJSONArray("buttons"), "sub_button", "all");
     JSONObject result = new JSONObject();
-    result.put("buttons", buttons);
+    result.put("button", buttons);
     log.info("-----从本地加载微信菜单配置文件成功------");
     return result;
   }

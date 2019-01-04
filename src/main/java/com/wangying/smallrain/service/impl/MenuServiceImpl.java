@@ -2,7 +2,6 @@ package com.wangying.smallrain.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wangying.smallrain.dao.LocalConfigDataDao;
 import com.wangying.smallrain.dao.extend.MenuExtendMapper;
 import com.wangying.smallrain.entity.Menu;
+import com.wangying.smallrain.entity.enums.MenuPlatform;
 import com.wangying.smallrain.service.MenuService;
 import com.wangying.smallrain.utils.BaseUtils;
 
@@ -81,6 +82,39 @@ public class MenuServiceImpl implements MenuService {
     return dealList(result);
   }
 
+  @Override
+  public int addMenu(Menu menu) {
+    // TODO Auto-generated method stub
+    if(BaseUtils.isEmptyString(menu.getId())) {   //新建
+      menu.setId(BaseUtils.createUUID());
+      return menuMapper.insert(menu);
+    }
+    List<Menu> local = LocalConfigDataDao.localBackMenusList;
+    if(null!=local&&!local.isEmpty()) {   //如果是配置文件生成，更新到缓存
+      for(Menu m:local) {
+        if(menu.getId().equals(m.getId())) {
+           BaseUtils.copyProperties(menu, m);
+           return 1;
+        }
+      }
+    }
+    //更新
+    return menuMapper.updateByPrimaryKeySelective(menu);
+  }
+
+  @Override
+  public Map<String, Object> dealAndLoadWxMenus() {
+    // TODO Auto-generated method stub
+    Map<String, Object> result  = new HashMap<String, Object>();
+    List<Menu> wxMenuList = menuMapper.selectsMenusByPlatform(MenuPlatform.WECHAT.name());  //查询数据库里的菜单项
+    if(null!=wxMenuList&&!wxMenuList.isEmpty()) {
+      Collections.sort(wxMenuList);
+      dealList(wxMenuList);
+      result.put("button", JSONObject.toJSONString(wxMenuList));
+    }
+    return result;
+  }
+
   /**
    * 处理包含 parent 属性的列表，将其归入到parent的子列表中
    * 
@@ -106,32 +140,18 @@ public class MenuServiceImpl implements MenuService {
       }
     }
     for (Menu menu : result) {
-      List<Menu> sub = subs.get(menu.getParent());
+      List<Menu> sub = subs.get(menu.getId());
       if (sub == null)
         sub = new ArrayList<Menu>();
-      menu.setSubMenus(sub);;
+      menu.setSubMenus(sub);
     }
     return result;
   }
-
+  
   @Override
-  public int addMenu(Menu menu) {
+  public int deleteByMenuiId(String MenuId) {
     // TODO Auto-generated method stub
-    if(BaseUtils.isEmptyString(menu.getId())) {   //新建
-      menu.setId(BaseUtils.createUUID());
-      return menuMapper.insert(menu);
-    }
-    List<Menu> local = LocalConfigDataDao.localBackMenusList;
-    if(null!=local&&!local.isEmpty()) {   //如果是配置文件生成，更新到缓存
-      for(Menu m:local) {
-        if(menu.getId().equals(m.getId())) {
-           BaseUtils.copyProperties(menu, m);
-           return 1;
-        }
-      }
-    }
-    //更新
-    return menuMapper.updateByPrimaryKeySelective(menu);
+    return menuMapper.deleteByPrimaryKey(MenuId);
   }
 
 

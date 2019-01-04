@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wangying.smallrain.entity.Result;
@@ -87,8 +88,8 @@ public class WeChatControlle {
   }
   
   @RequestMapping("/menu/init")
-  public Result menuInit() {
-    return wechatService.initWxMenus();
+  public Result menuInit(@RequestParam(value="source", required=false) String source) {
+    return wechatService.initWxMenus(source);
   }
   
   @RequestMapping("/menu/query")

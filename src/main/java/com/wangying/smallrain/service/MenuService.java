@@ -23,6 +23,14 @@ public interface MenuService {
   
   public int addMenu(Menu menu);
   
+  
+  /**
+   * 根据按钮Id删除按钮
+   * @param MenuId
+   * @return
+   */
+  public int deleteByMenuiId(String MenuId);
+  
   /**
    * 根据当前顶部按钮选取次级按钮组
    * @param paltform  顶部菜单平台
@@ -38,5 +46,12 @@ public interface MenuService {
    * @return
    */
   public List<Menu> getMenusOfPlatForm(String platform);
+  
+  /**
+   * 返回公众号更新按钮的格式
+   * @param paltform
+   * @return
+   */
+  public Map<String, Object> dealAndLoadWxMenus();
  
 }
