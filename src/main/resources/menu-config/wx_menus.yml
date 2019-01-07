@@ -9,8 +9,8 @@
 #9、media_id：下发消息（除文本消息）用户点击media_id类型按钮后，微信服务器会将开发者填写的永久素材id对应的素材下发给用户，永久素材类型可以是图片、音频、视频、图文消息。请注意：永久素材id必须是在“素材管理/新增永久素材”接口上传后获得的合法id。
 #10、view_limited：跳转图文消息URL用户点击view_limited类型按钮后，微信客户端将打开开发者在按钮中填写的永久素材id对应的图文消息URL，永久素材类型只支持图文消息。请注意：永久素材id必须是在“素材管理/新增永久素材”接口上传后获得的合法id。
 #11、 miniprogram 小程序类型
-buttons:
-  - name: button1
+buttons: 
+  - name: 中文菜单1
     type: click
     key: button001
     url: https://www.baidu.com/
@@ -18,7 +18,7 @@ buttons:
     parent: -1
     appid: 
     pagepath: 
-  - name: button2
+  - name: 中文菜单2
     type: click
     key: button002
     url: https://www.baidu.com/
@@ -26,7 +26,7 @@ buttons:
     parent: -1
     appid: 
     pagepath: 
-  - name: button3
+  - name: 中文菜单3
     type: click
     key: button003
     url: https://www.baidu.com/
@@ -34,7 +34,7 @@ buttons:
     parent: -1
     appid: 
     pagepath: 
-  - name: button4
+  - name: 中文菜单4
     type: click
     key: button004
     url: https://www.baidu.com/

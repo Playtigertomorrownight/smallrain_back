@@ -18,6 +18,7 @@ import org.yaml.snakeyaml.Yaml;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.wangying.smallrain.entity.Menu;
+import com.wangying.smallrain.utils.BaseUtils;
 
 @Component
 public class LocalConfigDataDao {
@@ -99,7 +100,7 @@ public class LocalConfigDataDao {
       if (null != inputStream)
         inputStream.close();
       JSONObject menus = JSONObject.parseObject(JSONObject.toJSONString(Config));
-      return removeNullEntry(menus);
+      return BaseUtils.removeNullEntry(menus);
     } catch (Exception e) {
       e.printStackTrace();
       log.info("从本地配置文件加载数据失败");
@@ -136,12 +137,12 @@ public class LocalConfigDataDao {
         continue;
       Integer parent = item.getInteger("parent");
       if (-1 == parent) { // 一级菜单
-        result.add(removeNullEntry(item));
+        result.add(BaseUtils.removeNullEntry(item));
       } else { // 二级菜单
         List<JSONObject> sub = subs.get(parent);
         if (sub == null)
           sub = new ArrayList<JSONObject>();
-        sub.add(removeNullEntry(item));
+        sub.add(BaseUtils.removeNullEntry(item));
         subs.put(parent, sub);
       }
     }
@@ -155,22 +156,5 @@ public class LocalConfigDataDao {
     return result;
   }
 
-  /**
-   * 移除属性值为空的属性
-   * 
-   * @param obj
-   * @return
-   */
-  private JSONObject removeNullEntry(JSONObject obj) {
-    if (obj == null)
-      return obj;
-    for (Iterator<Map.Entry<String, Object>> it = obj.entrySet().iterator(); it.hasNext();) {
-      Map.Entry<String, Object> item = it.next();
-      String key = item.getKey();
-      if (StringUtils.isEmpty(obj.getString(key)) || "level".equals(key) || "parent".equals(key))
-        it.remove();
-    }
-    return obj;
-  }
 
 }

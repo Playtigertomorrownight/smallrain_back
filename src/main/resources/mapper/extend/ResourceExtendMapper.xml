@@ -44,7 +44,7 @@
         and type = #{resQuery.type} 
       </if>
       <if test="resQuery.label != null and resQuery.label != ''">
-        and label = #{resQuery.label} 
+        and label like '%#{resQuery.label}%' 
       </if>
       <if test="resQuery.createTimeBegin != null">
         and create_time <![CDATA[>=]]> #{resQuery.createTimeBegin,jdbcType=TIMESTAMP}
@@ -64,7 +64,7 @@
         and type = #{resQuery.type} 
       </if>
       <if test="resQuery.label != null and resQuery.label != ''">
-        and label = #{resQuery.label} 
+        and label like '%#{resQuery.label}%' 
       </if>
       <if test="resQuery.createTimeBegin != null">
         and create_time <![CDATA[>=]]> #{resQuery.createTimeBegin,jdbcType=TIMESTAMP}

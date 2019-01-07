@@ -155,7 +155,6 @@ public class BackManagerController {
   
   /**
    * 后台资源管理
-   * @param platform  待编辑按钮平台
    * @param current   当前按钮
    * @return
    */

@@ -26,7 +26,7 @@
 					    </radio-group>
 				    </div>
 				    <div v-if="menuPlatform.name== 'WECHAT'">
-				        <i-button type="primary" @click="updateMenusToWechat">更新菜单到公众号</i-button>
+				        <i-button v-cloak type="primary" @click="updateMenusToWechat">更新菜单到公众号</i-button>
 				    </div>
                    <Row> 
                        <i-col span="10">
@@ -100,8 +100,21 @@
                  </Content>
               </Layout>
           </top-sider-bottom>
+           <Modal v-model="menuViewModal" width="450">
+	        <p slot="header" style="color:#f60;text-align:center">
+	            <h3 v-cloak>菜单信息查看</h3>
+	        </p>
+	        <div style="text-align:center">
+	            <i-table :columns="menuViewColumns" :data="menuViewData"></i-table>
+	        </div>
+	        <div slot="footer">
+	            <i-button type="primary" size="large" long @click="menuViewModal = false">确定</i-button>
+	        </div>
+	      </Modal>
     </div>
     <script type="text/javascript"> 
+     //菜单属性名映射
+     const menuFiledName = {name: "菜单名称",text: "显示文本",icon: "菜单图标",clazz: "样式类名",url: "链接地址",parent: "父菜单",orderNum: "排序值",type: "菜单类型",mediaId: "媒体ID",appid: "appid",pagepath: "小程序页面地址",platform: "所属平台",topref: "所属顶部按钮"};
      // 表单验证规则
 	  const formRule = {
 		        name: [
@@ -129,6 +142,9 @@
                     	tempTreeData: null
                     },
                     menuFormData: {name:'',text:'',icon:"",clazz:"",url:"",parent:"",orderNum:0,type:"",mediaId:"",appid:"",pagepath:"",platform:"",topref:""},
+                    menuViewColumns: [{title: '属性',key: 'filed'},{title: '值',key: 'value'}],
+                    menuViewData: [],
+                    menuViewModal: false,
                     menuDataRule: {},
                     treeData: {},
                     menuTree: [
@@ -269,7 +285,23 @@
                         }
                     });
                 },
-                editMenu: function(root, node, data){      //编辑菜单
+                viewMenu: function(node){
+                	const ref = node.node.ref;
+                    let refMenu = this.selectSingleMenuByref(ref);
+                    let data = [];
+                    console.log(refMenu)
+                    for (var item in refMenu){
+                    	if(refMenu[item]&&item!='subMenus'&&item!='id'){
+                    		data.push({
+                                filed: menuFiledName[item],
+                                value: refMenu[item]
+                            });
+                    	}
+                    }
+                    this.menuViewData = data;
+                    this.menuViewModal = true;
+                },
+                editMenu: function(node){      //编辑菜单
                 	if(this.operate.action != "ready"){   //处于编辑转台
                         this.$Message.error('请先完成当前'+this.operate.action+'操作！');
                         this.$refs["menuName"].focus();
@@ -277,22 +309,7 @@
                     }
                 	this.menuDataRule = formRule;
                     const ref = node.node.ref;
-                    let edits = this.editMenus;
-                    let refMenu = null ;
-                    if(edits && edits.length){
-                    	for(let i=0,len=edits.length;i<len&&!refMenu;i++){
-                    		let menu = edits[i];
-                    		if(!menu) continue;
-                    		if(menu.subMenus&&menu.subMenus.length){
-                                for(let i=0,len=menu.subMenus.length;i<len&&!refMenu;i++){
-                                    let sub = menu.subMenus[i];
-                                    if(!sub) continue;
-                                    if(ref == sub.id)  refMenu = sub;
-                                }
-                            }
-                    		if(ref == menu.id)  refMenu = menu;
-                    	}
-                    }
+                    let refMenu = this.selectSingleMenuByref(ref);
                     Object.assign(this.menuFormData,refMenu);
                     this.operate = {   //记录当前数据
                             action: "edit",
@@ -330,13 +347,24 @@
                         }, [
                         	h('Button', {
                                 props: Object.assign({}, this.buttonProps, {
+                                    icon: 'ios-eye'
+                                }),
+                                style: {
+                                    marginRight: '8px'
+                                },
+                                on: {
+                                    click: () => { this.viewMenu(node) }
+                                }
+                            }),
+                        	h('Button', {
+                                props: Object.assign({}, this.buttonProps, {
                                     icon: 'ios-build'
                                 }),
                                 style: {
                                     marginRight: '8px'
                                 },
                                 on: {
-                                    click: () => { this.editMenu(root, node, data) }
+                                    click: () => { this.editMenu(node) }
                                 }
                             }),
                             h('Button', {
@@ -391,6 +419,26 @@
                         }
                     }
                     this.$set(this.treeData, 'children', children);
+                },
+                selectSingleMenuByref: function(ref){    //根据按钮ID 选取按钮数据
+                	if(!ref) return null;
+                	let edits = this.editMenus;
+                    let refMenu = null ;
+                    if(edits && edits.length){
+                        for(let i=0,len=edits.length;i<len&&!refMenu;i++){
+                            let menu = edits[i];
+                            if(!menu) continue;
+                            if(menu.subMenus&&menu.subMenus.length){
+                                for(let i=0,len=menu.subMenus.length;i<len&&!refMenu;i++){
+                                    let sub = menu.subMenus[i];
+                                    if(!sub) continue;
+                                    if(ref == sub.id)  refMenu = sub;
+                                }
+                            }
+                            if(ref == menu.id)  refMenu = menu;
+                        }
+                    }
+                    return refMenu;
                 },
                 updateMenusToWechat: function(){    //更新菜单到微信公众号
                 	let that = this;

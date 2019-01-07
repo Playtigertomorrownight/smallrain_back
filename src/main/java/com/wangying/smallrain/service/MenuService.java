@@ -3,6 +3,7 @@ package com.wangying.smallrain.service;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wangying.smallrain.entity.Menu;
 
 public interface MenuService {
@@ -52,6 +53,6 @@ public interface MenuService {
    * @param paltform
    * @return
    */
-  public Map<String, Object> dealAndLoadWxMenus();
+  public JSONObject dealAndLoadWxMenus();
  
 }

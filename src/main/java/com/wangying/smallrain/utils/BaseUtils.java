@@ -5,7 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -15,6 +17,9 @@ import org.springframework.beans.FatalBeanException;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
+
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * 基本工具类，提供一写基本的方法，目前主要提供对象复制的通用方法
@@ -157,4 +162,22 @@ public class BaseUtils extends BeanUtils {
     return md5Text.equalsIgnoreCase(md5);
   }
 
+  /**
+   * 移除属性值为空的属性
+   * 
+   * @param obj
+   * @return
+   */
+  public static JSONObject removeNullEntry(JSONObject obj) {
+    if (obj == null)
+      return obj;
+    for (Iterator<Map.Entry<String, Object>> it = obj.entrySet().iterator(); it.hasNext();) {
+      Map.Entry<String, Object> item = it.next();
+      String key = item.getKey();
+      if (StringUtils.isEmpty(obj.getString(key)) || "level".equals(key) || "parent".equals(key))
+        it.remove();
+    }
+    return obj;
+  }
+  
 }

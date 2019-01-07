@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wangying.smallrain.utils.BaseUtils;
 
 /**
  * 微信菜单类型
@@ -95,6 +96,17 @@ public enum WxMenuType {
       result.add(JSONObject.parseObject(type.toString()));
     }
     return result;
+  }
+  
+  public static WxMenuType valueOfType(String arg) {
+    if(!BaseUtils.isEmptyString(arg)) {
+      WxMenuType [] types = WxMenuType.values();
+      for(WxMenuType type : types) {
+         if(type.type().equals(arg)||type.name().equals(arg))
+            return type;
+      }
+    }
+    return null;
   }
   
 }

@@ -15,6 +15,7 @@ import com.wangying.smallrain.dao.LocalConfigDataDao;
 import com.wangying.smallrain.dao.extend.MenuExtendMapper;
 import com.wangying.smallrain.entity.Menu;
 import com.wangying.smallrain.entity.enums.MenuPlatform;
+import com.wangying.smallrain.entity.enums.WxMenuType;
 import com.wangying.smallrain.service.MenuService;
 import com.wangying.smallrain.utils.BaseUtils;
 
@@ -103,18 +104,66 @@ public class MenuServiceImpl implements MenuService {
   }
 
   @Override
-  public Map<String, Object> dealAndLoadWxMenus() {
+  public JSONObject dealAndLoadWxMenus() {
     // TODO Auto-generated method stub
-    Map<String, Object> result  = new HashMap<String, Object>();
-    List<Menu> wxMenuList = menuMapper.selectsMenusByPlatform(MenuPlatform.WECHAT.name());  //查询数据库里的菜单项
-    if(null!=wxMenuList&&!wxMenuList.isEmpty()) {
-      Collections.sort(wxMenuList);
-      dealList(wxMenuList);
-      result.put("button", JSONObject.toJSONString(wxMenuList));
+    JSONObject result  = new JSONObject();
+    List<Menu> MenuList =  menuMapper.selectsMenusByPlatform(MenuPlatform.WECHAT.name());  //查询数据库里的菜单项
+    if(null!=MenuList&&!MenuList.isEmpty()) {
+      Collections.sort(MenuList);
+      List<JSONObject> wxMenuList = deaWxMenulList(MenuList);
+      result.put("button", wxMenuList);
     }
     return result;
   }
 
+  /**
+   * 处理包含 parent 属性的列表，将其归入到parent的子列表中
+   * 
+   * @param list
+   * @return
+   */
+  private List<JSONObject> deaWxMenulList(List<Menu> list) {
+    List<JSONObject> result = new ArrayList<JSONObject>();
+    Map<String, List<JSONObject>> subs = new HashMap<String, List<JSONObject>>();
+    // 遍历所有菜单项，区别一二级菜单
+    for (int i = 0, len = list.size(); i < len; i++) {
+      Menu item = list.get(i);
+      if (null == item)  continue;
+      String parent = item.getParent();
+      if ("-1".equals(parent)) { // 一级菜单
+        result.add(MenutoWxMenu(item));
+      } else { // 二级菜单
+        List<JSONObject> sub = subs.get(parent);
+        if (sub == null)
+          sub = new ArrayList<JSONObject>();
+        sub.add(MenutoWxMenu(item));
+        subs.put(parent, sub);
+      }
+    }
+    for (JSONObject menu : result) {
+      List<JSONObject> sub = subs.get(menu.getString("key"));
+      if (sub == null)
+        sub = new ArrayList<JSONObject>();
+      menu.put("sub_button", sub);
+    }
+    return result;
+  }
+  
+  private JSONObject MenutoWxMenu(Menu menu) {
+    JSONObject result = new JSONObject();
+    WxMenuType menuType = WxMenuType.valueOfType(menu.getType());
+    result.put("type", null==menuType?"":menuType.type());
+    result.put("name", menu.getText());
+    result.put("key", menu.getId());
+    result.put("url", menu.getUrl());
+    result.put("media_id  ", menu.getMediaId());
+    result.put("appid", menu.getAppid());
+    result.put("pagepath", menu.getPagepath());
+    result.put("sub_button", "");
+    return BaseUtils.removeNullEntry(result);
+    
+  }
+  
   /**
    * 处理包含 parent 属性的列表，将其归入到parent的子列表中
    * 
