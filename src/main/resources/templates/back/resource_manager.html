@@ -130,6 +130,35 @@
 					        </form-item>
 				        </i-form> -->
 				    </div>
+                    <div v-if="action=='group'">
+                        <div  style="padding: 12px 12px; ">
+                            <Page :total="resourceGroupData.totalNum" ref="pages" show-total  show-elevator show-sizer :current.sync="currentPage"  :page-size="currentPageSize"
+                             :page-size-opts="pageSizeOpts"  @on-change="pageChangeRG" @on-page-size-change="pageSizeChangeRG" />
+                             
+                            <i-button v-cloak type="primary" @click="resourceGroupModal.isShow=true;">添加按钮组</i-button>
+                        </div>
+                        <i-table stripe border :columns=resourceGroupColumns :data="resourceGroupTableData">
+                            <template slot-scope="{ row }" slot="name">
+                                <strong>{{ row.name }}</strong>
+                            </template>
+                        </i-table>
+                         <Modal v-model="resourceGroupModal.isShow" @on-visible-change = "RgvisibleChange">
+					        <div slot="header" style="color:white;text-align:center" v-cloak>
+                                <h2>{{resourceGroupModal.title}}</h2>
+                            </div>
+						    <i-form ref="RGData" :model="resourceGroupModal.formData"  label-position="top" >
+		                          <form-item label="资源组名称：" class="rg-form-item">
+		                            <i-input v-model="resourceGroupModal.formData.name"  size="large"  placeholder="input the resource group name"></i-input>
+		                          </form-item>
+		                          <form-item label="资源组描述：" class="rg-form-item">
+		                            <i-input type="textarea" :rows="4" v-model="resourceGroupModal.formData.description" size="large" placeholder="input the resource group description"></i-input>
+		                          </form-item>
+	                        </i-form>
+	                        <div slot="footer">
+				                <i-button type="primary" long  @click="RGModalOk">提交</i-button>
+				            </div> 
+					    </Modal>
+                    </div>
                  </Content>
               </Layout>
           </top-sider-bottom>
@@ -141,6 +170,16 @@
             el: '#app',
             data: function(){
                 return {
+                	resourceGroupModal:{
+                		action: "default",
+                		isShow: false,
+                        title: "Edit Resource Group Info",
+                        formData: {
+                        	id: '',
+                        	name: '',
+                        	description: ''
+                        }
+                	},
                 	resourceModalShow: false,
                     resourceModalContent: {
                     	title: "",
@@ -150,6 +189,7 @@
                     },
                 	action: '${action}',
                 	pagedata: ${pageData},
+                	resourceGroupData: ${resourceGroupData},
                 	//id, name, type, label, size, create_time, path, description, user_id, image, suffix
                 	tableColumns: [
                          { title: '资源id', key: 'id',align: 'left'},
@@ -164,7 +204,7 @@
                          { title: '封面图', key: 'image',align: 'center',render: (h, params) => {return h('span', params.row.image?params.row.image:"————")}},
                          { title: '扩转名', key: 'suffix',width: 80,align: 'center'},
                          {
-                             title: 'Action',
+                             title: '操作',
                              key: 'action',
                              width: 150,
                              align: 'center',
@@ -173,7 +213,22 @@
                              }
                          }
                      ],
+                     resourceGroupColumns: [
+                    	 { title: '名称', key: 'name',align: 'left',width: 400},
+                    	 { title: '描述', key: 'description',align: 'left'},
+                    	 { title: '资源数量', key: 'resource_count',sortable: true,align: 'left',width: 120},
+                    	 {
+                             title: '操作',
+                             key: 'action',
+                             width: 200,
+                             align: 'center',
+                             render: (h, params) => {
+                                 return h('div', [h('Button',{props:{type:'primary',size:'small'},style:{marginRight:'5px'},on:{click:()=>{this.changeResourceGroup(params)}}},'修改'),h('Button',{props:{type:'error',size:'small'},on:{click:()=>{this.removeResourceGroup(params)}}},'删除')]);
+                             }
+                         }
+                     ],
                      tableData: [],
+                     resourceGroupTableData: [],
                      pageSizeOpts: [2,3,5,10,25,50,75,100],
                      uploadParam: [],
                      fileList: [],
@@ -190,6 +245,49 @@
                 }
             },
             methods: {
+            	RGModalOk: function(){    //添加资源组
+            		let paramData = this.resourceGroupModal.formData;
+            		if(!paramData.name|!paramData.description){
+            			this.$Notice.error({
+                            title: 'error',
+                            desc:  "信息不能为空！"
+                        });
+            			return ;
+            		}
+            		const that = this;
+            		sendRequest(this,"./resource-group/addOrUpdate","POST",paramData,function (response) {
+                        var resData = response.data;
+                        console.log(resData)
+                        let rgModal = that.resourceGroupModal;
+                        if(resData&&resData.status == 0){   //添加成功
+                            that.$Notice.success({
+                                title: '成功',
+                                desc:  '资源组 '+ paramData.name + rgModal.action=='edit'?'修改':'添加'+'成功'
+                            });
+                            that.resourceGroupModal.isShow=false;
+                            paramData['resource_count'] = 0;
+                            if(rgModal.action!='edit')
+                                that.resourceGroupTableData.push(paramData);
+                            else
+                            	window.location.reload();
+                        }else{
+                            that.$Notice.error({
+                                title: '资源 组'+ paramData.name + rgModal.action=='edit'?'修改':'添加'+'失败',
+                                desc:  '原因: '+ resData.message
+                            });
+                        }
+                    });
+            	},
+            	RgvisibleChange: function(status){
+            		if(!status){   //模态框关闭
+            			this.resourceGroupModal.formData = {
+            					action: 'default',
+                                id: '',
+                                name: '',
+                                description: ''
+                            }
+            		}
+            	},
             	addParam: function(file){   //文件上传前，禁用默认上传功能
             		this.fileList.push(file);
             		this.uploadParam.push({
@@ -210,6 +308,47 @@
             		this.currentPageSize = pageSize;
             		this.requestResourceList(1,pageSize);
             	},
+            	pageChangeRG: function(page){    //资源组更改分页页码
+                    this.requestResourceGroupList(page,this.currentPageSize);
+                },
+                changeResourceGroup: function(param){   //修改资源组信息
+                	const data = param.row;
+                	this.resourceGroupModal = {
+                	    action: "edit",
+                        isShow: true,
+                        title: "Edit Resource Group Info",
+                        formData: {
+                            id: data.id,
+                            name: data.name,
+                            description: data.description
+                        }
+                    };
+                },
+                removeResourceGroup: function(param){   //删除资源组信息
+                	const data = param.row;
+                console.log(data)
+                    const that = this;
+                    sendRequest(this,"./resource-group/delete?resGroupId="+data.id,"DELETE",null,function (response) {
+                        var resData = response.data;
+                        console.log(resData)
+                        if(resData&&resData.status == 0){   //删除成功
+                            that.$Notice.success({
+                                title: '成功',
+                                desc:  '资源组 '+ data.name + ' 删除成功'
+                            });
+                            that.resourceGroupTableData.splice(data._index, 1);
+                        }else{
+                            that.$Notice.error({
+                                title: '资源 组'+ data.name + ' 删除失败',
+                                desc:  '原因: '+ resData.message
+                            });
+                        }
+                    });
+                },
+                pageSizeChangeRG: function(pageSize){  //资源组更改pageSize
+                    this.currentPageSize = pageSize;
+                    this.requestResourceGroupList(1,pageSize);
+                },
             	viewResource: function(param){    //预览资源
             		const data = param.row;
             		this.loadResource(data);
@@ -217,30 +356,22 @@
                 remove: function(param){   //移除列表
                 	const data = param.row;
                 	const that = this;
-                    axios({     //提交数据到后台
-                        method: "DELETE",
-                        url: "../file/delete/"+data.id,
-                    }).then(function (response) {
+                	sendRequest(this,"../file/delete/","DELETE",null,function (response) {
                         var resData = response.data;
                         console.log(resData)
                         if(resData&&resData.status == 0){   //删除成功
-                        	that.$Notice.success({
+                            that.$Notice.success({
                                 title: '成功',
                                 desc:  '资源 '+ data.name + ' 删除成功'
                             });
-                        	that.tableData.splice(data._index, 1);
+                            that.tableData.splice(data._index, 1);
                         }else{
-                        	that.$Notice.error({
+                            that.$Notice.error({
                                 title: '资源 '+ data.name + ' 删除失败',
                                 desc:  '原因: '+ resData.message
                             });
                         }
-                    }).catch(function (error) {
-                        that.$Notice.error({
-                            title: '资源 '+ data.name + ' 删除失败',
-                            desc:  '发生了某些异常: '+error
-                        });
-                    });     
+                    });
                 },
                 removeFile: function(index){   //移除文件
                 	this.fileList.splice(index,1);
@@ -318,36 +449,47 @@
             	   params['pageSize']=pageSize;
             	   
             	   console.log(params);
-            	   axios({     //提交数据到后台
-                       method: "POST",
-                       url: "./resource/list",
-                       data: params
-                   }).then(function (response) {
-                	  const resData = response.data;
-                      if(resData && resData.status == 0){   //查询成功
-                    	  const data = resData.data;
-                    	  that.pagedata = data;
-                    	  that.tableData = data.items;
-                    	  that.currentPage = data.currentPage;
-                      }else{   //查询失败
-                    	  that.$Notice.error({
-                              title: '查询资源列表失败',
-                              desc:  '原因'+ response.message
-                          });
-                    	  that.pagedata.totalNum = 0;
-                          that.tableData = [];
-                          that.currentPage = 0;
-                      }
-                  }).catch(function (error) {
-                      console.log(error);
-                      that.$Notice.error({
-                          title: '查询资源列表失败',
-                          desc:  '发生了某些异常: '+error
-                      });
-                      that.pagedata.totalNum = 0;
-                      that.tableData = [];
-                      that.currentPage = 0;
-                  });
+            	   sendRequest(this,"./resource/list","POST",params,function (response) {
+                       const resData = response.data;
+                       if(resData && resData.status == 0){   //查询成功
+                           const data = resData.data;
+                           that.pagedata = data;
+                           that.tableData = data.items;
+                           that.currentPage = data.currentPage;
+                       }else{   //查询失败
+                           that.$Notice.error({
+                               title: '查询资源列表失败',
+                               desc:  '原因'+ response.message
+                           });
+                           that.pagedata.totalNum = 0;
+                           that.tableData = [];
+                           that.currentPage = 0;
+                       }
+                   });
+               },
+               requestResourceGroupList: function(){   //请求资源组数据
+            	   const that = this; 
+                   let params = {};
+                   params['pageNum']=pageNum;
+                   params['pageSize']=pageSize;
+                   console.log(params);
+                   sendRequest(this,"./resource-group/list","POST",params,function (response) {
+                       const resData = response.data;
+                       if(resData && resData.status == 0){   //查询成功
+                           const data = resData.data;
+                           that.resourceGroupData = data;
+                           that.resourceGroupTableData = data.items;
+                           that.currentPage = data.currentPage;
+                       }else{   //查询失败
+                           that.$Notice.error({
+                               title: '查询资源组列表失败',
+                               desc:  '原因'+ response.message
+                           });
+                           that.resourceGroupData.totalNum = 0;
+                           that.resourceGroupTableData = [];
+                           that.currentPage = 0;
+                       }
+                   });
                },
                loadResource: function(data){     //加载资源到 Modal
             	   console.log("加载资源：")
@@ -396,8 +538,11 @@
                
             },
             mounted : function() { //创建时
-               if(this.pagedata && this.pagedata.items){  //挂载数据
+               if(this.action=='list' && this.pagedata && this.pagedata.items){  //挂载数据
                  this.tableData = this.pagedata.items;
+               }
+               if(this.action=='group' && this.resourceGroupData && this.resourceGroupData.items){  //挂载数据
+                   this.resourceGroupTableData = this.resourceGroupData.items;
                }
             }
         })

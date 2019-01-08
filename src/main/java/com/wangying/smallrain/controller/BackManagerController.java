@@ -19,12 +19,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.wangying.smallrain.entity.Menu;
 import com.wangying.smallrain.entity.PageBean;
 import com.wangying.smallrain.entity.Resource;
+import com.wangying.smallrain.entity.ResourceGroup;
 import com.wangying.smallrain.entity.Result;
 import com.wangying.smallrain.entity.enums.FileDataType;
 import com.wangying.smallrain.entity.enums.MenuPlatform;
 import com.wangying.smallrain.entity.enums.WxMenuType;
+import com.wangying.smallrain.entity.query.BaseQueryEntity;
 import com.wangying.smallrain.entity.query.ResourceQueryEntity;
 import com.wangying.smallrain.service.MenuService;
+import com.wangying.smallrain.service.ResourceGroupService;
 import com.wangying.smallrain.service.ResourceService;
 import com.wangying.smallrain.utils.BaseUtils;
 import com.wangying.smallrain.utils.ResultUtil;
@@ -38,6 +41,9 @@ public class BackManagerController {
   
   @Autowired
   private ResourceService resourceService;
+  
+  @Autowired
+  private ResourceGroupService resourceGroupService;
   
   @Value("${ftp.ftpFileDmain}")
   private String ftpFileDmain;
@@ -173,6 +179,7 @@ public class BackManagerController {
     mv.addObject("action",action);
     mv.addObject("pageData","{}");
     mv.addObject("resType","{}"); //类型数据
+    mv.addObject("resourceGroupData","{}"); //资源组数据
     mv.addObject("ftpFileDmain",ftpFileDmain); //文件服务器域名
     if("list".equals(action)) {   //资源列表
       mv.addObject("title","资源管理-资源列表");
@@ -182,6 +189,10 @@ public class BackManagerController {
       
     }else if("add".equals(action)){   //资源上传
       mv.addObject("title","资源管理-资源上传");
+    }else if("group".equals(action)){
+      mv.addObject("title","资源管理-资源组管理");
+      Result pageDate = getResourceGroupList(new BaseQueryEntity());
+      mv.addObject("resourceGroupData",JSONObject.toJSONString(pageDate.getData())); //资源组数据
     }else {
       
     }
@@ -202,11 +213,71 @@ public class BackManagerController {
     try {
       pageDate = resourceService.getResourceList(resQuery);
     }catch(Exception e) {
-      return ResultUtil.fail("查询资源列表失败："+e.getMessage());
+      return ResultUtil.exception("查询资源列表失败："+e.getMessage());
     }
     return ResultUtil.success(pageDate);
   }
   
+  /**
+   * 后台资源管理
+   * @param platform  待编辑按钮平台
+   * @param current   当前按钮
+   * @return
+   */
+  @RequestMapping(value="/resource-group/list",method = RequestMethod.POST)
+  @ResponseBody
+  public Result  getResourceGroupList(@RequestBody(required=false) BaseQueryEntity resQuery) {
+    PageBean<ResourceGroup> pageDate = new PageBean<ResourceGroup>();
+    try {
+      pageDate = resourceGroupService.getResourceGroupList(resQuery);
+    }catch(Exception e) {
+      return ResultUtil.exception("查询资源列表失败："+e.getMessage());
+    }
+    return ResultUtil.success(pageDate);
+  }
+  
+  /**
+   * 后台资源管理
+   * @param platform  待编辑按钮平台
+   * @param current   当前按钮
+   * @return
+   */
+  @RequestMapping(value="/resource-group/addOrUpdate",method = RequestMethod.POST)
+  @ResponseBody
+  public Result  resourceGroupAdd(@RequestBody(required=true) ResourceGroup  resourceGroup) {
+    try {
+      if(null == resourceGroup) {
+        return ResultUtil.fail("添加资源组失败,接受到的参数为空！");
+      }
+      if(resourceGroupService.addOrupdateResourceGroup(resourceGroup)<=0) {
+        return ResultUtil.fail("添加资源组失败,数据库操作失败！");
+      }
+    }catch(Exception e) {
+      return ResultUtil.exception("添加资源组异常：" +e.getMessage());
+    }
+    return ResultUtil.success("添加资源组成功!");
+  }
+  
+  
+  /**
+   * 后台资源管理
+   * @param platform  待编辑按钮平台
+   * @param current   当前按钮
+   * @return
+   */
+  @RequestMapping(value="/resource-group/delete",method = RequestMethod.DELETE)
+  @ResponseBody
+  public Result  resourceGroupDelete(@RequestParam(value="resGroupId",required=true) String  resGroupId) {
+    try {
+      int count = resourceGroupService.deleteResourceGroup(resGroupId);
+      if(count<=0) {
+        return ResultUtil.fail("删除资源组失败！");
+      }
+    }catch(Exception e) {
+      return ResultUtil.exception("删除资源组异常：" +e.getMessage());
+    }
+    return ResultUtil.success("删除资源组成功!");
+  }
   
   
 }

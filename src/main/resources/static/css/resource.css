@@ -110,6 +110,16 @@ div.file-info label {
 	display: inline-block;
 }
 
+
+.rg-form-item .ivu-form-item-content{
+	width: 100%;
+}
+
+.rg-form-item label{
+	font-size: 14px;
+    font-weight: 700;
+}
+
 .modal_content_img {
 	text-align: center;
 	vertical-align: center;
