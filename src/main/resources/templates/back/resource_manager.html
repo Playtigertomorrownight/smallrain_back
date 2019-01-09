@@ -76,6 +76,23 @@
                            </Content>
 					    </Modal>
 					    
+					    <Modal v-model="resourceModal.isShow" @on-visible-change = "visibleChange">
+					        <div slot="header" style="color:white;text-align:center" v-cloak>
+                                <h2>{{resourceGroupModal.title}}</h2>
+                            </div>
+						    <i-form ref="RGData" :model="resourceGroupModal.formData"  label-position="top" >
+		                          <form-item label="资源组名称：" class="rg-form-item">
+		                            <i-input v-model="resourceGroupModal.formData.name"  size="large"  placeholder="input the resource group name"></i-input>
+		                          </form-item>
+		                          <form-item label="资源组描述：" class="rg-form-item">
+		                            <i-input type="textarea" :rows="4" v-model="resourceGroupModal.formData.description" size="large" placeholder="input the resource group description"></i-input>
+		                          </form-item>
+	                        </i-form>
+	                        <div slot="footer">
+				                <i-button v-cloak type="primary" long  @click="RGModalOk">提交</i-button>
+				            </div> 
+					    </Modal>
+					    
 				    </div>
 				    <div v-if="action=='add'">
 				        <Upload v-cloak ref="upload" multiple paste  type="drag" max-size="10240" action="../file/upload" :on-success="uploadSuccess" :on-exceeded-size="handleMaxSize" :before-upload="addParam">
@@ -140,7 +157,7 @@
 				    </div>
                     <div v-if="action=='group'">
                         <div  style="padding: 12px 12px; ">
-                            <Page :total="resourceGroupData.totalNum" ref="pages" show-total  show-elevator show-sizer :current.sync="currentPage"  :page-size="currentPageSize"
+                            <Page :total="allResourceGroup.length" ref="pages" show-total  show-elevator show-sizer :current.sync="currentPage"  :page-size="currentPageSize"
                              :page-size-opts="pageSizeOpts"  @on-change="pageChangeRG" @on-page-size-change="pageSizeChangeRG" />
                              
                             <i-button v-cloak type="primary" @click="resourceGroupModal.isShow=true;">添加按钮组</i-button>
@@ -163,7 +180,7 @@
 		                          </form-item>
 	                        </i-form>
 	                        <div slot="footer">
-				                <i-button type="primary" long  @click="RGModalOk">提交</i-button>
+				                <i-button v-cloak type="primary" long  @click="RGModalOk">提交</i-button>
 				            </div> 
 					    </Modal>
                     </div>
@@ -189,6 +206,17 @@
                         	resourceCount: 0
                         }
                 	},
+                	resourceModal:{
+                		action: "default",
+                		isShow: false,
+                        title: "Edit Resource Group Info",
+                        formData: {
+                        	id: '',
+                        	name: '',
+                        	description: '',
+                        	resourceCount: 0
+                        }
+                	},
                 	resourceModalShow: false,
                     resourceModalContent: {
                     	title: "",
@@ -199,7 +227,8 @@
                 	action: '${action}',
                 	pagedata: ${pageData},
                 	resourceGroupData: ${resourceGroupData},
-                	allResourceGroup: [],
+                	allResourceGroup: ${allResourceGroup},
+                	rgNameMap: {},
                 	//id, name, type, label, size, create_time, path, description, user_id, image, suffix
                 	tableColumns: [
                          { title: '资源id', key: 'id',align: 'left'},
@@ -210,16 +239,18 @@
                          { title: '创建时间', key: 'createTime',align: 'center', sortable: true,render: (h, params) => {return h('strong', getSmpFormatDateByLong(params.row.createTime,true));}},
                          { title: '资源路径', key: 'path',align: 'left'},
                          { title: '描述', key: 'description',align: 'center',render: (h, params) => {return h('span', params.row.description?params.row.description:"————")}},
-                         { title: '上传人id', key: 'userId',align: 'center',render: (h, params) => {return h('span', params.row.userId?params.row.userId:"————")}},
+                         { title: '资源组', key: 'userId',align: 'center',render: (h, params) => {return h('span', params.row.groupId?this.rgNameMap[params.row.groupId]:"————")}},
                          { title: '封面图', key: 'image',align: 'center',render: (h, params) => {return h('span', params.row.image?params.row.image:"————")}},
                          { title: '扩转名', key: 'suffix',width: 80,align: 'center'},
                          {
                              title: '操作',
                              key: 'action',
-                             width: 150,
+                             width: 200,
                              align: 'center',
                              render: (h, params) => {
-                                 return h('div', [h('Button',{props:{type:'primary',size:'small'},style:{marginRight:'5px'},on:{click:()=>{this.viewResource(params)}}},'查看'),h('Button',{props:{type:'error',size:'small'},on:{click:()=>{this.remove(params)}}},'删除')]);
+                                 return h('div', [h('Button',{props:{type:'primary',size:'small'},style:{marginRight:'5px'},on:{click:()=>{this.editResource(params)}}},'编辑'),
+                                	              h('Button',{props:{type:'primary',size:'small'},style:{marginRight:'5px'},on:{click:()=>{this.viewResource(params)}}},'查看'),
+                                	              h('Button',{props:{type:'error',size:'small'},on:{click:()=>{this.remove(params)}}},'删除')]);
                              }
                          }
                      ],
@@ -301,6 +332,17 @@
                             }
             		}
             	},
+            	visibleChange: function(status){
+            		if(!status){   //模态框关闭
+            			this.resourceModal.formData = {
+            					action: 'default',
+                                id: '',
+                                name: '',
+                                description: '',
+                                resourceCount: 0
+                            }
+            		}
+            	},
             	addParam: function(file){   //文件上传前，禁用默认上传功能
             		this.fileList.push(file);
             		this.uploadParam.push({
@@ -323,7 +365,7 @@
             		this.requestResourceList(1,pageSize);
             	},
             	pageChangeRG: function(page){    //资源组更改分页页码
-                    this.requestResourceGroupList(page,this.currentPageSize);
+                    this.pageResourceGroupList(page,this.currentPageSize);
                 },
                 changeResourceGroup: function(param){   //修改资源组信息
                 	const data = param.row;
@@ -363,8 +405,12 @@
                 },
                 pageSizeChangeRG: function(pageSize){  //资源组更改pageSize
                     this.currentPageSize = pageSize;
-                    this.requestResourceGroupList(1,pageSize);
+                    this.pageResourceGroupList(1,pageSize);
                 },
+                editResource: function(param){    //编辑资源
+            		const data = param.row;
+                    console.log(data);
+            	},
             	viewResource: function(param){    //预览资源
             		const data = param.row;
             		this.loadResource(data);
@@ -483,29 +529,14 @@
                        }
                    });
                },
-               requestResourceGroupList: function(){   //请求资源组数据
-            	   const that = this; 
-                   let params = {};
-                   params['pageNum']=pageNum;
-                   params['pageSize']=pageSize;
-                   console.log(params);
-                   sendRequest(this,"./resource-group/list","POST",params,function (response) {
-                       const resData = response.data;
-                       if(resData && resData.status == 0){   //查询成功
-                           const data = resData.data;
-                           that.resourceGroupData = data;
-                           that.resourceGroupTableData = data.items;
-                           that.currentPage = data.currentPage;
-                       }else{   //查询失败
-                           that.$Notice.error({
-                               title: '查询资源组列表失败',
-                               desc:  '原因'+ response.message
-                           });
-                           that.resourceGroupData.totalNum = 0;
-                           that.resourceGroupTableData = [];
-                           that.currentPage = 0;
-                       }
-                   });
+               pageResourceGroupList: function(pageNum,pageSize){   //请求资源组数据
+            	   let start = pageSize*(pageNum-1);
+                   let end = start+pageSize;
+                   if(this.allResourceGroup&&this.allResourceGroup.length)
+            	   		this.resourceGroupTableData = this.allResourceGroup.slice(start,end);
+                   else
+                	   this.resourceGroupTableData = [];
+            	   this.currentPage = pageNum;
                },
                loadResource: function(data){     //加载资源到 Modal
             	   console.log("加载资源：")
@@ -545,29 +576,20 @@
                
             },
             mounted : function() { //创建时
-               if(this.action=='list' && this.pagedata && this.pagedata.items){  //列表挂载数据
-                 this.tableData = this.pagedata.items;
+               if(this.action=='list'){
+            	   if(this.pagedata && this.pagedata.items){  //列表挂载数据
+                       this.tableData = this.pagedata.items;
+            	       let mapping = {};
+                       for(let j = 0,len = this.allResourceGroup.length; j < len; j++){
+                    	   let item = this.allResourceGroup[j];
+                    	   if(!item) continue;
+                    	   mapping[item.id] = item.name;
+                    	}
+                       this.rgNameMap = mapping;
+                   }
                }
                if(this.action=='group' && this.resourceGroupData && this.resourceGroupData.items){  //资源组挂载数据
-                   this.resourceGroupTableData = this.resourceGroupData.items;
-               }
-               if(this.action=='add'){  //上传挂载数据
-                   this.resourceGroupTableData = this.resourceGroupData.items;
-                   let params = {pageNum:1,pageSize:0};
-                   const that = this;
-                   sendRequest(this,"./resource-group/list","POST",params,function (response) {
-                       const resData = response.data;
-                       if(resData && resData.status == 0){   //查询成功
-                           const data = resData.data;
-                           console.log(data)
-                           that.allResourceGroup = data.items;
-                       }else{   //查询失败
-                           that.$Notice.error({
-                               title: '查询资源组列表失败',
-                               desc:  '原因'+ response.message
-                           });
-                       }
-                   });
+                   this.pageResourceGroupList(1,this.currentPageSize);;
                }
             }
         });
