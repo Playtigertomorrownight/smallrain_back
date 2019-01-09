@@ -5,6 +5,11 @@ public class BaseQueryEntity {
   private Integer pageNum=1;
   private Integer pageSize=10;
   
+  public BaseQueryEntity(Integer pageNum, Integer pageSize) {
+    super();
+    this.pageNum = pageNum;
+    this.pageSize = pageSize;
+  }
   public Integer getPageNum() {
     return pageNum;
   }

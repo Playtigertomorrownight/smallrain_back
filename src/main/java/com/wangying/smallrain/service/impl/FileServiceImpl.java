@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.wangying.smallrain.dao.ResourceGroupMapper;
 import com.wangying.smallrain.dao.extend.ResourceExtendMapper;
 import com.wangying.smallrain.entity.Resource;
 import com.wangying.smallrain.entity.Result;
@@ -34,6 +35,10 @@ public class FileServiceImpl implements FileService {
 
   @Autowired
   private ResourceExtendMapper resourceMapper;
+  
+  @Autowired
+  private ResourceGroupMapper resourceGroupMapper;
+  
   @Autowired
   private FTPClientHelper fTPClientHelper;
 
@@ -46,7 +51,7 @@ public class FileServiceImpl implements FileService {
   private Logger log = LoggerFactory.getLogger(FileServiceImpl.class);
 
   @Override
-  public boolean uploadFile(MultipartFile file, String fileName, String description, String label) {
+  public boolean uploadFile(MultipartFile file, String fileName, String description, String label,String groupId) {
     // TODO Auto-generated method stub
     log.info("上传文件。。。。");
     Resource res = new Resource(); // new resource 对象
@@ -69,6 +74,7 @@ public class FileServiceImpl implements FileService {
     res.setLabel(label);
     log.info("上传的文件标签：" + label);
     res.setType(FileDataType.valueOfType(suffixName)); // 生成文件类型
+    res.setGroupId(groupId);
     try {
       boolean isUpload = false;
       if(localFtp) {
@@ -80,6 +86,10 @@ public class FileServiceImpl implements FileService {
         log.info("上传文件成功！保存数据到数据库。。");
         res.setId(BaseUtils.createUUID());
         resourceMapper.insert(res);
+        if(BaseUtils.isEmptyString(groupId)) {   //如果指派的资源组非空，跟新资源组数量信息
+          resourceGroupMapper.addResourceCount(1, groupId);
+        }
+        
         return true;
       }
     }catch(Exception e) {

@@ -120,4 +120,8 @@
     select count(*) from resource_group
   </select>
   
+  <update id="addResourceCount">
+    update resource_group set resource_count = resource_count+#{count,jdbcType=INTEGER} where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
 </mapper>

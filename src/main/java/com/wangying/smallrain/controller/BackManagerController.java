@@ -181,6 +181,9 @@ public class BackManagerController {
     mv.addObject("resType","{}"); //类型数据
     mv.addObject("resourceGroupData","{}"); //资源组数据
     mv.addObject("ftpFileDmain",ftpFileDmain); //文件服务器域名
+    Result rgPageDats =  getResourceGroupList(new BaseQueryEntity(1,0));   //获取所有按钮组数据
+    
+    
     if("list".equals(action)) {   //资源列表
       mv.addObject("title","资源管理-资源列表");
       Result pageDate = getResourceList(new ResourceQueryEntity());
@@ -191,7 +194,7 @@ public class BackManagerController {
       mv.addObject("title","资源管理-资源上传");
     }else if("group".equals(action)){
       mv.addObject("title","资源管理-资源组管理");
-      Result pageDate = getResourceGroupList(new BaseQueryEntity());
+      Result pageDate = getResourceGroupList(new BaseQueryEntity(1,10));
       mv.addObject("resourceGroupData",JSONObject.toJSONString(pageDate.getData())); //资源组数据
     }else {
       

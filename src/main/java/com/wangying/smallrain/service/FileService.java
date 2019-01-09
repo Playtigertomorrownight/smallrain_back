@@ -17,7 +17,7 @@ public interface FileService {
    * @param Filename
    * @return
    */
-  public boolean uploadFile(MultipartFile file,String fileName,String description,String label);
+  public boolean uploadFile(MultipartFile file,String fileName,String description,String label,String groupId);
   
   
   /**

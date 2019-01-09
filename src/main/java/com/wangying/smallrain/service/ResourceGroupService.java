@@ -13,4 +13,6 @@ public interface ResourceGroupService {
   
   int addOrupdateResourceGroup(ResourceGroup resourceGroup);
   
+  int updateResourceGroupResCount(int addNum,String rgId);
+  
 }

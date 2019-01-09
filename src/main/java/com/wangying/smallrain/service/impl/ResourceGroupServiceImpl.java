@@ -24,10 +24,12 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
   @Override
   public PageBean<ResourceGroup> getResourceGroupList(BaseQueryEntity query) {
     // TODO Auto-generated method stub
-    PageHelper.startPage(query.getPageNum(), query.getPageSize());
+    if(query.getPageSize()!=0) {
+      PageHelper.startPage(query.getPageNum(), query.getPageSize());
+    }
     List<ResourceGroup> resouceList = resourceGroupMapper.selectAllRecords();
     int countNum = resourceGroupMapper.selectAllCount();
-    PageBean<ResourceGroup> pageData = new PageBean<>(query.getPageNum(), query.getPageSize(),countNum);
+    PageBean<ResourceGroup> pageData = new PageBean<>(query.getPageNum(), query.getPageSize()==0?countNum:query.getPageSize(),countNum);
     pageData.setItems(resouceList);
     
     return pageData;
@@ -49,6 +51,12 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
     }else {    //id不为空，更新资源组
       return resourceGroupMapper.updateByPrimaryKeySelective(resourceGroup);
     }
+  }
+
+  @Override
+  public int updateResourceGroupResCount(int addNum,String rgId) {
+    // TODO Auto-generated method stub
+    return resourceGroupMapper.addResourceCount(addNum, rgId);
   }
 
 }

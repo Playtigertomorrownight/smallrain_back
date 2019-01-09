@@ -41,8 +41,9 @@ public class FileController {
   public Result uploadfile(@RequestParam("file") MultipartFile files,
                            @RequestParam(value="name", required=false) String name,
                            @RequestParam(value="description", required=false) String description,
-                           @RequestParam(value="label", required=false) String label) {
-    boolean isSuccess = fileService.uploadFile(files,name,description,label);
+                           @RequestParam(value="label", required=false) String label,
+                           @RequestParam(value="groupId", required=false) String groupId) {
+    boolean isSuccess = fileService.uploadFile(files,name,description,label,groupId);
     if(isSuccess)  return ResultUtil.success("上传成功！");
     return ResultUtil.fail("上传失败！");
   }
@@ -57,7 +58,7 @@ public class FileController {
 
     List<MultipartFile> mfiles =((MultipartHttpServletRequest)request).getFiles("file"); 
     for(MultipartFile mfile:mfiles) {
-      fileService.uploadFile(mfile,null,null,null);
+      fileService.uploadFile(mfile,null,null,null,null);
     }
     return ResultUtil.success("上传成功！");
     

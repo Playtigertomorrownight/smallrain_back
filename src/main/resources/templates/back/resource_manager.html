@@ -106,7 +106,15 @@
 			                                       </li>
 			                                       <li class="file-filed">
 			                                         <i-input v-model="uploadParam[index].description" placeholder="添加文件描述"></i-input>
-			                                       </li>
+			                                       </li> 
+			                                       <li class="file-filed">
+				                                       <i-select v-model="uploadParam[index].groupId" clearable placeholder="选择资源组">
+						                                    <i-option v-for="rg in allResourceGroup" :value="rg.id" :label="rg.name" :key="rg.id"   v-cloak>
+						                                        <span>{{rg.name}}</span>
+						                                        <span style="float:right;color:#ccc">-- {{rg.description}}</span>
+						                                    </i-option>
+						                               </i-select>
+						                           </li>
 								             </ul>
 				                         </i-form>
 			                         </div>
@@ -177,7 +185,8 @@
                         formData: {
                         	id: '',
                         	name: '',
-                        	description: ''
+                        	description: '',
+                        	resourceCount: 0
                         }
                 	},
                 	resourceModalShow: false,
@@ -190,6 +199,7 @@
                 	action: '${action}',
                 	pagedata: ${pageData},
                 	resourceGroupData: ${resourceGroupData},
+                	allResourceGroup: [],
                 	//id, name, type, label, size, create_time, path, description, user_id, image, suffix
                 	tableColumns: [
                          { title: '资源id', key: 'id',align: 'left'},
@@ -216,7 +226,7 @@
                      resourceGroupColumns: [
                     	 { title: '名称', key: 'name',align: 'left',width: 400},
                     	 { title: '描述', key: 'description',align: 'left'},
-                    	 { title: '资源数量', key: 'resource_count',sortable: true,align: 'left',width: 120},
+                    	 { title: '资源数量', key: 'resourceCount',sortable: true,align: 'left',width: 120},
                     	 {
                              title: '操作',
                              key: 'action',
@@ -268,8 +278,10 @@
                             paramData['resource_count'] = 0;
                             if(rgModal.action!='edit')
                                 that.resourceGroupTableData.push(paramData);
-                            else
-                            	window.location.reload();
+                            else{
+                            	that.resourceGroupTableData.splice(that.resourceGroupModal.edit_index,1,paramData);
+                            }
+                            	
                         }else{
                             that.$Notice.error({
                                 title: '资源 组'+ paramData.name + rgModal.action=='edit'?'修改':'添加'+'失败',
@@ -284,7 +296,8 @@
             					action: 'default',
                                 id: '',
                                 name: '',
-                                description: ''
+                                description: '',
+                                resourceCount: 0
                             }
             		}
             	},
@@ -293,7 +306,8 @@
             		this.uploadParam.push({
                         name: "",
                         description: "",
-                        label: ""
+                        label: "",
+                        groupId: ""
                     });
             		tempFile = file;
             		return false;
@@ -315,12 +329,14 @@
                 	const data = param.row;
                 	this.resourceGroupModal = {
                 	    action: "edit",
+                	    edit_index: data._index,
                         isShow: true,
                         title: "Edit Resource Group Info",
                         formData: {
                             id: data.id,
                             name: data.name,
-                            description: data.description
+                            description: data.description,
+                            resourceCount: data.resourceCount
                         }
                     };
                 },
@@ -503,22 +519,19 @@
             		   this.resourceModalShow = true;
             	   }else{    //其他文件不能直接展示，只能有后台转换后展示
             		   const that = this;
-            		   axios({     //提交数据到后台
-                           method: "GET",
-                           url: "../file/load/"+data.id,
-                       }).then(function (response) {
-                    	   var resData = response.data;
-                    	   console.log(resData)
+            		   sendRequest(this,"../file/load/"+data.id,"GET",null,function (response) {    //请求服务器加载资源
+                           var resData = response.data;
+                           console.log(resData)
                           let content = {};
                           if(resData.status == 0){   //加载资源成功
-                        	  const contentData = resData.data;
-                        	  content = {
-                        			  title: data.name +' -- 预览',
-                        	          type: contentData.type,
-                        	          content: contentData.content
-                        	  }
+                              const contentData = resData.data;
+                              content = {
+                                      title: data.name +' -- 预览',
+                                      type: contentData.type,
+                                      content: contentData.content
+                              }
                           }else{
-                        	  content = {
+                              content = {
                                       title: '类型不支持',
                                       type: 'default',
                                       content: data.type+" 类型的文件尚不支持转换，请下载后自行查看"
@@ -526,26 +539,38 @@
                           }
                           that.resourceModalContent = content;
                           that.resourceModalShow = true;
-                      }).catch(function (error) {
-                    	  console.log(error)
-                          that.$Notice.error({
-                              title: '加载资源失败',
-                              desc:  '发生了某些异常: '+error
-                          });
                       });
             	   }
                }
                
             },
             mounted : function() { //创建时
-               if(this.action=='list' && this.pagedata && this.pagedata.items){  //挂载数据
+               if(this.action=='list' && this.pagedata && this.pagedata.items){  //列表挂载数据
                  this.tableData = this.pagedata.items;
                }
-               if(this.action=='group' && this.resourceGroupData && this.resourceGroupData.items){  //挂载数据
+               if(this.action=='group' && this.resourceGroupData && this.resourceGroupData.items){  //资源组挂载数据
                    this.resourceGroupTableData = this.resourceGroupData.items;
                }
+               if(this.action=='add'){  //上传挂载数据
+                   this.resourceGroupTableData = this.resourceGroupData.items;
+                   let params = {pageNum:1,pageSize:0};
+                   const that = this;
+                   sendRequest(this,"./resource-group/list","POST",params,function (response) {
+                       const resData = response.data;
+                       if(resData && resData.status == 0){   //查询成功
+                           const data = resData.data;
+                           console.log(data)
+                           that.allResourceGroup = data.items;
+                       }else{   //查询失败
+                           that.$Notice.error({
+                               title: '查询资源组列表失败',
+                               desc:  '原因'+ response.message
+                           });
+                       }
+                   });
+               }
             }
-        })
+        });
 </script>
 
 </body>
