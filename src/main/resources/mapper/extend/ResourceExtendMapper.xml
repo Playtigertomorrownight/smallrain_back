@@ -39,16 +39,16 @@
     select count(*) from resource
     where 1
       <if test="resQuery.name != null and resQuery.name != ''">
-        and name like '%#{resQuery.name}%' 
+        and name like concat(concat('%',#{resQuery.name}),'%')  
       </if>
       <if test="resQuery.type != null and resQuery.type != ''">
         and type = #{resQuery.type} 
       </if>
       <if test="resQuery.label != null and resQuery.label != ''">
-        and label like '%#{resQuery.label}%' 
+        and label like concat(concat('%',#{resQuery.label}),'%') 
       </if>
       <if test="resQuery.groupId != null and resQuery.groupId != ''">
-        and group_id like '%#{resQuery.groupId}%' 
+        and group_id = #{resQuery.groupId} 
       </if>
       <if test="resQuery.createTimeBegin != null">
         and create_time <![CDATA[>=]]> #{resQuery.createTimeBegin,jdbcType=TIMESTAMP}
@@ -62,16 +62,16 @@
     select * from resource
     where 1
       <if test="resQuery.name != null and resQuery.name != ''">
-        and name like '%#{resQuery.name}%' 
+        and name like concat(concat('%',#{resQuery.name}),'%')  
       </if>
       <if test="resQuery.type != null and resQuery.type != ''">
         and type = #{resQuery.type} 
       </if>
       <if test="resQuery.label != null and resQuery.label != ''">
-        and label like '%#{resQuery.label}%' 
+         and label like concat(concat('%',#{resQuery.label}),'%') 
       </if>
       <if test="resQuery.groupId != null and resQuery.groupId != ''">
-        and group_id like '%#{resQuery.groupId}%' 
+        and group_id = #{resQuery.groupId}
       </if>
       <if test="resQuery.createTimeBegin != null">
         and create_time <![CDATA[>=]]> #{resQuery.createTimeBegin,jdbcType=TIMESTAMP}

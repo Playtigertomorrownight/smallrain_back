@@ -174,7 +174,7 @@
                             <Page :total="allResourceGroup.length" ref="pages" show-total  show-elevator show-sizer :current.sync="currentPage"  :page-size="currentPageSize"
                              :page-size-opts="pageSizeOpts"  @on-change="pageChangeRG" @on-page-size-change="pageSizeChangeRG" />
                              
-                            <i-button v-cloak type="primary" @click="resourceGroupModal.isShow=true;">添加按钮组</i-button>
+                            <i-button v-cloak type="primary" @click="resourceGroupModal.isShow=true;">添加资源组</i-button>
                         </div>
                         <i-table stripe border :columns=resourceGroupColumns :data="resourceGroupTableData">
                             <template slot-scope="{ row }" slot="name">
@@ -262,8 +262,8 @@
                              width: 200,
                              align: 'center',
                              render: (h, params) => {
-                                 return h('div', [h('Button',{props:{type:'primary',size:'small'},style:{marginRight:'5px'},on:{click:()=>{this.editResource(params)}}},'编辑'),
-                                	              h('Button',{props:{type:'primary',size:'small'},style:{marginRight:'5px'},on:{click:()=>{this.viewResource(params)}}},'查看'),
+                                 return h('div', [h('Button',{props:{type:'primary',size:'small'},style:{marginRight:'5px'},on:{click:()=>{this.viewResource(params)}}},'查看'),
+                                	              h('Button',{props:{type:'primary',size:'small'},style:{marginRight:'5px'},on:{click:()=>{this.editResource(params)}}},'编辑'),
                                 	              h('Button',{props:{type:'error',size:'small'},on:{click:()=>{this.remove(params)}}},'删除')]);
                              }
                          }
