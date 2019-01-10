@@ -29,6 +29,7 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
     }
     List<ResourceGroup> resouceList = resourceGroupMapper.selectAllRecords();
     int countNum = resourceGroupMapper.selectAllCount();
+    countNum = countNum==0?1:countNum;
     PageBean<ResourceGroup> pageData = new PageBean<>(query.getPageNum(), query.getPageSize()==0?countNum:query.getPageSize(),countNum);
     pageData.setItems(resouceList);
     

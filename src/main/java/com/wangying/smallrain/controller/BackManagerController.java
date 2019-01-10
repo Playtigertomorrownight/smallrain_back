@@ -204,6 +204,17 @@ public class BackManagerController {
   
   /**
    * 后台资源管理
+   * @param current   当前按钮
+   * @return
+   */
+  @RequestMapping("/resource/addOrupdate")
+  @ResponseBody
+  public Result addOrUpdateResource(@RequestBody(required=true) Resource resource) {
+    return resourceService.addOrUpdateResource(resource);
+  }
+  
+  /**
+   * 后台资源管理
    * @param platform  待编辑按钮平台
    * @param current   当前按钮
    * @return
