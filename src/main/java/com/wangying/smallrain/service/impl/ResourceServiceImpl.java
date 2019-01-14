@@ -3,7 +3,6 @@ package com.wangying.smallrain.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,13 +25,6 @@ public class ResourceServiceImpl implements ResourceService {
   
   @Autowired
   private BaseConfig baseConfig;
-  
-  
-  /**
-   * 默认资源组ID
-   */
-  @Value("${appdata.default.resourceGroup}")
-  private String defaultResourceGroup;
   
   @Override
   public PageBean<Resource> getResourceList(ResourceQueryEntity query) {

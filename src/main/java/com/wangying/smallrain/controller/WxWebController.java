@@ -17,6 +17,7 @@ import com.wangying.smallrain.entity.enums.FileDataType;
 import com.wangying.smallrain.entity.query.ResourceQueryEntity;
 import com.wangying.smallrain.service.ResourceGroupService;
 import com.wangying.smallrain.service.ResourceService;
+import com.wangying.smallrain.utils.BaseUtils;
 
 @Controller
 @RequestMapping("/wx/web")
@@ -46,7 +47,7 @@ public class WxWebController {
   @RequestMapping("/articles")
   public ModelAndView articles(@RequestParam(value="label",required = false) String label ) {
     ModelAndView mv = new ModelAndView("wechat/article_list");
-    mv.addObject("title", "smalrlain - articles list");
+    mv.addObject("title", BaseUtils.joinString(label," 相关文章"));
     PageBean<Resource> pageData = new PageBean<Resource>();
     ResourceQueryEntity resQuery = new ResourceQueryEntity();   //新建查询条件
     resQuery.setPageSize(0);   //查询所有指定标签的资源
