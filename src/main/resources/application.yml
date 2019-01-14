@@ -48,9 +48,9 @@ tuling:
   apiKey: 6bb2f01f653e441887170ecdee3df869
   userId: 347456
  
- #数据库连接池 druid 配置
+#自定义配置
 appdata:
-  druid:
+  druid:  #数据库连接池 druid 配置
     type: com.alibaba.druid.pool.DruidDataSource
     initialSize: 5  #初始化大小，最小，最大
     minIdle: 5
@@ -85,3 +85,9 @@ ftp:
   useEPSVwithIPv4: false
   passiveMode: true
   ftpFileDmain: http://www.smallrain.top/   #文件服务器域名
+  
+#自定义配置项
+app:
+  smallrain:
+    defaultResourceGroup:    #默认资源组ID
+    

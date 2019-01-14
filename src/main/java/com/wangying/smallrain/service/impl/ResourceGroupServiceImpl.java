@@ -60,4 +60,10 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
     return resourceGroupMapper.addResourceCount(addNum, rgId);
   }
 
+  @Override
+  public List<ResourceGroup> selectResourceGroupWithIds(List<String> ids) {
+    // TODO Auto-generated method stub
+    return resourceGroupMapper.selectByIds(ids);
+  }
+
 }

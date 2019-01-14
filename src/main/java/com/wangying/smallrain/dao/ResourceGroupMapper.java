@@ -59,4 +59,6 @@ public interface ResourceGroupMapper {
     
     int addResourceCount(int count,String id);
     
+    List<ResourceGroup> selectByIds(List<String> ids);
+    
 }

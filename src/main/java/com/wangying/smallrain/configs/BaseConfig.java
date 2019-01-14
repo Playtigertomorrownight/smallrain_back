@@ -13,6 +13,10 @@ import org.springframework.util.unit.DataUnit;
  * @author wangying.dz3
  *
  */
+/**
+ * @author wangying.dz3
+ *
+ */
 @Configuration
 @ConfigurationProperties(prefix = "app.smallrain")
 public class BaseConfig {
@@ -23,6 +27,8 @@ public class BaseConfig {
   private long maxRequestSize;
   //服务域名
   private String dommainName;
+  //默认资源组ID
+  private String defaultResourceGroup;
   
   public long getMaxFileSize() {
     return maxFileSize;
@@ -46,6 +52,14 @@ public class BaseConfig {
 
   public void setDommainName(String dommainName) {
     this.dommainName = dommainName;
+  }
+
+  public String getDefaultResourceGroup() {
+    return defaultResourceGroup;
+  }
+
+  public void setDefaultResourceGroup(String defaultResourceGroup) {
+    this.defaultResourceGroup = defaultResourceGroup;
   }
 
   /**

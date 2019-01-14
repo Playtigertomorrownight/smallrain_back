@@ -124,4 +124,13 @@
     update resource_group set resource_count = resource_count+#{count,jdbcType=INTEGER} where id = #{id,jdbcType=VARCHAR}
   </update>
   
+  <select id="selectByIds" resultMap="BaseResultMap" parameterType="java.util.List" >
+    select 
+    <include refid="Base_Column_List" />
+    from resource_group where id in 
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+       #{item}       
+    </foreach> 
+  </select>
+  
 </mapper>

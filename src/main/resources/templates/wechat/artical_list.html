@@ -5,21 +5,44 @@
 </head>
 <body ontouchstart>
     <div id="app">
-    
+        <div class="header"></div>
+        <div class="cotainer">
+           <div class="rg-list" v-for="rg in resourceGroupList" :key="rg.id">
+              <img src="../../static/image/rg-list.png" />
+              <div> 
+                 <h3>{{rg.name}}</h3>
+                 <p>{{rg.name}}</p>
+                 <label>{{}}</label>
+              </div>
+           </div>
+        </div>
+        <div class="footer"></div>
     </div>
     <script type="text/javascript"> 
 	    new Vue({
 		    el: '#app',
 		    data: function(){
 		        return {
-		            
+		            resourceList: ${resourceList},
+		            resourceGroupList: ${resourceGroupList},
+		            showListData: {}
 		        }
 		    },
 		    methods: {
 		    
 		    },
 		    mounted : function() { //创建时
-		            
+		    	if(this.resourceGroupList && this.resourceGroupList.length ){
+		    		for(let i=0,len=this.resourceList.length;i<len;i++){
+		    			let res = this.resourceList[i];
+		    			if(!res) continue;
+		    			let sub = this.showListData[res.groupId];
+		    			if(!sub) sub = [];
+		    			sub.push(res);
+		    			this.showListData[res.groupId] = sub;
+		    			
+		    		}
+		    	}
 		    }
 	    });
     </script>

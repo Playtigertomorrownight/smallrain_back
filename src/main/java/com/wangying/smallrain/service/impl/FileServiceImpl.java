@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.wangying.smallrain.configs.BaseConfig;
 import com.wangying.smallrain.dao.ResourceGroupMapper;
 import com.wangying.smallrain.dao.extend.ResourceExtendMapper;
 import com.wangying.smallrain.entity.Resource;
@@ -47,6 +48,9 @@ public class FileServiceImpl implements FileService {
   
   @Value("${ftp.rootPath}")
   private String ftpRootPath;
+  
+  @Autowired
+  private BaseConfig baseConfig;
 
   private Logger log = LoggerFactory.getLogger(FileServiceImpl.class);
 
@@ -74,7 +78,12 @@ public class FileServiceImpl implements FileService {
     res.setLabel(label);
     log.info("上传的文件标签：" + label);
     res.setType(FileDataType.valueOfType(suffixName)); // 生成文件类型
-    res.setGroupId(groupId);
+    if(BaseUtils.isEmptyString(groupId)) {
+      res.setGroupId(baseConfig.getDefaultResourceGroup());   //default rres group 
+    }else {
+      res.setGroupId(groupId);
+    }
+    
     try {
       boolean isUpload = false;
       if(localFtp) {
