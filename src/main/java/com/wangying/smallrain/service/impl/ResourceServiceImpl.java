@@ -68,4 +68,10 @@ public class ResourceServiceImpl implements ResourceService {
     return ResultUtil.success(operate);
   }
 
+  @Override
+  public Resource getResourceById(String resId) {
+    // TODO Auto-generated method stub
+    return resourceMapper.selectByPrimaryKey(resId);
+  }
+
 }

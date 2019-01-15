@@ -169,7 +169,7 @@ public class FileServiceImpl implements FileService {
   }
 
   @Override
-  public Result loadFile(String resourceId) {
+  public Result loadFile(String resourceId,boolean isMdWithCss) {
     log.info("根据资源ID加载相关的文件，资源ID ："+ resourceId);
     Resource res = resourceMapper.selectByPrimaryKey(resourceId);
     String path = res.getPath();
@@ -193,7 +193,7 @@ public class FileServiceImpl implements FileService {
          String fileContent = new String(fileData, "UTF-8");
          MarkdownEntity html = MarkDown2HtmlWrapper.ofContent(fileContent); 
          result.put("type", "html");
-         result.put("content", html.toString(false));
+         result.put("content", html.toString(isMdWithCss));
          return ResultUtil.success(result);
       }else {
         return ResultUtil.fail("文件类型："+ res.getType() +" 暂时不支持转换！");

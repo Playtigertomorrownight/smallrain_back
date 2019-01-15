@@ -73,7 +73,7 @@ public class FileController {
   @ResponseBody
   public Result loadFile(@PathVariable("resId") String resId) {
 
-    return fileService.loadFile(resId);
+    return fileService.loadFile(resId,false);
     
   }
   

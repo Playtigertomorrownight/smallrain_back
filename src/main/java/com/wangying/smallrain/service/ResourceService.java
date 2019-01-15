@@ -12,4 +12,6 @@ public interface ResourceService {
   
   public Result addOrUpdateResource(Resource res);
   
+  public Resource getResourceById(String resId);
+  
 }

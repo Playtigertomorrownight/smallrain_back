@@ -12,20 +12,20 @@
         <div class="cotainer">
            <div class="rg-list-contain" >
 	           <ul class="rg-list" >
-	              <li class="rg" v-for="rg in resourceGroupList" :key="rg.id" @click="showList(rg.id)">
-	              	  <img src="../../static/image/rg-list.png" />
-		              <div class="rg-content"> 
-		                 <p class="rg-title">{{rg.name}}</p>
+	              <li class="rg" v-for="(rg,index) in resourceGroupList" :key="rg.id" :ref="'rg_'+rg.id">
+	              	  <img src="../../static/image/rg-list.png" @click="showList(rg.id)" />
+		              <div class="rg-content" @click="showList(rg.id)"> 
+		                 <p class="rg-title" >{{rg.name}}</p>
 		                 <p class="rg-count" >共 <strong>{{showListData[rg.id]?showListData[rg.id].length:0}}</strong> 篇文章</p>
-		                 <p class="rg-description">{{rg.name}}</p>
+		                 <p class="rg-description">{{rg.description}}</p>
 		              </div>
-		              <div v-if="isResListShow(rg.id)">
-			                 <ul  class="res-list" >
-			                     <li class="res" v-for="res in showListData[rg.id]" :key="rg.id">
+		              <div  class="res-list"  v-show="resourceListShow[rg.id]">
+			                 <ul>
+			                     <li class="res" v-for="res in showListData[rg.id]" :key="rg.id" @click="viewResource(res.id)">
 			                          <img src="../../static/image/article.png" />
-						              <div> 
-						                 <h3>{{res.name}}</h3>
-						                 <p>{{res.name}}</p>
+						              <div class="res-content"> 
+						                 <p class="res-title">{{res.name}}</p>
+						                 <p class="res-description">{{res.description}}</p>
 						              </div>
 			                     </li>
 			                 </ul>
@@ -44,25 +44,31 @@
 		            resourceList: ${resourceList},
 		            resourceGroupList: ${resourceGroupList},
 		            showListData: {},
-		            resourceListShow: []
+		            resourceListShow: ${resourceListShow}
 		        }
 		    }, 
 		    methods: {
 		    	showList: function(rgId){
-		    		console.log(rgId)
-		    		console.log(this.resourceListShow[rgId])
+		    		for(let id in this.resourceListShow){
+		    		  if(rgId != id){
+		    			this.resourceListShow[id] = false;
+		    		  }
+		    		}
 		    		this.resourceListShow[rgId] = !this.resourceListShow[rgId];
-		    		console.log(this.resourceListShow)
-		    		/* for(let id in this.resourceListShow){
-		    			if(rgId == id){
-		    				
-		    			}else{
-		    				
-		    			}
-		    		} */
+		    		let offsetTop = -1;
+		    		if(!this.resourceListShow[rgId]){
+		    			offsetTop = 0;
+		    		}
+		    		const that = this;
+		    		setTimeout(function(){
+		    			offsetTop = offsetTop==0?offsetTop:that.$refs['rg_'+rgId][0].offsetTop-20;
+		    			ScrollTop(offsetTop,100);
+		    		},100);
 		    	},
-		    	isResListShow: function(rgId){
-		    		return this.resourceListShow[rgId];
+		    	viewResource: function(resId){
+		    		let aimUrl = getAimUrl("/wx/web/article?resourceId="+resId);
+		    		console.log(aimUrl)
+		    		window.location.href = aimUrl+'&time='+((new Date()).getTime());
 		    	}
 		    },
 		    created : function() { //创建时
@@ -71,7 +77,6 @@
 		    			let rg = this.resourceGroupList[i];
 		    			if(!rg) continue;
 		    			this.showListData[rg.id] = [];
-		    			this.resourceListShow[rg.id] = false;
 		    		}
 		    		if(this.resourceList && this.resourceList.length){
 		    			for(let i=0,len=this.resourceList.length;i<len;i++){

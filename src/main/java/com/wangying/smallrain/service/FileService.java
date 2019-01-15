@@ -32,7 +32,7 @@ public interface FileService {
    * @param resourceId
    * @return
    */
-  public Result loadFile(String resourceId);
+  public Result loadFile(String resourceId,boolean isMdWithCss);
   
   /**
    * 根据资源ID删除相关的文件及其记录
