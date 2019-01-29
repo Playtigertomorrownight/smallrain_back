@@ -61,12 +61,12 @@
 					           <img :src="resourceModalContent.imagePath" >
 					          </div>
 					       </Content>
-					       <Content v-else-if="resourceModalContent.type == 'txt'">  <!-- 渲染图像 -->
+					       <Content v-else-if="resourceModalContent.type == 'txt'">  <!-- 渲染文本 -->
                               <div class="modal_content_text" v-html="resourceModalContent.content">
                                
                               </div>
                            </Content>
-                           <Content v-else-if="resourceModalContent.type == 'html'">  <!-- 渲染图像 -->
+                           <Content v-else-if="resourceModalContent.type == 'html'">  <!-- 渲染html -->
                               <div class="modal_content_html" v-html="resourceModalContent.content">
                                
                               </div>

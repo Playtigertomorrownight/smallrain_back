@@ -2,16 +2,28 @@
 <html lang="zh-CN">
 <head>
     <#include "/common/wechat_head.html"/>
+    <link rel="stylesheet" type="text/css" href="../../static/css/markdown.css">
     <link rel="stylesheet" type="text/css" href="../../static/css/wechat/article.css">
 </head>
 <body ontouchstart>
     <div id="app">
         <div class="header" align="center">${title}</div>
-        <div class="contain" style="width:96%;padding-left:2%" v-html="datas.data.content">
+        <div class="content" v-html="datas.data.content">
         </div>
         <div class="footer"></div>
     </div>
     <script type="text/javascript"> 
+	    //images init
+	   window.onload=function(){
+	    	let images = document.getElementsByTagName("img");
+	    	for(let i=0,len=images;i<len;i++){
+	            let image = images[i];
+	            if(!image) continue;
+	            console.log(image.width);
+	        }
+	    };
+	    
+    
         new Vue({
             el: '#app',
             data: function(){

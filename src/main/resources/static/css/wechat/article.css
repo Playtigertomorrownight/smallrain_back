@@ -1,10 +1,14 @@
+*{
+	width:100%;
+}
 li {
-    line-height: 24px;
+    line-height: 20px;
     overflow-wrap: break-word;
     padding: 8px 1px;
+    margin-left: 5%;
 }
 
-p, li p {
+p, li p{
     overflow-wrap: break-word;
     line-height: 27px !important;
     text-indent:2rem;
@@ -19,4 +23,32 @@ p strong{
 
 h1, h2 {
     color: #9696f3 !important;
+}
+
+h2 {
+    font-size: 1.4rem;
+    line-height: 35px;
+    margin-top: 30px;
+}
+
+img{
+	width: 100%;
+}
+
+pre{
+	width: 100%;
+	overflow: scroll;
+}
+
+div.header {
+	font-size: 1.7rem;
+    padding: 8px 8px;
+    font-weight: 600;
+    background: #353535;
+    color: #fcfcfd;
+}
+
+div.content{
+	width:90%;
+	padding-left:5%;
 }

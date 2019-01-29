@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MarkdownEntity {
 
-    public static String TAG_WIDTH = "<style type=\"text/css\"> %s { width:85%%} </style>";
+    public static String TAG_WIDTH = "<style type=\"text/css\"> %s { width:85%;} </style>";
 
     // css 样式
     private String css;
