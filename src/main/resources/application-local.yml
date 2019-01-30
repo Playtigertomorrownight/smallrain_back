@@ -15,3 +15,7 @@ app:
     dommainName: http://localhost:80  #服务域名
     maxFileSize: 128 #最大文件上传大小
     maxRequestSize: 512 #总上传数据总大小
+    
+# ftp 配置 
+ftp:
+  host: 106.12.204.7

@@ -16,10 +16,11 @@
 	    //images init
 	   window.onload=function(){
 	    	let images = document.getElementsByTagName("img");
-	    	for(let i=0,len=images;i<len;i++){
+	    	for(let i=0,len=images.length;i<len;i++){
 	            let image = images[i];
 	            if(!image) continue;
-	            console.log(image.width);
+	            console.log(document.body.clientWidth*0.90);
+	            image.style.width= document.body.clientWidth*0.90+'px';
 	        }
 	    };
 	    

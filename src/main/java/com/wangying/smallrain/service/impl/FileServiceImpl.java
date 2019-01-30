@@ -96,9 +96,10 @@ public class FileServiceImpl implements FileService {
         res.setId(BaseUtils.createUUID());
         resourceMapper.insert(res);
         if(BaseUtils.isEmptyString(groupId)) {   //如果指派的资源组非空，跟新资源组数量信息
+          resourceGroupMapper.addResourceCount(1, baseConfig.getDefaultResourceGroup());
+        }else {
           resourceGroupMapper.addResourceCount(1, groupId);
         }
-        
         return true;
       }
     }catch(Exception e) {

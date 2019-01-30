@@ -73,7 +73,6 @@ appdata:
 #ftp 服务器配置
 ftp:
   localFtp: false  #ftp服务器是否安装在本地
-  host: 106.12.204.7
   port: 21
   username: smallrain
   password: wy16894255
