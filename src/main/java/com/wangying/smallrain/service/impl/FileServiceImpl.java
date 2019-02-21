@@ -9,8 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,7 +28,7 @@ import com.wangying.smallrain.utils.BaseUtils;
 import com.wangying.smallrain.utils.FileUtils;
 import com.wangying.smallrain.utils.ResultUtil;
 
-@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
+@Transactional
 @Service
 public class FileServiceImpl implements FileService {
 
@@ -224,6 +222,7 @@ public class FileServiceImpl implements FileService {
          return ResultUtil.fail("删除资源失败");
        }
        resourceMapper.deleteByPrimaryKey(resourceId);  //删除数据库记录
+       resourceGroupMapper.addResourceCount(-1, res.getGroupId());
        return ResultUtil.success("删除资源成功！");
        
     } catch (Exception e) {

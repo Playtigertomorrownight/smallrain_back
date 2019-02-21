@@ -35,7 +35,7 @@
 	<script type="text/javascript">
 		new Vue({
 			el : '#app',
-			data : {
+			data : {				
                 isShow: false,
                 okText: "登录",
                 width: 410,
@@ -67,6 +67,7 @@
                         	params.append('username', this.formTop.username);
                         	params.append('password', hex_md5(this.formTop.password));  //MD5 加密
                         	params.append('remberMe', this.formTop.remberMe);
+                        	that.modal_loading=true;
                         	axios({
 	                        	    method: "post",
 	                        	    url: "./login",
@@ -78,6 +79,7 @@
 	                        			console.log('跳转到页面：'+data.data);
 	                        			window.location.href = data.data; 
 	                        		}else{
+	                        			that.modal_loading=false;
 	                        			that.$Notice.error({
 	                                        title: '登录失败',
 	                                        desc:  data.message
@@ -85,6 +87,7 @@
 	                        		}
                         	   }).catch(function (error) {
                         		   console.log(error);
+                        		   that.modal_loading=false;
                         		   that.$Notice.error({
                                        title: '登录失败',
                                        desc:  '发生了某些异常: '+error

@@ -3,7 +3,7 @@ spring:
   application:
     name: smallrain-back
   profiles:
-    active: local
+    active: prod
   freemarker:
     # 设置模板后缀名
     suffix: .html
@@ -88,5 +88,5 @@ ftp:
 #自定义配置项
 app:
   smallrain:
-    defaultResourceGroup:    #默认资源组ID
+    defaultResourceGroup: ef3bcee0c4ab445ea045c796456e144d    #默认资源组ID
     

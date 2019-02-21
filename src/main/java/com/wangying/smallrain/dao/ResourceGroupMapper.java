@@ -2,6 +2,8 @@ package com.wangying.smallrain.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.wangying.smallrain.entity.ResourceGroup;
 
 public interface ResourceGroupMapper {
@@ -57,7 +59,7 @@ public interface ResourceGroupMapper {
     
     int selectAllCount();
     
-    int addResourceCount(int count,String id);
+    int addResourceCount(@Param("count") int count,@Param("id") String id);
     
     List<ResourceGroup> selectByIds(List<String> ids);
     
