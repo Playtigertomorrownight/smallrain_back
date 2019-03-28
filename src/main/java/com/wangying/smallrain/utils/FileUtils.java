@@ -8,10 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-
-import org.springframework.core.io.ClassPathResource;
 
 public class FileUtils {
 

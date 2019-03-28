@@ -35,7 +35,7 @@ public class TulingBotData {
     Map<String,Object> param = initParam(0,userId,request,null,location);
     log.info("向图灵机器人的请求参数："+JSONObject.toJSONString(param));
     //发送请求
-    String resultStr = HttpUtil.doPostWithJSON(apiUrl, null, param);  //请求微信
+    String resultStr = HttpUtil.doPost(apiUrl, null, param);  //请求
     log.info("向图灵机器人请求应答的结果为： "+ resultStr);
     if(StringUtils.isEmpty(resultStr)) {
       log.info("向图灵机器人请求应答失败，请求结果为空 ！");

@@ -1,7 +1,5 @@
 package com.wangying.smallrain.ftp;
 
-import java.io.IOException;
-
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.springframework.beans.factory.annotation.Autowired;
