@@ -1,3 +1,14 @@
+#tomcat配置
+server:
+  use-forward-headers: true
+  port: 8999
+  address: 127.0.0.1
+  contextPath: /manager/index
+  tomcat: 
+    remote_ip_header: x-forwarded-for
+    protocol_header: x-forwarded-proto
+    port-header: X-Forwarded-Port
+
 #线上环境，数据库配置
 spring:
   datasource:
