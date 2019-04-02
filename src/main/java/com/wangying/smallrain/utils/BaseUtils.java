@@ -2,6 +2,8 @@ package com.wangying.smallrain.utils;
 
 import java.beans.PropertyDescriptor;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -104,6 +106,15 @@ public class BaseUtils extends BeanUtils {
     return UUID.randomUUID().toString().replace("-", "");
   }
 
+  public static File createTempFile(String suffixName) throws IOException {
+	  File result = new File(joinString("/tmp/","temp-",createUUID(),suffixName));
+	  if(!result.getParentFile().exists()) {
+		  result.getParentFile().mkdirs();
+	  }
+	  result.createNewFile();
+	  return result;
+  }
+  
   /**
    * 字符串拼接
    * 

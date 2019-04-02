@@ -3,7 +3,7 @@ spring:
   application:
     name: smallrain-back
   profiles:
-    active: prod
+    active: local
   freemarker:
     # 设置模板后缀名
     suffix: .html
@@ -70,7 +70,7 @@ ftp:
   port: 21
   username: smallrain
   password: wy16894255
-  rootPath: /var/ftp/public_root/
+  rootPath: /www/wwwroot/smallrain/
   connectTimeOut: 5000  #ftp 连接超时时间 毫秒
   bufferSize: 1024  #缓冲区大小
   fileType: 2 #传输数据格式 2 --  binary 二进制数据
