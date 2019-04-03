@@ -27,7 +27,7 @@ import com.wangying.smallrain.utils.WechatUtil;
  *
  */
 @RestController
-@RequestMapping("v1/wx")
+@RequestMapping("/sr/v1/wx")
 public class WeChatControlle {
 
   @Value("${wechat.token}")

@@ -67,7 +67,7 @@ public class FileServiceImpl implements FileService {
 		res.setSuffix(suffixName);
 		long filesize = file.getSize(); // 获取并设置文件大小
 		res.setSize(filesize);
-		log.info("上传的文件大小为：" + filesize);
+		log.info("上传的文件大小为：" + filesize); 
 		res.setDescription(description);
 		log.info("上传的文件描述：" + description);
 		res.setLabel(label);

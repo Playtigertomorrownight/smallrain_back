@@ -24,4 +24,5 @@ app:
     
 # ftp 配置 
 ftp:
+  localFtp: false  #ftp服务器是否安装在本地
   host: 106.12.204.7

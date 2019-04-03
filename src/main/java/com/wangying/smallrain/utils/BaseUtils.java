@@ -107,7 +107,7 @@ public class BaseUtils extends BeanUtils {
   }
 
   public static File createTempFile(String suffixName) throws IOException {
-	  File result = new File(joinString("/tmp/","temp-",createUUID(),suffixName));
+	  File result = new File(joinString("/tmp/smalrain/","temp-",createUUID(),suffixName));
 	  if(!result.getParentFile().exists()) {
 		  result.getParentFile().mkdirs();
 	  }

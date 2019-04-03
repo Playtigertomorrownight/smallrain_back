@@ -23,7 +23,7 @@ import com.wangying.smallrain.utils.BaseUtils;
 import com.wangying.smallrain.utils.ResultUtil;
 
 @Controller
-@RequestMapping("/user/")
+@RequestMapping("/sr/user/")
 public class UserController {
 
   @Autowired

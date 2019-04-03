@@ -23,7 +23,7 @@ import com.wangying.smallrain.utils.BaseUtils;
 import com.wangying.smallrain.utils.ResultUtil;
 
 @Controller
-@RequestMapping("/wx/web")
+@RequestMapping("/sr/wx/web")
 public class WxWebController {
 
   @Autowired
