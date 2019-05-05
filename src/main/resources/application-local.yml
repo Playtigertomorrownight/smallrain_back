@@ -19,10 +19,10 @@ logging:
 app:
   smallrain:
     dommainName: http://localhost:8999  #服务域名
+    ftpFileDmain: http://www.smallrain.top/sr/resource   #文件服务器域名
     maxFileSize: 128 #最大文件上传大小
     maxRequestSize: 512 #总上传数据总大小
     
 # ftp 配置 
 ftp:
-  localFtp: false  #ftp服务器是否安装在本地
   host: 106.12.204.7

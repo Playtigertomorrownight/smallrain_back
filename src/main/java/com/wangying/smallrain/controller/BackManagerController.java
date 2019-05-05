@@ -6,7 +6,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wangying.smallrain.configs.BaseConfig;
 import com.wangying.smallrain.entity.Menu;
 import com.wangying.smallrain.entity.PageBean;
 import com.wangying.smallrain.entity.Resource;
@@ -32,21 +32,23 @@ import com.wangying.smallrain.service.ResourceService;
 import com.wangying.smallrain.utils.BaseUtils;
 import com.wangying.smallrain.utils.ResultUtil;
 
+/**
+ * 后台管理控制器
+ * @author 16524
+ *
+ */
 @Controller
-@RequestMapping("/sr/manager/")
+@RequestMapping("/sr/back/")
 public class BackManagerController {
 
   @Autowired
   private MenuService menuService;
-  
   @Autowired
   private ResourceService resourceService;
-  
   @Autowired
   private ResourceGroupService resourceGroupService;
-  
-  @Value("${ftp.ftpFileDmain}")
-  private String ftpFileDmain;
+  @Autowired
+  private BaseConfig baseConfig;
   
   private Logger log = LoggerFactory.getLogger(BackManagerController.class);
   
@@ -70,7 +72,7 @@ public class BackManagerController {
   public ModelAndView  menu(@RequestParam(value = "platform", required = false)String platform,
                             @RequestParam(value = "current", required = false)String current) {
     log.info("后台菜单管理。。。。");
-    ModelAndView  mv = new ModelAndView("back/menu_manager");  //指定viewname
+    ModelAndView  mv = baseConfig.initModwlAndView("back/menu_manager");  //指定viewname
     mv.addObject("topMenu","menu-manager");   //顶部按钮名称
     if(BaseUtils.isEmptyString(current)) current = "manager-back-menu-top";
     mv.addObject("currentMenu",current);   //当前左部按钮名称
@@ -167,7 +169,7 @@ public class BackManagerController {
   @RequestMapping("/resource")
   public ModelAndView  resource(@RequestParam(value = "current", required = false)String current) {
     log.info("后台资源管理。。。。");
-    ModelAndView  mv = new ModelAndView("back/resource_manager");  //指定viewname
+    ModelAndView  mv = baseConfig.initModwlAndView("back/resource_manager");  //指定viewname
     mv.addObject("topMenu","resource-manager");   //顶部按钮名称
     current = BaseUtils.isEmptyString(current)?"manager-back-resource-list":current;
     mv.addObject("currentMenu",current);   //当前左部按钮名称
@@ -180,7 +182,6 @@ public class BackManagerController {
     mv.addObject("pageData","{}");
     mv.addObject("resType","{}"); //类型数据
     mv.addObject("resourceGroupData","{}"); //资源组数据
-    mv.addObject("ftpFileDmain",ftpFileDmain); //文件服务器域名
     PageBean<ResourceGroup>  RgpageDate = resourceGroupService.getResourceGroupList(new BaseQueryEntity(1,0));   //获取所有按钮组数据
     mv.addObject("allResourceGroup",JSONObject.toJSONString(RgpageDate.getItems())); //所有按钮组数据
     if("list".equals(action)) {   //资源列表
