@@ -1,9 +1,9 @@
 #tomcat配置
 server:
   use-forward-headers: true
-  port: 8090
+  port: ${SMALLRAINPORT:8090}
   address: 127.0.0.1
-  contextPath:  /back/index
+  contextPath:  ${CONTEXTPATH:/back/index}
   tomcat: 
     remote_ip_header: x-forwarded-for
     protocol_header: x-forwarded-proto
@@ -26,7 +26,7 @@ app:
     dommainName: ${SMALLRAIN_HOST:http://www.smallrain.top} #服务域名,最后不加/
     maxFileSize: 128 #最大文件上传大小
     maxRequestSize: 512 #总上传数据总大小
-    tempFileDir: /tmp/smalrain/   #临时文件存放目录
+    tempFileDir: ${TEMPFILEDIR:/tmp/smalrain/}   #临时文件存放目录
     
 # ftp 配置 
 ftp:
