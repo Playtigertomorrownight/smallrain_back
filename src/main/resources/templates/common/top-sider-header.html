@@ -6,7 +6,6 @@
                 <i-menu mode="horizontal" theme="dark" active-name="${topMenu}"  @on-select="clickTopMenu">
                     <div class="layout-logo"></div>
                     <div class="layout-nav">
-                    
                         <menu-item v-for="menu in menus.top" :name="menu.name" :class="menu.clazz" :key="menu.name" >
                             <Icon :type="menu.icon" size="28"></Icon>
                             {{menu.text}}

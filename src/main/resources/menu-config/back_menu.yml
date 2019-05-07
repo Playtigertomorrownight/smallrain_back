@@ -15,7 +15,7 @@ buttons:
       clazz: menu-manager
       icon: md-menu
       text: 菜单管理
-      url: /manager/index
+      url: /back/index
       parent: -1
       platform: BACKTOP
       orderNum: 1
@@ -25,7 +25,7 @@ buttons:
       clazz: manager-back-menu-top
       icon: 
       text: 管理后台顶部菜单
-      url: /manager/menu?platform=BACKTOP&current=manager-back-menu-top
+      url: /back/menu?platform=BACKTOP&current=manager-back-menu-top
       parent: -1
       orderNum: 1
       platform: BACKLEFT
@@ -35,7 +35,7 @@ buttons:
       clazz: manager-back-menu-left
       icon: 
       text: 管理后台左部菜单
-      url: /manager/menu?platform=BACKLEFT&current=manager-back-menu-left
+      url: /back/menu?platform=BACKLEFT&current=manager-back-menu-left
       parent: -1
       orderNum: 2
       platform: BACKLEFT

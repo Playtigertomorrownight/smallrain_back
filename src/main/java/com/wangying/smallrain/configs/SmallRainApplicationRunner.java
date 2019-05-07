@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.wangying.smallrain.ftp.FTPClientPool;
 import com.wangying.smallrain.service.WechatService;
+import com.wangying.smallrain.utils.BaseUtils;
 
 /**
  * @author wangying.dz3 程序启动初始化操作
@@ -20,6 +21,9 @@ public class SmallRainApplicationRunner implements CommandLineRunner {
   
   @Value("${ftp.localFtp}")
   private boolean localFtp;
+  
+  @Value("${app.smallrain.tempFileDir}")
+  private String tempFileDir;
   
   @Autowired
   private WechatService wechatService;
@@ -32,6 +36,7 @@ public class SmallRainApplicationRunner implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     log.info("程序启动完成后首先需要执行的初始化操作");
+    BaseUtils.TEMP_FILE_DIR = tempFileDir;
     //初始化token 操作
     log.info("-- 1. 获取 token 操作 --");
     String access_token = wechatService.getAccessToken();

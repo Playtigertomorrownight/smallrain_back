@@ -42,7 +42,7 @@ public class FileServiceImpl implements FileService {
 	@Autowired
 	private BaseConfig baseConfig;
 	@Value("${ftp.localFtp}")
-	private boolean localFtp;
+	private String localFtp;
 	private Logger log = LoggerFactory.getLogger(FileServiceImpl.class);
 
 	@Override
@@ -83,7 +83,7 @@ public class FileServiceImpl implements FileService {
 			tempFile = BaseUtils.createTempFile(suffixName);   //创建临时文件
 			file.transferTo(tempFile);   //下载文件到本地
 			boolean isUpload = false;
-			if (localFtp) { // 使用本地文件系统
+			if (Boolean.valueOf(localFtp)) { // 使用本地文件系统
 				isUpload = localFileManager.uploadFileToLocal(tempFile, res);
 			} else { // 使用 ftp
 				isUpload = ftpFileManager.uploadFileToFtp(tempFile, res);
@@ -126,7 +126,7 @@ public class FileServiceImpl implements FileService {
 		}
 		try {
 			String content = "";
-			if (localFtp) { // 使用本地文件系统
+			if (Boolean.valueOf(localFtp)) { // 使用本地文件系统
 				content = localFileManager.loadLocalFile(path);
 			} else { // 使用 ftp
 				content = ftpFileManager.loadFtpFile(path);
@@ -168,7 +168,7 @@ public class FileServiceImpl implements FileService {
 		}
 		try {
 			boolean isRemoved = false;
-			if (localFtp) { // 使用本地文件系统
+			if (Boolean.valueOf(localFtp)) { // 使用本地文件系统
 				isRemoved = localFileManager.deleteLocalFile(path);
 			} else { // 使用 ftp
 				isRemoved = ftpFileManager.deleteFtpFile(path);

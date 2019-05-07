@@ -2,8 +2,8 @@
 <html>
 <head>
 <#include "/common/head.html"/>
-<link rel="stylesheet" type="text/css" href="../../static/css/index.css">
-<script type="text/javascript" src="../../static/javascript/md5.js" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="${domain}/static/css/index.css">
+<script type="text/javascript" src="${domain}/static/javascript/md5.js" charset="utf-8"></script>
 <title>${title}</title>
 </head>
 <body>
@@ -70,7 +70,7 @@
                         	that.modal_loading=true;
                         	axios({
 	                        	    method: "post",
-	                        	    url: "./login",
+	                        	    url: "${domain}/user/login",
 	                        	    data: params
                         	    }).then(function (response) {
 	                        		var data = response.data;

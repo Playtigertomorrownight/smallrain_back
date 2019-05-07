@@ -2,8 +2,20 @@
 <html>
 <head>
 <#include "/common/head.html"/>
-<link rel="stylesheet" type="text/css" href="../static/css/index.css">
+<link rel="stylesheet" type="text/css" href="${domain}/static/css/index.css">
 <title>${title}</title>
+<style>
+  p.notice-menu-name{
+    width: 100%;
+    text-align: center;
+    font-size: 1.2em;
+    letter-spacing: 2px;
+    font-weight: 600;
+    padding: 11px;
+    background-color: #FFFFFF;
+    color: #000000;
+  }
+</style>
 </head>
 <body>
     <#include "/common/top-sider-header.html"/>
@@ -218,7 +230,7 @@
             	    const that = this;
             		this.$refs["menuForm"].validate((valid) => {    //表单校验
                         if (valid) {   //校验通过，请求后台进行提交数据
-                        	sendRequest(this,"./menu/add","POST",this.menuFormData,function(response){
+                        	sendRequest(this,"${domain}/back/menu/add","POST",this.menuFormData,function(response){
                         		var data = response.data;
                                 if(data.status == 0){  //提交数据成功
                                     window.location.reload();
@@ -264,26 +276,40 @@
                         this.$refs["menuName"].focus();
                        return ;
                     }
-                    const parentKey = root.find(el => el === node).parent;
-                    const parent = root.find(el => el.nodeKey === parentKey).node;
-                    const index = parent.children.indexOf(data);
-                    console.log(data);
-                    let that = this;
-                    sendRequest(this,"./menu/delete?menuId="+data.ref,"DELETE",null,function(response){
-                        var data = response.data;
-                        if(data.status == 0){  //提交数据成功
-                        	that.$Notice.success({
-                                title: 'success',
-                                desc:  '删除菜单成功！'
+                	console.log("node")
+                	console.log(node)
+                	console.log("data")
+                	console.log(data)
+                	this.$Modal.confirm({
+                        title: '警告',
+                        content: '<p style="padding-bottom: 10px;">请确定是否要删除菜单：</p><p class="notice-menu-name">'+data.title+'</p>',
+                        onOk: () => {
+                        	let that = this;
+                            sendRequest(this,"${domain}/back/menu/delete?menuId="+data.ref,"DELETE",null,function(response){
+                                var data = response.data;
+                                if(data.status == 0){  //提交数据成功
+                                	that.$Notice.success({
+                                        title: 'success',
+                                        desc:  '删除菜单成功！'
+                                    });
+                                	const parentKey = root.find(el => el === node).parent;
+                                    const parent = root.find(el => el.nodeKey === parentKey).node;
+                                    const index = parent.children.indexOf(data);
+                                	parent.children.splice(index, 1);
+                                }else{
+                                    that.$Notice.error({
+                                        title: '删除菜单失败！',
+                                        desc:  data.message
+                                    });
+                                }
                             });
-                        	parent.children.splice(index, 1);
-                        }else{
-                            that.$Notice.error({
-                                title: '删除菜单失败！',
-                                desc:  data.message
-                            });
+                        },
+                        onCancel: () => {
+                        	console.log("delet menu cancle")
                         }
                     });
+                	
+                    //console.log(data);
                 },
                 viewMenu: function(node){
                 	const ref = node.node.ref;
@@ -354,7 +380,8 @@
                                 },
                                 on: {
                                     click: () => { this.viewMenu(node) }
-                                }
+                                },
+                                alt: '预览'
                             }),
                         	h('Button', {
                                 props: Object.assign({}, this.buttonProps, {
@@ -442,7 +469,7 @@
                 },
                 updateMenusToWechat: function(){    //更新菜单到微信公众号
                 	let that = this;
-                	sendRequest(this,"../v1/wx/menu/init?source=dbdata","GET",null,function(response){
+                	sendRequest(this,"${domain}/v1/wx/menu/init?source=dbdata","GET",null,function(response){
                         var data = response.data;
                         if(data.status == 0){  //提交数据成功
                             that.$Notice.success({

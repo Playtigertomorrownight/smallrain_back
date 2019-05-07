@@ -38,7 +38,7 @@ import com.wangying.smallrain.utils.ResultUtil;
  *
  */
 @Controller
-@RequestMapping("/sr/back/")
+@RequestMapping("/back/")
 public class BackManagerController {
 
   @Autowired

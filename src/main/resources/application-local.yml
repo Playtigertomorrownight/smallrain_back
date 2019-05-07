@@ -1,8 +1,8 @@
 #服务配置
 server:
-  port: 8999
+  port: 8090
   address: 0.0.0.0
-  contextPath: /manager/index
+  contextPath: /back/index
 
 #本地环境，数据库配置
 spring:
@@ -18,11 +18,13 @@ logging:
 #自定义配置项
 app:
   smallrain:
-    dommainName: http://localhost:8999  #服务域名
+    dommainName: http://localhost:8090  #服务域名
     ftpFileDmain: http://www.smallrain.top/sr/resource   #文件服务器域名
     maxFileSize: 128 #最大文件上传大小
     maxRequestSize: 512 #总上传数据总大小
+    tempFileDir: C:\Users\16524\Desktop\temp-file\smallrain\   #临时文件存放目录
     
 # ftp 配置 
 ftp:
+  localFtp: false  #ftp服务器是否安装在本地
   host: 106.12.204.7

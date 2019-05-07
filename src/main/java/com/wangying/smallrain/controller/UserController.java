@@ -23,7 +23,7 @@ import com.wangying.smallrain.utils.BaseUtils;
 import com.wangying.smallrain.utils.ResultUtil;
 
 @Controller
-@RequestMapping("/sr/user/")
+@RequestMapping("/user/")
 public class UserController {
 
   @Autowired
@@ -34,7 +34,7 @@ public class UserController {
   @RequestMapping("tologin")
   public ModelAndView toLogin() {
     log.info("跳转登录页。。");
-    ModelAndView mv = new ModelAndView("tologin");
+    ModelAndView mv =  baseConfig.initModwlAndView("tologin");
     mv.addObject("title", "用户登录");
     return mv;
   }
@@ -54,8 +54,8 @@ public class UserController {
       // 获取返回的结果
       // User user = (User) subject.getPrincipal();
       SavedRequest savedRequest = WebUtils.getSavedRequest(request);
-      String savedRequestUrl = null==savedRequest?"/manager/index":savedRequest.getRequestUrl();
-      savedRequestUrl = savedRequestUrl.length()<3?"/manager/index":savedRequestUrl;
+      String savedRequestUrl = null==savedRequest?"/back/index":savedRequest.getRequestUrl();
+      savedRequestUrl = savedRequestUrl.length()<3?"/back/index":savedRequestUrl;
       // 返回原始页
       String latUrl = BaseUtils.joinString(baseConfig.getDommainName(), savedRequestUrl);
       log.info("跳转回原地址："+latUrl);

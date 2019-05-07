@@ -26,7 +26,7 @@ import com.wangying.smallrain.utils.ResultUtil;
  *
  */
 @RestController
-@RequestMapping("/sr/file/")
+@RequestMapping("/file/")
 public class FileController {
 
   @Autowired

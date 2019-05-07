@@ -7,14 +7,15 @@
 }
 
 .layout-logo {
-	width: 100px;
-	height: 30px;
-	background: #5b6270;
-	border-radius: 3px;
-	float: left;
-	position: relative;
-	top: 15px;
-	left: 20px;
+	width: 83px;
+    height: 59px;
+    background-image: url(../image/web/logo1.png);
+    /* border-radius: 3px; */
+    float: left;
+    position: relative;
+    /* top: 1px; */
+    left: 0px;
+    background-size: cover;
 }
 
 .layout-nav {

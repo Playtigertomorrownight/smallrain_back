@@ -2,7 +2,7 @@
 <html>
 <head>
 <#include "/common/head.html"/>
-<link rel="stylesheet" type="text/css" href="../static/css/resource.css">
+<link rel="stylesheet" type="text/css" href="${domain}/static/css/resource.css">
 <title>${title}</title>
 </head>
 <body>
@@ -109,7 +109,7 @@
 					    
 				    </div>
 				    <div v-if="action=='add'">
-				        <Upload v-cloak ref="upload" multiple paste  type="drag" max-size="10240" action="../file/upload" :on-success="uploadSuccess" :on-exceeded-size="handleMaxSize" :before-upload="addParam">
+				        <Upload v-cloak ref="upload" multiple paste  type="drag" max-size="10240" action="${domain}/file/upload" :on-success="uploadSuccess" :on-exceeded-size="handleMaxSize" :before-upload="addParam">
 							<div style="padding: 20px 0">
 							<Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
 							     <p v-cloak>Click or drag files here to upload</p>
@@ -310,7 +310,7 @@
             			return ;
             		}
             		const that = this;
-            		sendRequest(this,"./resource-group/addOrUpdate","POST",paramData,function (response) {
+            		sendRequest(this,"${domain}/back/resource-group/addOrUpdate","POST",paramData,function (response) {
                         var resData = response.data;
                         console.log(resData)
                         let rgModal = that.resourceGroupModal;
@@ -338,7 +338,7 @@
             	resourceModalOk: function(){   //修改资源
             		let paramData = this.resourceModal.formData;   //表单数据
             		const that = this;
-                    sendRequest(this,"./resource/addOrupdate","POST",paramData,function (response) {
+                    sendRequest(this,"${domain}/back/resource/addOrupdate","POST",paramData,function (response) {
                         var resData = response.data;
                         console.log(resData)
                         if(resData&&resData.status == 0){   //添加成功
@@ -429,7 +429,7 @@
                 	const data = param.row;
                 console.log(data)
                     const that = this;
-                    sendRequest(this,"./resource-group/delete?resGroupId="+data.id,"DELETE",null,function (response) {
+                    sendRequest(this,"${domain}/back/resource-group/delete?resGroupId="+data.id,"DELETE",null,function (response) {
                         var resData = response.data;
                         console.log(resData)
                         if(resData&&resData.status == 0){   //删除成功
@@ -473,7 +473,7 @@
                 remove: function(param){   //移除列表
                 	const data = param.row;
                 	const that = this;
-                	sendRequest(this,"../file/delete/"+data.id,"DELETE",null,function (response) {
+                	sendRequest(this,"${domain}/file/delete/"+data.id,"DELETE",null,function (response) {
                         var resData = response.data;
                         console.log(resData)
                         if(resData&&resData.status == 0){   //删除成功
@@ -566,7 +566,7 @@
             	   params['pageSize']=pageSize;
             	   
             	   console.log(params);
-            	   sendRequest(this,"./resource/list","POST",params,function (response) {
+            	   sendRequest(this,"${domain}/back/resource/list","POST",params,function (response) {
                        const resData = response.data;
                        if(resData && resData.status == 0){   //查询成功
                            const data = resData.data;
@@ -605,7 +605,7 @@
             		   this.resourceModalShow = true;
             	   }else{    //其他文件不能直接展示，只能有后台转换后展示
             		   const that = this;
-            		   sendRequest(this,"../file/load/"+data.id,"GET",null,function (response) {    //请求服务器加载资源
+            		   sendRequest(this,"${domain}/file/load/"+data.id,"GET",null,function (response) {    //请求服务器加载资源
                            var resData = response.data;
                            console.log(resData)
                           let content = {};

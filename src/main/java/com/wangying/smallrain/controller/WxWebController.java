@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wangying.smallrain.configs.BaseConfig;
 import com.wangying.smallrain.entity.PageBean;
 import com.wangying.smallrain.entity.Resource;
 import com.wangying.smallrain.entity.ResourceGroup;
@@ -23,7 +25,7 @@ import com.wangying.smallrain.utils.BaseUtils;
 import com.wangying.smallrain.utils.ResultUtil;
 
 @Controller
-@RequestMapping("/sr/wx/web")
+@RequestMapping("/wx/web")
 public class WxWebController {
 
   @Autowired
@@ -35,13 +37,16 @@ public class WxWebController {
   @Autowired
   private FileService fileService;
   
+  @Autowired
+  private BaseConfig baseConfig;
+  
   /**
    * 后台首页,默认进入菜单管理
    * @return
    */
   @RequestMapping("/index")
   public ModelAndView index() {
-    ModelAndView mv = new ModelAndView("wechat/index");
+    ModelAndView mv = baseConfig.initModwlAndView("wechat/index");
     mv.addObject("title", "微网站首页");
     return mv;
   }
@@ -53,8 +58,8 @@ public class WxWebController {
    */
   @RequestMapping("/articles")
   public ModelAndView articles(@RequestParam(value="label",required = false) String label ) {
-    ModelAndView mv = new ModelAndView("wechat/article_list");
-    mv.addObject("title", BaseUtils.joinString(label," 相关文章"));
+    ModelAndView mv = baseConfig.initModwlAndView("wechat/article_list");
+    mv.addObject("title", BaseUtils.joinString(StringUtils.isEmpty(label)?"":label,StringUtils.isEmpty(label)?"全部文章":" 相关文章"));
     PageBean<Resource> pageData = new PageBean<Resource>();
     ResourceQueryEntity resQuery = new ResourceQueryEntity();   //新建查询条件
     resQuery.setPageSize(0);   //查询所有指定标签的资源
@@ -82,7 +87,7 @@ public class WxWebController {
    */
   @RequestMapping("/article")
   public ModelAndView article(@RequestParam(value="resourceId",required = true) String resourceId) {
-    ModelAndView mv = new ModelAndView("wechat/article");
+    ModelAndView mv = baseConfig.initModwlAndView("wechat/article");
     Resource resource = resourceService.getResourceById(resourceId);
     if(null==resource) {
       mv.addObject("title", "An null resource");

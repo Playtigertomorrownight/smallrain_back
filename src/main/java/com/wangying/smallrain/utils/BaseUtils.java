@@ -31,6 +31,8 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class BaseUtils extends BeanUtils {
 
+  public static String TEMP_FILE_DIR;
+	
   /**
    * 重写对象复制，忽略值为空的属性
    * 
@@ -107,7 +109,8 @@ public class BaseUtils extends BeanUtils {
   }
 
   public static File createTempFile(String suffixName) throws IOException {
-	  File result = new File(joinString("/tmp/smalrain/","temp-",createUUID(),suffixName));
+	  String filePath = joinString(TEMP_FILE_DIR,"temp-",createUUID(),suffixName);
+	  File result = new File(filePath);
 	  if(!result.getParentFile().exists()) {
 		  result.getParentFile().mkdirs();
 	  }
