@@ -72,13 +72,13 @@
                     for ( let i = 0; i < menus.length; i++){
                         let menu = menus[i];
                         if(menu.name == name){
-                            return getAimUrl(menu.url);
+                            return "${domain}"+menu.url;
                         }
                         if(menu.subMenus && menu.subMenus.length){
                             for ( let j = 0; j < menu.subMenus.length; j++){
                                 let sub = menu.subMenus[j];
                                 if(sub.id == name){
-                                    return getAimUrl(sub.url);
+                                    return "${domain}"+sub.url;
                                 }
                             }
                         }

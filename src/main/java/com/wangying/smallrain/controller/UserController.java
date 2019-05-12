@@ -57,7 +57,8 @@ public class UserController {
       String savedRequestUrl = null==savedRequest?"/back/index":savedRequest.getRequestUrl();
       savedRequestUrl = savedRequestUrl.length()<3?"/back/index":savedRequestUrl;
       // 返回原始页
-      String latUrl = BaseUtils.joinString(baseConfig.getDommainName(), savedRequestUrl);
+      String domain = baseConfig.getDommainName();
+      String latUrl = BaseUtils.joinString(domain.substring(0, domain.indexOf("/")), savedRequestUrl);
       log.info("跳转回原地址："+latUrl);
       return  ResultUtil.success(latUrl);
     } catch (Exception e) {
