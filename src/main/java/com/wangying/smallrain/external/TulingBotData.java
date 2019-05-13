@@ -1,11 +1,12 @@
 package com.wangying.smallrain.external;
 
+import static com.wangying.smallrain.configs.ConfigHelper.getValue;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -15,13 +16,6 @@ import com.wangying.smallrain.utils.WechatUtil;
 
 @Component
 public class TulingBotData {
-   
-  @Value("${tuling.apiUrl}")
-  private String apiUrl;
-  
-  @Value("${tuling.apiKey}")
-  private String tlApiKey;
-  
    
   private Logger log = LoggerFactory.getLogger(TulingBotData.class);
   
@@ -35,7 +29,7 @@ public class TulingBotData {
     Map<String,Object> param = initParam(0,userId,request,null,location);
     log.info("向图灵机器人的请求参数："+JSONObject.toJSONString(param));
     //发送请求
-    String resultStr = HttpUtil.doPost(apiUrl, null, param);  //请求
+    String resultStr = HttpUtil.doPost(getValue("TULING_API_URL"), null, param);  //请求
     log.info("向图灵机器人请求应答的结果为： "+ resultStr);
     if(StringUtils.isEmpty(resultStr)) {
       log.info("向图灵机器人请求应答失败，请求结果为空 ！");
@@ -82,7 +76,7 @@ private Map<String,Object> initParam(int requestType,String userId,String text,S
    param.put("perception", perception);
    //用户信息
    Map<String,Object> userInfo = new HashMap<String,Object>();
-   userInfo.put("apiKey", tlApiKey);
+   userInfo.put("apiKey", getValue("TULING_API_KEY"));
    userInfo.put("userId", userId);
    param.put("userInfo", userInfo);
    return param;
@@ -114,7 +108,6 @@ private Map<String,Object> initParam(int requestType,String userId,String text,S
   public void setStreet(String street) {
     this.street = street;
   }
-   
  }
  
 }

@@ -45,7 +45,7 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
   @Override
   public int addOrupdateResourceGroup(ResourceGroup resourceGroup) {
     // TODO Auto-generated method stub
-    if(BaseUtils.isEmptyString(resourceGroup.getId())) {   //id为空，新建资源组
+    if(BaseUtils.isEmpty(resourceGroup.getId())) {   //id为空，新建资源组
       resourceGroup.setId(BaseUtils.createUUID());
       resourceGroup.setResourceCount(0);
       return resourceGroupMapper.insert(resourceGroup);

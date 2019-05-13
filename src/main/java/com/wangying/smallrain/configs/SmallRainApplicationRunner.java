@@ -1,5 +1,7 @@
 package com.wangying.smallrain.configs;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +10,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import com.wangying.smallrain.entity.BaseConfigs;
 import com.wangying.smallrain.ftp.FTPClientPool;
+import com.wangying.smallrain.service.ConfigService;
 import com.wangying.smallrain.service.WechatService;
 import com.wangying.smallrain.utils.BaseUtils;
 
@@ -31,6 +35,9 @@ public class SmallRainApplicationRunner implements CommandLineRunner {
   @Autowired
   private FTPClientPool ftpClientPool;
   
+  @Autowired
+  private ConfigService ConfigService;
+  
   private Logger log = LoggerFactory.getLogger(SmallRainApplicationRunner.class);
 
   @Override
@@ -46,5 +53,26 @@ public class SmallRainApplicationRunner implements CommandLineRunner {
       ftpClientPool.initPool();
       log.info("-- 初始化 ftp 连接池完毕 --");
     }
+    
+    initDbConfigValues();
   }
+  
+  /**
+   * 初始化数据库配置项的值
+   */
+  private void initDbConfigValues() {
+    log.info("初始化数据库中配置项的值。。");
+    List<BaseConfigs> result = ConfigService.selectAllConfig();
+    if(!BaseUtils.isEmpty(result)) {
+      for(BaseConfigs config: result) {
+        if(BaseUtils.isEmpty(config)||BaseUtils.isEmpty(config.getKey()))  continue;  //无效的配置项
+        log.info(BaseUtils.joinString("加载数据库配置项：",config.getKey(), "  --  ", config.getValue()));
+        ConfigHelper.BASE_CONFIG_DB.put(config.getKey(), config.getValue());
+      }
+      log.info("初始化数据库中配置项的值完成");
+    }else {
+      log.info("初始化数据库中配置项的值为空！");
+    }
+  }
+  
 }

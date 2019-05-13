@@ -26,21 +26,8 @@ mybatis:
   typeAliasesPackage: com.wangying.samllrain.entity
   mapperLocations: classpath*:/mapper/*Mapper.xml,/mapper/extend/*Mapper.xml
 
-#微信基本信息配置
-wechat: 
-  token: SMALL_RAIN_BACK_APPLICATION
-  appId: wxb126148c95009448
-  appsecret: 749abe2fc4af0c5f3f70d95d92c2fcc6
-  accessTokenUrl: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
-  menusCreateUrl: https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN
-  menusGetUrl: https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN
-  menusDeleteUrl: https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN
 
-#图灵机器人接口介入
-tuling:
-  apiUrl: http://openapi.tuling123.com/openapi/api/v2
-  apiKey: 6bb2f01f653e441887170ecdee3df869
-  userId: 347456
+
  
 #自定义配置
 appdata:
@@ -61,22 +48,7 @@ appdata:
     filters: stat,wall,slf4j  #配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000  #通过connectProperties属性来打开mergeSql功能；慢SQL记录
     useGlobalDataSourceStat: true  #合并多个DruidDataSource的监控数据
-    
-    
-    
-#ftp 服务器配置
-ftp:
-  port: 21
-  username: smallrain
-  password: wy16894255
-  rootPath: /www/wwwroot/smallrain
-  connectTimeOut: 5000  #ftp 连接超时时间 毫秒
-  bufferSize: 1024  #缓冲区大小
-  fileType: 2 #传输数据格式 2 --  binary 二进制数据
-  controlEncoding: utf-8
-  useEPSVwithIPv4: false
-  passiveMode: true
-  
+         
 #自定义配置项
 app:
   smallrain:

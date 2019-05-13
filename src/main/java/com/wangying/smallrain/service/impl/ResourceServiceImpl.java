@@ -45,14 +45,14 @@ public class ResourceServiceImpl implements ResourceService {
   @Override
   public Result addOrUpdateResource(Resource res) {
     // TODO Auto-generated method stub
-    if(null==res||BaseUtils.isEmptyString(res.getName())) {
+    if(null==res||BaseUtils.isEmpty(res.getName())) {
       return ResultUtil.fail("资源名称不能为空！");
     }
-    if(BaseUtils.isEmptyString(res.getGroupId())) {
+    if(BaseUtils.isEmpty(res.getGroupId())) {
       res.setGroupId(baseConfig.getDefaultResourceGroup());
     }
     String operate = "新建资源成功！";
-    if(BaseUtils.isEmptyString(res.getId())) {   //ID为空，新建资源
+    if(BaseUtils.isEmpty(res.getId())) {   //ID为空，新建资源
        res.setId(BaseUtils.createUUID());
        if(resourceMapper.insert(res)<=0) {
          return ResultUtil.fail("新建资源信息是失败！");

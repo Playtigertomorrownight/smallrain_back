@@ -73,7 +73,7 @@ public class FileServiceImpl implements FileService {
 		res.setLabel(label);
 		log.info("上传的文件标签：" + label);
 		res.setType(FileDataType.valueOfType(suffixName)); // 生成文件类型
-		if (BaseUtils.isEmptyString(groupId)) {
+		if (BaseUtils.isEmpty(groupId)) {
 			res.setGroupId(baseConfig.getDefaultResourceGroup()); // default rres group
 		} else {
 			res.setGroupId(groupId);
@@ -92,7 +92,7 @@ public class FileServiceImpl implements FileService {
 				log.info("上传文件成功！保存数据到数据库。。");
 				res.setId(BaseUtils.createUUID());
 				resourceMapper.insert(res);
-				if (BaseUtils.isEmptyString(groupId)) { // 如果指派的资源组非空，更新资源组数量信息
+				if (BaseUtils.isEmpty(groupId)) { // 如果指派的资源组非空，更新资源组数量信息
 					resourceGroupMapper.addResourceCount(1, baseConfig.getDefaultResourceGroup());
 				} else {
 					resourceGroupMapper.addResourceCount(1, groupId);
@@ -120,7 +120,7 @@ public class FileServiceImpl implements FileService {
 		log.info("根据资源ID加载相关的文件，资源ID ：" + resourceId);
 		Resource res = resourceMapper.selectByPrimaryKey(resourceId);
 		String path = res.getPath();
-		if (null == res || BaseUtils.isEmptyString(path)) {
+		if (null == res || BaseUtils.isEmpty(path)) {
 			log.warn("无对应的资源");
 			return ResultUtil.fail("无对应的资源");
 		}
@@ -162,7 +162,7 @@ public class FileServiceImpl implements FileService {
 		log.info(BaseUtils.joinString("根据资源ID加载相关的文件，资源ID ：", resourceId));
 		Resource res = resourceMapper.selectByPrimaryKey(resourceId);
 		String path = res.getPath();
-		if (null == res || BaseUtils.isEmptyString(path)) {
+		if (null == res || BaseUtils.isEmpty(path)) {
 			log.warn("无对应的资源");
 			return ResultUtil.fail("无对应的资源");
 		}

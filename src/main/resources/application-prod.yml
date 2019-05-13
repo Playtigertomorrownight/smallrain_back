@@ -28,9 +28,4 @@ app:
     ftpFileDmain: ${FTPFILEDMAIN:http://www.smallrain.top/resource/}   #文件服务器域名
     maxFileSize: 128 #最大文件上传大小
     maxRequestSize: 512 #总上传数据总大小
-    tempFileDir: ${TEMPFILEDIR:/tmp/smalrain/}   #临时文件存放目录
-    
-# ftp 配置 
-ftp:
-  localFtp: ${ISLOCALFTP:true}  #ftp服务器是否安装在本地
-  host: ${FTPHOST:106.12.204.7}
+    tempFileDir: ${TEMPFILEDIR:/tmp/smalrain/}   #临时文件存放目录  

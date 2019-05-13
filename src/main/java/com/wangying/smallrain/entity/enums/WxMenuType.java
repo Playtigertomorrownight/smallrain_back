@@ -99,7 +99,7 @@ public enum WxMenuType {
   }
   
   public static WxMenuType valueOfType(String arg) {
-    if(!BaseUtils.isEmptyString(arg)) {
+    if(!BaseUtils.isEmpty(arg)) {
       WxMenuType [] types = WxMenuType.values();
       for(WxMenuType type : types) {
          if(type.type().equals(arg)||type.name().equals(arg))

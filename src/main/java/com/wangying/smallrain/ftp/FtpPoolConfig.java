@@ -1,11 +1,11 @@
 package com.wangying.smallrain.ftp;
 
+import static com.wangying.smallrain.configs.ConfigHelper.getValue;
+
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "ftp")
 public class FtpPoolConfig extends GenericObjectPoolConfig {
 
   private String host;// 主机名
@@ -20,6 +20,22 @@ public class FtpPoolConfig extends GenericObjectPoolConfig {
   private int dataTimeout;
   private boolean useEPSVwithIPv4;
   private boolean passiveMode;// 是否启用被动模式
+  
+  //初始化属性值
+  {
+    this.host = getValue("FTP_HOST");
+    this.port = Integer.parseInt(getValue("FTP_PORT"));
+    this.username = getValue("FTP_USERNAME");
+    this.password = getValue("FTP_PASSWORD");
+    this.rootPath = getValue("FTP_ROOT_PATH");
+    this.connectTimeOut = Integer.parseInt(getValue("FTP_CONNECT_TIMEOUT"));
+    this.controlEncoding = getValue("FTP_ENCODING");
+    this.bufferSize = Integer.parseInt(getValue("FTP_BUFFER_SIZE"));
+    this.fileType = Integer.parseInt(getValue("FTP_FILE_TYPE"));
+    this.dataTimeout = Integer.parseInt(getValue("FTP_DATA_TIMEOUT"));
+    this.useEPSVwithIPv4 = Boolean.valueOf(getValue("USE_EPSV_WITH_IPV4"));
+    this.passiveMode = Boolean.valueOf(getValue("FTP_PASSIVE_MODE"));
+  }
 
   public int getConnectTimeOut() {
     return connectTimeOut;

@@ -86,7 +86,7 @@ public class MenuServiceImpl implements MenuService {
   @Override
   public int addMenu(Menu menu) {
     // TODO Auto-generated method stub
-    if(BaseUtils.isEmptyString(menu.getId())) {   //新建
+    if(BaseUtils.isEmpty(menu.getId())) {   //新建
       menu.setId(BaseUtils.createUUID());
       return menuMapper.insert(menu);
     }

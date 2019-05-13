@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -139,8 +140,14 @@ public class BaseUtils extends BeanUtils {
    * @param str
    * @return
    */
-  public static boolean isEmptyString(String str) {
-    return null == str || str.trim().length() == 0;
+  public static boolean isEmpty(Object str) {
+    if(str instanceof String) {  //字符串
+      return null == str || str.toString().trim().length() == 0;
+    }else if(str instanceof Collection) {  //集合
+      return null == str || ((Collection<?>)str).isEmpty();
+    }else {  //一般类
+      return null == str;
+    }
   }
 
   /**

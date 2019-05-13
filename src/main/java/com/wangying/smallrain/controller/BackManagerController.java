@@ -74,13 +74,13 @@ public class BackManagerController {
     log.info("后台菜单管理。。。。");
     ModelAndView  mv = baseConfig.initModwlAndView("back/menu_manager");  //指定viewname
     mv.addObject("topMenu","menu-manager");   //顶部按钮名称
-    if(BaseUtils.isEmptyString(current)) current = "manager-back-menu-top";
+    if(BaseUtils.isEmpty(current)) current = "manager-back-menu-top";
     mv.addObject("currentMenu",current);   //当前左部按钮名称
     mv.addObject("title","菜单管理");
     //平台列表
     mv.addObject("platforms",JSONObject.toJSONString(MenuPlatform.list()));
     //管理哪个平台的菜单
-    if(BaseUtils.isEmptyString(platform)) {    //设置默认管理菜单平台
+    if(BaseUtils.isEmpty(platform)) {    //设置默认管理菜单平台
       platform  = MenuPlatform.BACKTOP.name();
     }
     mv.addObject("WxMenuType","{}");
@@ -171,7 +171,7 @@ public class BackManagerController {
     log.info("后台资源管理。。。。");
     ModelAndView  mv = baseConfig.initModwlAndView("back/resource_manager");  //指定viewname
     mv.addObject("topMenu","resource-manager");   //顶部按钮名称
-    current = BaseUtils.isEmptyString(current)?"manager-back-resource-list":current;
+    current = BaseUtils.isEmpty(current)?"manager-back-resource-list":current;
     mv.addObject("currentMenu",current);   //当前左部按钮名称
     //根据顶部所菜单选取需要返回的菜单项
     Map<String, Object>  menus = menuService.getMenuListBytop(MenuPlatform.BACKTOP.name(),"resource-manager");

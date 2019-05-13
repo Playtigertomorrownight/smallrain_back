@@ -23,8 +23,3 @@ app:
     maxFileSize: 128 #最大文件上传大小
     maxRequestSize: 512 #总上传数据总大小
     tempFileDir: C:\Users\16524\Desktop\temp-file\smallrain\   #临时文件存放目录
-    
-# ftp 配置 
-ftp:
-  localFtp: false  #ftp服务器是否安装在本地
-  host: 106.12.204.7

@@ -1,6 +1,7 @@
 package com.wangying.smallrain.service;
 
 import java.util.HashMap;
+
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.wangying.smallrain.configs.WeChatConfig;
 import com.wangying.smallrain.dao.LocalConfigDataDao;
 import com.wangying.smallrain.entity.Result;
 import com.wangying.smallrain.entity.enums.ResultCode;
@@ -20,11 +20,11 @@ import com.wangying.smallrain.utils.BaseUtils;
 import com.wangying.smallrain.utils.HttpUtil;
 import com.wangying.smallrain.utils.ResultUtil;
 
+import static com.wangying.smallrain.configs.ConfigHelper.getValue;
+
 @Service
 public class WechatService {
 
-  @Autowired
-  private WeChatConfig weChatConfig;
   @Autowired
   private MenuService menuService;
   @Autowired
@@ -51,7 +51,7 @@ public class WechatService {
     if(expires_in==0) { //请求获取失败，返回空
       return "";    
     }
-    //开启医德任务
+    //开启定时任务
     TimerTask timerTask = new TimerTask() {
         @Override
         public void run() {
@@ -72,10 +72,10 @@ public class WechatService {
    */
   private int requestAccessToken() {
   //获取请求token路径
-    String request_url = weChatConfig.getAccessTokenUrl();
+    String request_url = getValue("WECHAT_API_ACCESSTOKENURL");
     //替换参数
     try {
-      request_url = request_url.replace("APPID", weChatConfig.getAppId()).replace("APPSECRET", weChatConfig.getAppsecret());
+      request_url = request_url.replace("APPID", getValue("WECHAT_API_APPID")).replace("APPSECRET", getValue("WECHAT_API_APPSECRET"));
       String resultStr = HttpUtil.doGet(request_url, null, null);  //请求微信
       log.info("请求 access_token 的结果为： "+ resultStr);
       if(!StringUtils.isEmpty(resultStr)){
@@ -99,13 +99,13 @@ public class WechatService {
   public Result initWxMenus(String source) {
     log.info("---开始设置微信公众号菜单---");
     //合成请求地址
-    String createUrl = weChatConfig.getMenusCreateUrl();
+    String createUrl = getValue("WECHAT_API_MENUSCREATEURL");
     if(StringUtils.isEmpty(createUrl)) return ResultUtil.fail(ResultCode.ERROR,"更新菜单项失败，请求地址为空！");
     //获取accesstoken
     String access_token = getAccessToken();
     createUrl = createUrl.replace("ACCESS_TOKEN",access_token);
     Map<String,Object> menus = null;
-    if(BaseUtils.isEmptyString(source)||"local".equals(source)) {  //加载本地配置
+    if(BaseUtils.isEmpty(source)||"local".equals(source)) {  //加载本地配置
       //获取本地菜单配置信息
       menus = localConfigDataDao.loadWxMenuData();
       log.info("---本地菜单配置信息： "+JSONObject.toJSONString(menus));
@@ -133,7 +133,7 @@ public class WechatService {
   public Result queryWxMenus() {
     log.info("---开始查询微信公众号菜单---");
     //合成请求地址
-    String createUrl = weChatConfig.getMenusGetUrl();
+    String createUrl = getValue("WECHAT_API_MENUSGETURL");
     if(StringUtils.isEmpty(createUrl)) return ResultUtil.fail(ResultCode.ERROR,"查询菜单项失败，请求地址为空！");
     //获取accesstoken
     String access_token = getAccessToken();
@@ -153,7 +153,7 @@ public class WechatService {
   public Result deleteWxMenus() {
     log.info("---开始删除微信公众号菜单---");
     //合成请求地址
-    String deleteUrl = weChatConfig.getMenusDeleteUrl();
+    String deleteUrl = getValue("WECHAT_API_MENUSDELETEURL");
     if(StringUtils.isEmpty(deleteUrl)) return ResultUtil.fail(ResultCode.ERROR,"删除菜单项失败，请求地址为空！");
     //获取accesstoken
     String access_token = getAccessToken();

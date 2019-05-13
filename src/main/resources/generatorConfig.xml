@@ -23,16 +23,16 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
         <!--生成Model类存放位置-->
-        <javaModelGenerator targetPackage="${mybatis.package.model}" targetProject=".\src\main\java">
+        <javaModelGenerator targetPackage="${mybatis.package.model}" targetProject="smallrain_back\src\main\java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
         <!--生成Mapping映射文件存放位置-->
-        <sqlMapGenerator targetPackage="${mybatis.package.mapper}" targetProject=".\src\main\resources">
+        <sqlMapGenerator targetPackage="${mybatis.package.mapper}" targetProject="smallrain_back\src\main\resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
         <!--生成Dao类存放位置-->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="${mybatis.package.dao}" targetProject=".\src\main\java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="${mybatis.package.dao}" targetProject="smallrain_back\src\main\java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!--生成对应表及类名-->
@@ -92,8 +92,8 @@
                enableSelectByExample="false"
                selectByExampleQueryId="false">
          </table>-->
-         <table tableName="resource_group"
-               domainObjectName="ResourceGroup"
+         <table tableName="base_configs"
+               domainObjectName="BaseConfigs"
                enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"
