@@ -22,7 +22,15 @@ public interface MenuService {
    * @return
    */
   
-  public int addMenu(Menu menu);
+  public boolean addMenu(Menu menu);
+  
+  /**
+   * 更新按钮
+   * @param menu
+   * @return
+   */
+  
+  public boolean updateMenu(Menu menu);
   
   
   /**
@@ -30,7 +38,7 @@ public interface MenuService {
    * @param MenuId
    * @return
    */
-  public int deleteByMenuiId(String MenuId);
+  public boolean deleteByMenuiId(String MenuId);
   
   /**
    * 根据当前顶部按钮选取次级按钮组

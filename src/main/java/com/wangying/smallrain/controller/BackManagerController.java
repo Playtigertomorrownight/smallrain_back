@@ -120,48 +120,6 @@ public class BackManagerController {
   
   
   /**
-   * 添加或者更新菜单
-   * @param menu
-   * @return
-   */
-  @RequestMapping("/menu/add")
-  @ResponseBody
-  public Result addMenu(@RequestBody Menu menu) {
-    log.error("添加菜单数据！");
-    if(null == menu) {
-      log.error("接收到菜单数据为空！");
-      return ResultUtil.exception("接收到菜单数据为空！");
-    }
-    int count  =  menuService.addMenu(menu);
-    if(count <= 0 ) {
-      return ResultUtil.fail("添加或更新菜单失败");
-    }else {
-      return ResultUtil.success("添加或更新菜单成功",menu);
-    }
-  }
-  
-  /**
-   * 添加或者更新菜单
-   * @param menu
-   * @return
-   */
-  @RequestMapping(value="/menu/delete" , method = RequestMethod.DELETE)
-  @ResponseBody
-  public Result deleteMenu(@RequestParam(value = "menuId", required = true)String menuId) {
-    log.error("删除菜单数据！");
-    if(null == menuId) {
-      log.error("接收到菜单ID为空！");
-      return ResultUtil.exception("接收到菜单ID为空！");
-    }
-    int count  =  menuService.deleteByMenuiId(menuId);
-    if(count <= 0 ) {
-      return ResultUtil.fail("删除菜单失败，菜单不存在或默认菜单不可删除");
-    }else {
-      return ResultUtil.success("删除菜单成功！");
-    }
-  }
-  
-  /**
    * 后台资源管理
    * @param current   当前按钮
    * @return

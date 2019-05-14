@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wangying.smallrain.configs.ConfigHelper;
 import com.wangying.smallrain.entity.BaseConfigs;
 import com.wangying.smallrain.entity.Result;
 import com.wangying.smallrain.service.ConfigService;
@@ -46,6 +47,7 @@ public class ConfigController {
       return ResultUtil.fail("添加配置失败，接受到的配置信息为空！");
     }
     if(ConfigService.addConfig(config)) {
+      ConfigHelper.BASE_CONFIG_DB.put(config.getKey(), config.getValue());
       return ResultUtil.success("添加配置成功",config);
     }
     return ResultUtil.fail("添加配置失败，保存到数据库异常");
@@ -63,6 +65,7 @@ public class ConfigController {
       return ResultUtil.fail("更新配置失败，接受到的配置信息为空！");
     }
     if(ConfigService.updateConfig(config)) {
+      ConfigHelper.BASE_CONFIG_DB.put(config.getKey(), config.getValue());
       return ResultUtil.success("更新配置成功",config);
     }
     return ResultUtil.fail("更新配置失败，保存到数据库异常");
@@ -80,6 +83,7 @@ public class ConfigController {
       return ResultUtil.fail("删除配置失败，接受到的 key 值为空！");
     }
     if(ConfigService.deleteOneConfig(key)) {
+      ConfigHelper.BASE_CONFIG_DB.remove(key);
       return ResultUtil.success("删除配置成功",key);
     }
     return ResultUtil.fail("删除配置失败，数据库操作异常");

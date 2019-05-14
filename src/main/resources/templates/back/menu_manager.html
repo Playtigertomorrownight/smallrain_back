@@ -230,7 +230,8 @@
             	    const that = this;
             		this.$refs["menuForm"].validate((valid) => {    //表单校验
                         if (valid) {   //校验通过，请求后台进行提交数据
-                        	sendRequest(this,"${domain}/back/menu/add","POST",this.menuFormData,function(response){
+                        	let type = this.menuFormData.id?"PUT":"POST";    //判断更新还是提交
+                        	sendRequest(this,"${domain}/api/menu",type,this.menuFormData,function(response){
                         		var data = response.data;
                                 if(data.status == 0){  //提交数据成功
                                     window.location.reload();
@@ -285,7 +286,7 @@
                         content: '<p style="padding-bottom: 10px;">请确定是否要删除菜单：</p><p class="notice-menu-name">'+data.title+'</p>',
                         onOk: () => {
                         	let that = this;
-                            sendRequest(this,"${domain}/back/menu/delete?menuId="+data.ref,"DELETE",null,function(response){
+                            sendRequest(this,"${domain}/api/menu/"+data.ref,"DELETE",null,function(response){
                                 var data = response.data;
                                 if(data.status == 0){  //提交数据成功
                                 	that.$Notice.success({
