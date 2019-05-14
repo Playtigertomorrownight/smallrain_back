@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wangying.smallrain.entity.Result;
@@ -26,7 +27,7 @@ import com.wangying.smallrain.utils.WechatUtil;
  *
  */
 @RestController
-@RequestMapping("v1/wx")
+@RequestMapping("/v1/wx")
 public class WeChatControlle {
 
   @Value("${wechat.token}")
@@ -41,7 +42,7 @@ public class WeChatControlle {
   private Logger log = LoggerFactory.getLogger(WeChatControlle.class);
 
   /**
-   * 用于微信接口配置验证，以及消息回复
+   * 用于微信接口配置验证，以及处理微信服务的消息
    * @param signature
    * @param timestamp
    * @param nonce
@@ -69,7 +70,12 @@ public class WeChatControlle {
         log.info("----微信接口验证失败，本地加密 =="+thereString+" 原先加密串== "+signature);
       }
     }else {   //收到来自用户的消息或者是事件，转交 service 处理
-      messageService.dealMessage(req, resp);
+      if(messageService.responseMessage(req,resp)) {
+        log.info("成功回复消息！");
+      }else {
+        log.info("回复消息失败！");
+      }
+      return null;
     }
     return " ";
   }
@@ -82,8 +88,8 @@ public class WeChatControlle {
   }
   
   @RequestMapping("/menu/init")
-  public Result menuInit() {
-    return wechatService.initWxMenus();
+  public Result menuInit(@RequestParam(value="source", required=false) String source) {
+    return wechatService.initWxMenus(source);
   }
   
   @RequestMapping("/menu/query")

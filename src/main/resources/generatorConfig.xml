@@ -23,20 +23,20 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
         <!--生成Model类存放位置-->
-        <javaModelGenerator targetPackage="${mybatis.package.model}" targetProject=".\src\main\java">
+        <javaModelGenerator targetPackage="${mybatis.package.model}" targetProject="smallrain_back\src\main\java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
         <!--生成Mapping映射文件存放位置-->
-        <sqlMapGenerator targetPackage="${mybatis.package.mapper}" targetProject=".\src\main\resources">
+        <sqlMapGenerator targetPackage="${mybatis.package.mapper}" targetProject="smallrain_back\src\main\resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
         <!--生成Dao类存放位置-->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="${mybatis.package.dao}" targetProject=".\src\main\java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="${mybatis.package.dao}" targetProject="smallrain_back\src\main\java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!--生成对应表及类名-->
-        <table tableName="user"
+        <!-- <table tableName="user"
                domainObjectName="User"
                enableCountByExample="false"
                enableUpdateByExample="false"
@@ -44,5 +44,61 @@
                enableSelectByExample="false"
                selectByExampleQueryId="false">
         </table>
+        <table tableName="resource"
+               domainObjectName="Resource"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+        <table tableName="menu"
+               domainObjectName="Menu"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+        <table tableName="role"
+               domainObjectName="Role"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+        <table tableName="user_role"
+               domainObjectName="UserRole"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+        <table tableName="menu_role"
+               domainObjectName="MenuRole"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table> 
+        <table tableName="menu"
+               domainObjectName="Menu"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+         </table>-->
+         <table tableName="base_configs"
+               domainObjectName="BaseConfigs"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+         </table>
     </context>
 </generatorConfiguration>

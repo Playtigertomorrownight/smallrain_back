@@ -1,0 +1,162 @@
+<!-- 公共依赖 -->
+    <meta charset="UTF-8">
+    <link rel="icon" href="${domain}/static/image/web/logo.png" type="image/x-icon"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>${title}</title>
+    <script src="${domain}/static/vue/vue.min.js"></script>
+    <!-- 引入 WeUI -->
+    <link rel="stylesheet" type="text/css" href="${domain}/static/css/wechat/weui.css">
+    <link rel="stylesheet" type="text/css" href="${domain}/static/css/wechat/base.css">
+    <script type="text/javascript" src="${domain}/static/javascript/axio.js"></script>
+
+    <script type="text/javascript">
+        
+        String.prototype.startWith=function(str){
+            if(str==null||str==""||this.length==0||str.length>this.length)
+              return false;
+            if(this.substr(0,str.length)==str)
+              return true;
+            else
+              return false;
+            return true;
+            }
+        
+      //扩展Date的format方法   
+        Date.prototype.format = function (format) {  
+            var o = {  
+                "M+": this.getMonth() + 1,  
+                "d+": this.getDate(),  
+                "h+": this.getHours(),  
+                "m+": this.getMinutes(),  
+                "s+": this.getSeconds(),  
+                "q+": Math.floor((this.getMonth() + 3) / 3),  
+                "S": this.getMilliseconds()  
+            }  
+            if (/(y+)/.test(format)) {  
+                format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));  
+            }  
+            for (var k in o) {  
+                if (new RegExp("(" + k + ")").test(format)) {  
+                    format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));  
+                }  
+            }  
+            return format;  
+        }  
+        /**   
+        *转换日期对象为日期字符串   
+        * @param date 日期对象   
+        * @param isFull 是否为完整的日期数据,   
+        *               为true时, 格式如"2000-03-05 01:05:04"   
+        *               为false时, 格式如 "2000-03-05"   
+        * @return 符合要求的日期字符串   
+        */    
+        function getSmpFormatDate(date, isFull) {  
+            var pattern = "";  
+            if (isFull == true || isFull == undefined) {  
+                pattern = "yyyy-MM-dd hh:mm:ss";  
+            } else {  
+                pattern = "yyyy-MM-dd";  
+            }  
+            return getFormatDate(date, pattern);  
+        }  
+        /**   
+        *转换当前日期对象为日期字符串   
+        * @param date 日期对象   
+        * @param isFull 是否为完整的日期数据,   
+        *               为true时, 格式如"2000-03-05 01:05:04"   
+        *               为false时, 格式如 "2000-03-05"   
+        * @return 符合要求的日期字符串   
+        */    
+      
+        function getSmpFormatNowDate(isFull) {  
+            return getSmpFormatDate(new Date(), isFull);  
+        }  
+        /**   
+        *转换long值为日期字符串   
+        * @param l long值   
+        * @param isFull 是否为完整的日期数据,   
+        *               为true时, 格式如"2000-03-05 01:05:04"   
+        *               为false时, 格式如 "2000-03-05"   
+        * @return 符合要求的日期字符串   
+        */    
+      
+        function getSmpFormatDateByLong(l, isFull) {  
+            if(!l){
+                return getSmpFormatNowDate(isFull);
+            }
+            return getSmpFormatDate(new Date(l), isFull);  
+        }  
+        /**   
+        *转换long值为日期字符串   
+        * @param l long值   
+        * @param pattern 格式字符串,例如：yyyy-MM-dd hh:mm:ss   
+        * @return 符合要求的日期字符串   
+        */    
+      
+        function getFormatDateByLong(l, pattern) { 
+            if(!l){
+                return getSmpFormatNowDate(true);
+            }
+            return getFormatDate(new Date(l), pattern);  
+        }  
+        /**   
+        *转换日期对象为日期字符串   
+        * @param l long值   
+        * @param pattern 格式字符串,例如：yyyy-MM-dd hh:mm:ss   
+        * @return 符合要求的日期字符串   
+        */    
+        function getFormatDate(date, pattern) {  
+            if (date == undefined) {  
+                date = new Date();  
+            }  
+            if (pattern == undefined) {  
+                pattern = "yyyy-MM-dd hh:mm:ss";  
+            }  
+            return date.format(pattern);  
+        }  
+        
+        
+       /**
+                    根据axio 发送请求的同意封装 
+       */
+       function sendRequest(content,url,method,data,callback) {
+           axios({     //提交数据到后台
+               method: method,
+               url: url,
+               data: data
+           }).then(function (response) {
+               console.log(response);
+               callback(response);
+          }).catch(function (error) {
+              console.log(error);
+              content.$Notice.error({
+                  title: '提交失败',
+                  desc:  '发生了某些异常: '+error
+              });
+          });
+       }
+       
+       /*
+       * 滚动到指定的位置
+       */
+       const ScrollTop = (number = 0, time) => {
+    	    if (!time) {
+    	        document.body.scrollTop = document.documentElement.scrollTop = number;
+    	        return number;
+    	    }
+    	    const spacingTime = 10; // 设置循环的间隔时间  值越小消耗性能越高
+    	    let spacingInex = time / spacingTime; // 计算循环的次数
+    	    let nowTop = document.body.scrollTop + document.documentElement.scrollTop; // 获取当前滚动条位置
+    	    let everTop = (number - nowTop) / spacingInex; // 计算每次滑动的距离
+    	    let scrollTimer = setInterval(() => {
+    	        if (spacingInex > 0) {
+    	            spacingInex--;
+    	            ScrollTop(nowTop += everTop);
+    	        } else {
+    	            clearInterval(scrollTimer); // 清除计时器
+    	        }
+    	    }, spacingTime);
+    	};
+
+        
+    </script>

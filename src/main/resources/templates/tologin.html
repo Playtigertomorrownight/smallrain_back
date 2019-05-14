@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<#include "/common/head.html"/>
+<link rel="stylesheet" type="text/css" href="${domain}/static/css/index.css">
+<script type="text/javascript" src="${domain}/static/javascript/md5.js" charset="utf-8"></script>
+<title>${title}</title>
+</head>
+<body>
+	<div id="app">
+		<Modal v-model="isShow"  :width="width" :ok-text="okText" :closable="false" :mask-closable="false" :scrollable="false">
+			<div slot="header" class="modal-header" >
+	            <h1>Hello, welcome come to sign in</h1>
+	            <h1 class="webname">SmallRain</h1>
+	        </div>
+	        <div style="text-align:center">
+	            <i-form ref="loginFprm" :model="formTop" :rules="ruleValidate" label-position="left">
+			        <form-item label="用户名：" prop="username">
+			            <i-input v-model="formTop.username"  placeholder="请输入用户名">></i-input>
+			        </form-item>
+			        <form-item label="密码：" prop="password">
+			            <i-input type="password" v-model="formTop.password" placeholder="请输入用户密码"></i-input>
+			        </form-item>
+			        <form-item>
+			             <Checkbox v-model="formTop.remberMe" size="large" style="float:reight;">记住我的登录状态</Checkbox>
+			        </form-item>
+			        
+			    </i-form>
+	        </div>
+	        <div slot="footer">
+	            <i-button type=primary size="large" long :loading="modal_loading" @click="login('loginFprm')">{{okText}}</i-button>
+	        </div>
+		</Modal>
+	</div>
+	<script type="text/javascript">
+		new Vue({
+			el : '#app',
+			data : {				
+                isShow: false,
+                okText: "登录",
+                width: 410,
+                modal_loading: false,
+                formTop: {
+                    username: '',
+                    password: '',
+                    remberMe: false
+                },
+                ruleValidate: {
+                	username: [
+                        { required: true, message: '用户名不能为空!', trigger: 'blur' }
+                    ],
+                    password: [
+                        { required: true, message: '密码不能为空!', trigger: 'blur' }
+                       // { required: true, pattern: /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[.!@#$%^&*? ]).*$/, message: '密码最少6位，包括至少1个大写字母、小写字母、数字、特殊字符', trigger: 'blur' }
+                    ]
+                }
+            },
+			created : function() { //创建时
+				this.isShow = true;
+			},
+            methods: {
+                login: function(name){
+                	let that = this;
+                	this.$refs[name].validate((valid) => {    //表单校验
+                        if (valid) {   //校验通过，请求后台进行登录
+                        	var params = new URLSearchParams();
+                        	params.append('username', this.formTop.username);
+                        	params.append('password', hex_md5(this.formTop.password));  //MD5 加密
+                        	params.append('remberMe', this.formTop.remberMe);
+                        	that.modal_loading=true;
+                        	axios({
+	                        	    method: "post",
+	                        	    url: "${domain}/user/login",
+	                        	    data: params
+                        	    }).then(function (response) {
+	                        		var data = response.data;
+	                        		console.log(data)
+	                        		if(data.status == 0){  //登录成功,重定向页面
+	                        			console.log('跳转到页面：'+data.data);
+	                        			window.location.href = data.data; 
+	                        		}else{
+	                        			that.modal_loading=false;
+	                        			that.$Notice.error({
+	                                        title: '登录失败',
+	                                        desc:  data.message
+	                                    });
+	                        		}
+                        	   }).catch(function (error) {
+                        		   console.log(error);
+                        		   that.modal_loading=false;
+                        		   that.$Notice.error({
+                                       title: '登录失败',
+                                       desc:  '发生了某些异常: '+error
+                                   });
+                        	   });
+                        } else {   //校验不通过
+                            this.$Message.error('登录信息有误，请完善！');
+                        }
+                    })
+                }
+            }
+
+		})
+	</script>
+</body>
+</html>

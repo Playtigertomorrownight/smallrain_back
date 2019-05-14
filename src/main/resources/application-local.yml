@@ -1,9 +1,25 @@
+#服务配置
+server:
+  port: 8090
+  address: 0.0.0.0
+  servlet:
+    context-path: /sr-back
+#本地环境，数据库配置
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/smallrain_back?characterEncoding=utf-8&useSSL=false
-    username: root
-    password: 123456
+    url: jdbc:mysql://106.12.204.7:3306/smallrain_back?characterEncoding=utf-8&useSSL=false
+    username: smallrain
+    password: wy16894255
     driver-class-name: com.mysql.jdbc.Driver
-    
+#日志文件地址配置    
 logging:
   config: classpath:log_back/logback-local.xml
+  
+#自定义配置项
+app:
+  smallrain:
+    dommainName: http://localhost:8090/sr-back  #服务域名
+    ftpFileDmain: http://www.smallrain.top/sr/resource/   #文件服务器域名
+    maxFileSize: 128 #最大文件上传大小
+    maxRequestSize: 512 #总上传数据总大小
+    tempFileDir: C:\Users\16524\Desktop\temp-file\smallrain\   #临时文件存放目录

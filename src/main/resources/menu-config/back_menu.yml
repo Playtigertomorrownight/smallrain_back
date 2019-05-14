@@ -1,0 +1,43 @@
+#配置初始化菜单列表
+buttons:
+  top:  #顶部菜单配置
+    - name: logout
+      id: 1873aa7887564b37818ed3a02deef17a
+      clazz: logout
+      icon: 
+      text: 退出登录
+      url: /logout
+      parent: -1
+      platform: BACKTOP
+      orderNum: 0
+    - name: menu-manager
+      id: 837a3d97f1184096ba3038f99191fbda
+      clazz: menu-manager
+      icon: md-menu
+      text: 菜单管理
+      url: /back/index
+      parent: -1
+      platform: BACKTOP
+      orderNum: 1
+  left: #侧边栏菜单配置
+    - name: manager-back-menu-top
+      id: daabae9124fe40719d9d71bc0c4d4e72
+      clazz: manager-back-menu-top
+      icon: 
+      text: 管理后台顶部菜单
+      url: /back/menu?platform=BACKTOP&current=manager-back-menu-top
+      parent: -1
+      orderNum: 1
+      platform: BACKLEFT
+      topref: menu-manager
+    - name: manager-back-menu-left
+      id: a729695ecb43457c90a5604d8547b36c
+      clazz: manager-back-menu-left
+      icon: 
+      text: 管理后台左部菜单
+      url: /back/menu?platform=BACKLEFT&current=manager-back-menu-left
+      parent: -1
+      orderNum: 2
+      platform: BACKLEFT
+      topref: menu-manager
+    

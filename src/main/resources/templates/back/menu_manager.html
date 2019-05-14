@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+<head>
+<#include "/common/head.html"/>
+<link rel="stylesheet" type="text/css" href="${domain}/static/css/index.css">
+<title>${title}</title>
+<style>
+  p.notice-menu-name{
+    width: 100%;
+    text-align: center;
+    font-size: 1.2em;
+    letter-spacing: 2px;
+    font-weight: 600;
+    padding: 11px;
+    background-color: #FFFFFF;
+    color: #000000;
+  }
+</style>
+</head>
+<body>
+    <#include "/common/top-sider-header.html"/>
+    <div id="app"> 
+        <top-sider-bottom>
+            <Layout :style="{padding: '0 24px 24px'}"> 
+            <!--<Breadcrumb :style="{margin: '24px 0'}">
+                    <breadcrumb-item>Home</breadcrumb-item>
+                    <breadcrumb-item>Components</breadcrumb-item>
+                    <breadcrumb-item>Layout</breadcrumb-item>
+                </Breadcrumb> -->
+                <Content :style="{padding: '24px', minHeight: '780px', background: '#fff'}">
+                    <div v-if="menuPlatform.name== 'BACKLEFT'">
+	                    <label v-cloak style="font-size: 13px;font-weight: 600;margin-right: 2em;">对应顶部菜单（topref）： </label>
+		                <radio-group v-model="topref" @on-change="changeTopref">
+					        <Radio v-for="top in topMenus" v-if="top.name != 'logout'" :label="top.name" :key="top.id" >
+					            <Icon :type="top.icon"></Icon>
+					            <span v-cloak>{{top.text}}</span>
+					        </Radio>
+					    </radio-group>
+				    </div>
+				    <div v-if="menuPlatform.name== 'WECHAT'">
+				        <i-button v-cloak type="primary" @click="updateMenusToWechat">更新菜单到公众号</i-button>
+				    </div>
+                   <Row> 
+                       <i-col span="10">
+                            <Tree :data="menuTree" :render="renderContent"> </Tree>
+                       </i-col>
+                       <i-col span="14" :style="{padding: '10px 50px'}">
+                       <i-form ref="menuForm" :model="menuFormData" :rules="menuDataRule" label-position="right" :label-width="300">
+                           <form-item v-if="hasFiled('name')" label="名称（按钮名称）：" prop="name">
+                               <i-input ref="menuName" v-model="menuFormData.name"></i-input>
+                           </form-item>
+                           <form-item v-if="hasFiled('text')" label="显示文本：" prop="text">
+                               <i-input v-model="menuFormData.text"></i-input>
+                           </form-item>
+                           <form-item v-if="hasFiled('icon')" label="图标：">
+                               <i-select v-model="menuFormData.icon" filterable clearable >
+                                    <i-option v-for="item in icons" :value="item" :label="item" :key="item" v-cloak>
+                                        <Icon :type="item" style="margin-right:2rem;"></Icon>
+							            {{item}}
+							        </i-option>
+					           </i-select>
+                           </form-item>
+                           <form-item v-if="hasFiled('clazz')" label="css 类名：">
+                               <i-input v-model="menuFormData.clazz"></i-input>
+                           </form-item> <form-item label="url 地址：">
+                               <i-input v-model="menuFormData.url"></i-input>
+                           </form-item>
+                           <form-item v-if="hasFiled('orderNum')" label="排序值 ：" >
+                               <i-input v-model="menuFormData.orderNum" :number="true"></i-input>
+                           </form-item>
+                           <form-item v-if="hasFiled('platform')" label="所属平台：">
+                               <i-select v-model="menuFormData.platform" >
+							        <i-option v-for="platform in platformSelects" :value="platform.name" :label="platform.name" :key="platform.code" v-cloak>
+							            <span>{{platform.name}}</span>
+							            <span style="float:right;color:#ccc">-- {{platform.description}}</span>
+							        </i-option>
+							    </i-select>
+                           </form-item>
+                           <form-item v-if="hasFiled('topref')" label="所属顶级按钮（二级按钮专用）：">
+                               <i-input v-model="menuFormData.topref" disabled></i-input>
+                                <!-- <i-select v-model="menuFormData.topref" >
+                                    <i-option v-for="topMenu in topMenus" v-if="topMenu.name!='logout'" :value="topMenu.name" :label="topMenu.name" :key="topMenu.id" v-cloak>
+                                        <span>{{topMenu.name}}</span>
+                                        <span style="float:right;color:#ccc">-- {{topMenu.text}}</span>
+                                    </i-option>
+                                </i-select> -->
+                           </form-item>
+                           <form-item v-if="hasFiled('type')" label="类型（WeChat专用） ：">
+                               <i-select v-model="menuFormData.type" >
+                                    <i-option v-for="wxType in wxMenuType" :value="wxType.name" :label="wxType.name" :key="wxType.code" v-cloak>
+                                        <span>{{wxType.name}}</span>
+                                        <span style="float:right;color:#ccc">-- {{wxType.description}}</span>
+                                    </i-option>
+                                </i-select>
+                           </form-item>
+                           <form-item v-if="hasFiled('mediaId')" label="媒体Id（WeChat专用） ：">
+                               <i-input v-model="menuFormData.mediaId"></i-input>
+                           </form-item>
+                           <form-item v-if="hasFiled('appid')" label="小程序Id（小程序专用） ：">
+                                 <i-input v-model="menuFormData.appid"></i-input>
+                           </form-item>
+                           <form-item v-if="hasFiled('pagepath')" label="页面路径（小程序专用） ：">
+                               <i-input v-model="menuFormData.pagepath"></i-input>
+                           </form-item>
+                            <form-item>
+					            <i-button type="primary" style="float:right;margin-left:2rem;" @click="submitMenuData">提交</i-button>
+					             <i-button type="error" style="float:right;" @click="cancleEdit">取消</i-button>
+					        </form-item>
+                         </i-form>
+                       </i-col>
+                    </Row>
+                 </Content>
+              </Layout>
+          </top-sider-bottom>
+           <Modal v-model="menuViewModal" width="450">
+	        <p slot="header" style="color:#f60;text-align:center">
+	            <h3 v-cloak>菜单信息查看</h3>
+	        </p>
+	        <div style="text-align:center">
+	            <i-table :columns="menuViewColumns" :data="menuViewData"></i-table>
+	        </div>
+	        <div slot="footer">
+	            <i-button v-cloak type="primary" size="large" long @click="menuViewModal = false">确定</i-button>
+	        </div>
+	      </Modal>
+    </div>
+    <script type="text/javascript"> 
+     //菜单属性名映射
+     const menuFiledName = {name: "菜单名称",text: "显示文本",icon: "菜单图标",clazz: "样式类名",url: "链接地址",parent: "父菜单",orderNum: "排序值",type: "菜单类型",mediaId: "媒体ID",appid: "appid",pagepath: "小程序页面地址",platform: "所属平台",topref: "所属顶部按钮"};
+     // 表单验证规则
+	  const formRule = {
+		        name: [
+		            { required: true, message: '菜单名不能为空!', trigger: 'blur' }
+		        ],
+		        text: [
+		            { required: true, message: '菜单文本不能为空!', trigger: 'blur' }
+		           // { required: true, pattern: /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[.!@#$%^&*? ]).*$/, message: '密码最少6位，包括至少1个大写字母、小写字母、数字、特殊字符', trigger: 'blur' }
+		        ]
+		    };
+     new Vue({
+            el: '#app',
+            data: function(){
+                return {
+                	topref: "menu-manager",
+                	editMenus: ${editMenus},
+                    menuPlatform: ${menuPlatform},
+                    wxMenuType: ${WxMenuType},
+                    fileds: '${effectiveFileds}',
+                    platformSelects: ${platforms},
+                    topMenus: ${topMenus},
+                    icons: [],
+                    operate: {
+                    	action: "ready",
+                    	tempTreeData: null
+                    },
+                    menuFormData: {name:'',text:'',icon:"",clazz:"",url:"",parent:"",orderNum:0,type:"",mediaId:"",appid:"",pagepath:"",platform:"",topref:""},
+                    menuViewColumns: [{title: '属性',key: 'filed'},{title: '值',key: 'value'}],
+                    menuViewData: [],
+                    menuViewModal: false,
+                    menuDataRule: {},
+                    treeData: {},
+                    menuTree: [
+                        {
+                            title: '${treeRoot}',
+                            expand: true,
+                            ref: -1,
+                            render: (h, { root, node, data }) => {    //根节点渲染器
+                            	this.treeData = data;
+                                return h('span', {
+                                    style: {display: 'inline-block',width: '100%'}
+                                },[
+                                    h('span', [
+                                        h('Icon', {
+                                            props: {
+                                                type: 'ios-keypad'
+                                            },
+                                            style: {
+                                                marginRight: '8px'
+                                            }
+                                        }),
+                                        h('span', data.title)
+                                    ]),
+                                    h('span', {
+                                        style: {
+                                            display: 'inline-block',
+                                            float: 'right',
+                                            marginRight: '32px'
+                                        }
+                                    }, [
+                                        h('Button', {
+                                            props: Object.assign({}, this.buttonProps, {
+                                                icon: 'ios-add',
+                                                type: 'primary'
+                                            }),
+                                            style: {
+                                                width: '64px',
+                                            },
+                                            on: {
+                                                click: () => { this.append(data) }
+                                            }
+                                        })
+                                    ])
+                                ]);
+                            },
+                            children: []
+                        }
+                    ],
+                    buttonProps: {
+                        type: 'default',
+                        size: 'small',
+                    }
+                }
+            },
+            methods: {
+            	changeTopref: function(label){   //选中单选按钮
+            		console.log(label);
+            		this.menuFormData.topref=label;
+            		this.filterEditMenu(label);
+            	},
+            	cancleEdit: function(){   //取消编辑
+            		this.menuDataRule = {};
+            		this.operate = {action: "ready",tempTreeData: null};
+            		this.menuFormData = {name: "",text: "",icon: "",clazz: "",url: "",parent: "",orderNum: 0,type: "",mediaId: "",appid: "",pagepath: "",platform: "",topref: ""}
+            	},
+            	submitMenuData:function(){   //提交按钮数据
+            		if(this.operate.action == "ready"){
+            			 this.$Message.info('无对应的操作！');
+            			 return ;
+            		}
+            	    const that = this;
+            		this.$refs["menuForm"].validate((valid) => {    //表单校验
+                        if (valid) {   //校验通过，请求后台进行提交数据
+                        	sendRequest(this,"${domain}/back/menu/add","POST",this.menuFormData,function(response){
+                        		var data = response.data;
+                                if(data.status == 0){  //提交数据成功
+                                    window.location.reload();
+                                }else{
+                                    that.$Notice.error({
+                                        title: that.operate.action == "append"?'添加':'编辑'+'菜单失败！',
+                                        desc:  data.message
+                                    });
+                                }
+                        	});
+                          //完成后
+                          that.operate = {
+                                action: "ready",
+                                tempTreeData: null
+                            };
+                        
+                        }
+            		});
+            	},
+            	append: function(data) {     //添加菜单
+            		if(this.operate.action != "ready"){   //处于编辑转台
+            			this.$Message.error('请先完成当前'+this.operate.action+'操作！');
+            			this.$refs["menuName"].focus();
+            		   return ;
+            		}
+            		this.menuDataRule = formRule;
+            		this.operate = {   //记录当前数据
+                            action: "append",
+                            tempTreeData: data
+                        };
+            		this.$refs["menuName"].focus();
+            		this.menuFormData.parent = data.ref || "-1";
+                    /* const children = data.children || [];
+                    children.push({
+                        title: 'appended node',
+                        expand: true
+                    });
+                    this.$set(data, 'children', children); */
+                },
+                remove: function(root, node, data) {
+                	if(this.operate.action != "ready"){   //处于编辑转台
+                        this.$Message.error('请先完成当前'+this.operate.action+'操作！');
+                        this.$refs["menuName"].focus();
+                       return ;
+                    }
+                	console.log("node")
+                	console.log(node)
+                	console.log("data")
+                	console.log(data)
+                	this.$Modal.confirm({
+                        title: '警告',
+                        content: '<p style="padding-bottom: 10px;">请确定是否要删除菜单：</p><p class="notice-menu-name">'+data.title+'</p>',
+                        onOk: () => {
+                        	let that = this;
+                            sendRequest(this,"${domain}/back/menu/delete?menuId="+data.ref,"DELETE",null,function(response){
+                                var data = response.data;
+                                if(data.status == 0){  //提交数据成功
+                                	that.$Notice.success({
+                                        title: 'success',
+                                        desc:  '删除菜单成功！'
+                                    });
+                                	const parentKey = root.find(el => el === node).parent;
+                                    const parent = root.find(el => el.nodeKey === parentKey).node;
+                                    const index = parent.children.indexOf(data);
+                                	parent.children.splice(index, 1);
+                                }else{
+                                    that.$Notice.error({
+                                        title: '删除菜单失败！',
+                                        desc:  data.message
+                                    });
+                                }
+                            });
+                        },
+                        onCancel: () => {
+                        	console.log("delet menu cancle")
+                        }
+                    });
+                	
+                    //console.log(data);
+                },
+                viewMenu: function(node){
+                	const ref = node.node.ref;
+                    let refMenu = this.selectSingleMenuByref(ref);
+                    let data = [];
+                    console.log(refMenu)
+                    for (var item in refMenu){
+                    	if(refMenu[item]&&item!='subMenus'&&item!='id'){
+                    		data.push({
+                                filed: menuFiledName[item],
+                                value: refMenu[item]
+                            });
+                    	}
+                    }
+                    this.menuViewData = data;
+                    this.menuViewModal = true;
+                },
+                editMenu: function(node){      //编辑菜单
+                	if(this.operate.action != "ready"){   //处于编辑转台
+                        this.$Message.error('请先完成当前'+this.operate.action+'操作！');
+                        this.$refs["menuName"].focus();
+                       return ;
+                    }
+                	this.menuDataRule = formRule;
+                    const ref = node.node.ref;
+                    let refMenu = this.selectSingleMenuByref(ref);
+                    Object.assign(this.menuFormData,refMenu);
+                    this.operate = {   //记录当前数据
+                            action: "edit",
+                            tempTreeData: node
+                        };
+                    this.$refs["menuName"].focus();
+                },
+                hasFiled: function(filed){   //屏蔽某些字段
+                	return this.fileds.indexOf(filed)!=-1;
+                },
+                renderContent: function(h, { root, node, data }) {   //树结构子元素渲染器
+                    return h('span', {
+                        style: {
+                            display: 'inline-block',
+                            width: '100%'
+                        }
+                    }, [
+                        h('span', [
+                            h('Icon', {
+                                props: {
+                                    type: 'ios-menu'
+                                },
+                                style: {
+                                    marginRight: '8px'
+                                }
+                            }),
+                            h('span', data.title)
+                        ]),
+                        h('span', {
+                            style: {
+                                display: 'inline-block',
+                                float: 'right',
+                                marginRight: '32px'
+                            }
+                        }, [
+                        	h('Button', {
+                                props: Object.assign({}, this.buttonProps, {
+                                    icon: 'ios-eye'
+                                }),
+                                style: {
+                                    marginRight: '8px'
+                                },
+                                on: {
+                                    click: () => { this.viewMenu(node) }
+                                },
+                                alt: '预览'
+                            }),
+                        	h('Button', {
+                                props: Object.assign({}, this.buttonProps, {
+                                    icon: 'ios-build'
+                                }),
+                                style: {
+                                    marginRight: '8px'
+                                },
+                                on: {
+                                    click: () => { this.editMenu(node) }
+                                }
+                            }),
+                            h('Button', {
+                                props: Object.assign({}, this.buttonProps, {
+                                    icon: 'ios-add'
+                                }),
+                                style: {
+                                    marginRight: '8px'
+                                },
+                                on: {
+                                    click: () => { this.append(data) }
+                                }
+                            }),
+                            h('Button', {
+                                props: Object.assign({}, this.buttonProps, {
+                                    icon: 'ios-remove'
+                                }),
+                                on: {
+                                    click: () => { this.remove(root, node, data) }
+                                }
+                            })
+                        ])
+                    ]);
+                },
+                filterEditMenu: function(filter){
+                	console.log("filter=="+filter);
+                	//初始化待编辑菜单
+                    const children = [];
+                    let edits = this.editMenus;
+                    if(edits && edits.length){
+                        for(let i=0,len=edits.length;i<len;i++){
+                            let menu = edits[i];
+                            if(filter && filter!=menu.topref) continue;
+                            let subs = [];
+                            if(menu.subMenus&&menu.subMenus.length){
+                                for(let i=0,len=menu.subMenus.length;i<len;i++){
+                                   let sub = menu.subMenus[i];
+                                   if(filter && filter!=menu.topref) continue;
+                                   subs.push({
+                                       title: sub.text,
+                                       expand: true,
+                                       ref: sub.id
+                                   });
+                                }
+                            }
+                            children.push({
+                                title: menu.text,
+                                expand: true,
+                                ref: menu.id,
+                                children: subs
+                            });
+                        }
+                    }
+                    this.$set(this.treeData, 'children', children);
+                },
+                selectSingleMenuByref: function(ref){    //根据按钮ID 选取按钮数据
+                	if(!ref) return null;
+                	let edits = this.editMenus;
+                    let refMenu = null ;
+                    if(edits && edits.length){
+                        for(let i=0,len=edits.length;i<len&&!refMenu;i++){
+                            let menu = edits[i];
+                            if(!menu) continue;
+                            if(menu.subMenus&&menu.subMenus.length){
+                                for(let i=0,len=menu.subMenus.length;i<len&&!refMenu;i++){
+                                    let sub = menu.subMenus[i];
+                                    if(!sub) continue;
+                                    if(ref == sub.id)  refMenu = sub;
+                                }
+                            }
+                            if(ref == menu.id)  refMenu = menu;
+                        }
+                    }
+                    return refMenu;
+                },
+                updateMenusToWechat: function(){    //更新菜单到微信公众号
+                	let that = this;
+                	sendRequest(this,"${domain}/v1/wx/menu/init?source=dbdata","GET",null,function(response){
+                        var data = response.data;
+                        if(data.status == 0){  //提交数据成功
+                            that.$Notice.success({
+                                title: "success",
+                                desc:  '更新菜单到微信公众号成功！'
+                            });
+                        }else{
+                            that.$Notice.error({
+                                title: "fail",
+                                desc:  '更新菜单到微信公众号失败！'
+                            });
+                        }
+                   });
+                }
+            },
+            mounted : function() { //创建时
+            	let that = this;
+                //延时渲染下拉列表防止页面白屏
+            	setTimeout(function(){
+            		that.icons = iview_icons;   //图标下拉列表
+            	}, 1000);
+            	this.menuFormData.topref = this.menuPlatform.name== 'WECHAT'?"":this.topref;
+                //初始化待编辑菜单
+                this.filterEditMenu(this.menuPlatform.name == 'BACKLEFT'?this.topref:"");
+            }
+        })
+</script>
+
+</body>
+</html>

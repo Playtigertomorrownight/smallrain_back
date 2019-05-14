@@ -1,0 +1,94 @@
+<div id="index_app" style="display:none;">
+   <div class="layout">
+        <Layout>
+            <Header>
+             <!-- 头部菜单列表 以及 logo-->
+                <i-menu mode="horizontal" theme="dark" active-name="${topMenu}"  @on-select="clickTopMenu">
+                    <div class="layout-logo"></div>
+                    <div class="layout-nav">
+                        <menu-item v-for="menu in menus.top" :name="menu.name" :class="menu.clazz" :key="menu.name" >
+                            <Icon :type="menu.icon" size="28"></Icon>
+                            {{menu.text}}
+                        </menu-item>
+                    </div>
+                </i-menu>
+            </Header>
+            <Layout>
+                <Sider v-if="hasSider" hide-trigger :style="{background: '#fff'}">
+                    <i-menu active-name="${currentMenu}" theme="light" width="auto" :open-names="['']" @on-select="clickLeftMenu">
+                        <template v-for="menu in menus.left">
+                            <Submenu v-if="menu.subMenus&&menu.subMenus.length"  :name="menu.name">
+                                <template slot="title">
+                                    <Icon :type="menu.icon" size="25"></Icon>
+                                    {{menu.text}}
+                                </template> 
+                                    <menu-item v-for="sub in menu.subMenus" :name="sub.id" :key="sub.id">
+                                       {{sub.text}}
+                                    </menu-item>
+                            </Submenu>
+                            <menu-item  v-else :name="menu.name" :class="menu.clazz" :key="menu.name" >
+                                <Icon :type="menu.icon" size="20"></Icon>
+                                {{menu.text}}
+                            </menu-item>
+                        </template>
+                    </i-menu>
+                </Sider>
+                <slot> </slot>
+           </Layout>
+        </Layout>
+    </div>
+</div>
+<script type="text/javascript">
+   //注册为一个组件
+    Vue.component("top-sider-bottom",{
+    	template: '#index_app',
+        data: function(){
+            return {
+                menus: ${menus},
+                title: "smallrain"
+            }
+        },
+        computed: {
+            hasSider: function (){
+                return this.menus.left&&this.menus.left.length;
+            }
+        },
+        methods: {
+            clickTopMenu: function(name){
+                let href =  this.getUrl("top",name);
+                console.info("点击了头部按钮,"+name+" 跳转到页面："+ href);
+                if(document.location == href) return;
+                window.location.href = href;
+            },
+            clickLeftMenu: function(name){
+                let href =  this.getUrl("left",name);
+                console.info("点击了左部按钮："+name+" 跳转到页面："+ href);
+                if(document.location == href) return;
+                window.location.href = href;
+            },
+            getUrl: function(filed,name){
+                var menus = filed=="top"?this.menus.top:this.menus.left;
+                if(menus && menus.length){
+                    for ( let i = 0; i < menus.length; i++){
+                        let menu = menus[i];
+                        if(menu.name == name){
+                            return "${domain}"+menu.url;
+                        }
+                        if(menu.subMenus && menu.subMenus.length){
+                            for ( let j = 0; j < menu.subMenus.length; j++){
+                                let sub = menu.subMenus[j];
+                                if(sub.id == name){
+                                    return "${domain}"+sub.url;
+                                }
+                            }
+                        }
+                    }
+                }
+                return document.location;
+            }
+        },
+        watch: {
+            
+        }
+    })
+</script>

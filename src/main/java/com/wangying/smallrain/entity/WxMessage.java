@@ -5,17 +5,17 @@ import com.wangying.smallrain.entity.enums.MessageType;
 public class WxMessage {
   
 //文本消息模板
-  public static final String TEMPLATE_TEXT = "<xml><ToUserName>< ![CDATA[%s] ]></ToUserName><FromUserName>< ![CDATA[%s] ]></FromUserName><CreateTime>%s</CreateTime><MsgType>< ![CDATA[%s] ]></MsgType><Content>< ![CDATA[%s] ]></Content></xml>\r\n";
+  public static final String TEMPLATE_TEXT = "<xml><ToUserName><![CDATA[%s]]></ToUserName><FromUserName><![CDATA[%s]]></FromUserName><CreateTime>%s</CreateTime><MsgType><![CDATA[%s]]></MsgType><Content><![CDATA[%s]]></Content></xml>\r\n";
   //图片消息模板
-  public static final String TEMPLATE_IMAGE = "<xml><ToUserName>< ![CDATA[%s] ]></ToUserName><FromUserName>< ![CDATA[%s] ]></FromUserName><CreateTime>%s</CreateTime><MsgType>< ![CDATA[%s] ]></MsgType><Image><MediaId>< ![CDATA[%s] ]></MediaId></Image></xml>";
+  public static final String TEMPLATE_IMAGE = "<xml><ToUserName><![CDATA[%s]]></ToUserName><FromUserName><![CDATA[%s]]></FromUserName><CreateTime>%s</CreateTime><MsgType><![CDATA[%s]]></MsgType><Image><MediaId><![CDATA[%s]]></MediaId></Image></xml>";
   //语音消息模板
-  public static final String TEMPLATE_VOICE = "<xml><ToUserName>< ![CDATA[%s] ]></ToUserName><FromUserName>< ![CDATA[%s] ]></FromUserName><CreateTime>%s</CreateTime><MsgType>< ![CDATA[%s] ]></MsgType><Voice><MediaId>< ![CDATA[%s] ]></MediaId></Voice></xml>";
+  public static final String TEMPLATE_VOICE = "<xml><ToUserName><![CDATA[%s]]></ToUserName><FromUserName><![CDATA[%s]]></FromUserName><CreateTime>%s</CreateTime><MsgType><![CDATA[%s]]></MsgType><Voice><MediaId><![CDATA[%s]]></MediaId></Voice></xml>";
   //视频消息模板
-  public static final String TEMPLATE_VIDEO = "<xml><ToUserName>< ![CDATA[%s] ]></ToUserName><FromUserName>< ![CDATA[%s] ]></FromUserName><CreateTime>%s</CreateTime><MsgType>< ![CDATA[%s] ]></MsgType><Video><MediaId>< ![CDATA[%s] ]></MediaId><Title>< ![CDATA[%s] ]></Title><Description>< ![CDATA[%s] ]></Description></Video></xml>";
+  public static final String TEMPLATE_VIDEO = "<xml><ToUserName><![CDATA[%s]]></ToUserName><FromUserName><![CDATA[%s]]></FromUserName><CreateTime>%s</CreateTime><MsgType><![CDATA[%s]]></MsgType><Video><MediaId><![CDATA[%s]]></MediaId><Title><![CDATA[%s]]></Title><Description><![CDATA[%s]]></Description></Video></xml>";
   //音乐消息模板  
-  public static final String TEMPLATE_MUSIC = "<xml><ToUserName>< ![CDATA[%s] ]></ToUserName><FromUserName>< ![CDATA[%s] ]></FromUserName><CreateTime>%s</CreateTime><MsgType>< ![CDATA[%s] ]></MsgType><Music><Title>< ![CDATA[%s] ]></Title><Description>< ![CDATA[%s] ]></Description><MusicUrl>< ![CDATA[%s] ]></MusicUrl><HQMusicUrl>< ![CDATA[%s] ]></HQMusicUrl><ThumbMediaId>< ![CDATA[%s] ]></ThumbMediaId></Music></xml>";
+  public static final String TEMPLATE_MUSIC = "<xml><ToUserName><![CDATA[%s]]></ToUserName><FromUserName><![CDATA[%s]]></FromUserName><CreateTime>%s</CreateTime><MsgType><![CDATA[%s]]></MsgType><Music><Title><![CDATA[%s]]></Title><Description><![CDATA[%s]]></Description><MusicUrl><![CDATA[%s]]></MusicUrl><HQMusicUrl><![CDATA[%s]]></HQMusicUrl><ThumbMediaId><![CDATA[%s]]></ThumbMediaId></Music></xml>";
   //图文消息模板 
-  public static final String TEMPLATE_NEWS = "<xml><ToUserName>< ![CDATA[%s] ]></ToUserName><FromUserName>< ![CDATA[%s] ]></FromUserName><CreateTime>%s</CreateTime><MsgType>< ![CDATA[%s] ]></MsgType><ArticleCount>%s</ArticleCount><Articles><item><Title>< ![CDATA[%s] ]></Title><Description>< ![CDATA[%s] ]></Description><PicUrl>< ![CDATA[%s] ]></PicUrl><Url>< ![CDATA[%s] ]></Url></item></Articles></xml>";
+  public static final String TEMPLATE_NEWS = "<xml><ToUserName><![CDATA[%s]]></ToUserName><FromUserName><![CDATA[%s]]></FromUserName><CreateTime>%s</CreateTime><MsgType><![CDATA[%s]]></MsgType><ArticleCount>%s</ArticleCount><Articles><item><Title><![CDATA[%s]]></Title><Description><![CDATA[%s]]></Description><PicUrl><![CDATA[%s]]></PicUrl><Url><![CDATA[%s]]></Url></item></Articles></xml>";
   
   private String ToUserName;   //接收方帐号（收到的OpenID）,一般就在请求的参数中
   private String FromUserName; //开发者微信号,一般就在请求的参数中
@@ -42,17 +42,17 @@ public class WxMessage {
     if(null == MsgType) return "";
     switch(MsgType.code()) {
       case 0:
-         return String.format(TEMPLATE_TEXT,ToUserName,FromUserName,CreateTime,MsgType,Content);
+         return String.format(TEMPLATE_TEXT,ToUserName,FromUserName,CreateTime,MsgType.type(),Content);
       case 1:
-        return String.format(TEMPLATE_IMAGE,ToUserName,FromUserName,CreateTime,MsgType,MediaId);
+        return String.format(TEMPLATE_IMAGE,ToUserName,FromUserName,CreateTime,MsgType.type(),MediaId);
       case 2:
-        return String.format(TEMPLATE_VOICE,ToUserName,FromUserName,CreateTime,MsgType,MediaId);
+        return String.format(TEMPLATE_VOICE,ToUserName,FromUserName,CreateTime,MsgType.type(),MediaId);
       case 3:
-        return String.format(TEMPLATE_VIDEO,ToUserName,FromUserName,CreateTime,MsgType,MediaId,Title,Description);
+        return String.format(TEMPLATE_VIDEO,ToUserName,FromUserName,CreateTime,MsgType.type(),MediaId,Title,Description);
       case 4:
-        return String.format(TEMPLATE_MUSIC,ToUserName,FromUserName,CreateTime,MsgType,Title,Description,MusicURL,HQMusicUrl,ThumbMediaId);
+        return String.format(TEMPLATE_MUSIC,ToUserName,FromUserName,CreateTime,MsgType.type(),Title,Description,MusicURL,HQMusicUrl,ThumbMediaId);
       case 5:
-        return String.format(TEMPLATE_NEWS,ToUserName,FromUserName,CreateTime,MsgType,ArticleCount,Title,Description,PicUrl,Url);
+        return String.format(TEMPLATE_NEWS,ToUserName,FromUserName,CreateTime,MsgType.type(),ArticleCount,Title,Description,PicUrl,Url);
     }
     return "";
   }

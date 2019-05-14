@@ -29,22 +29,37 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
 		<dependency>
-			<groupId>org.mybatis.spring.boot</groupId>
-			<artifactId>mybatis-spring-boot-starter</artifactId>
-			<version>1.3.2</version>
+		    <groupId>com.github.pagehelper</groupId>
+		    <artifactId>pagehelper-spring-boot-starter</artifactId>
+		    <version>1.2.10</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.4</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
+			<version>5.0.8</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		 <!-- 引入freemarker包 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
 		
 		<!-- data source -->
         <!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
@@ -61,11 +76,15 @@
             <version>1.2.47</version>
         </dependency>
 		
-		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-        </dependency>
+		<dependency>
+		    <groupId>commons-httpclient</groupId>
+		    <artifactId>commons-httpclient</artifactId>
+		    <version>3.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpmime</artifactId>
+		</dependency>
         
         <!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
 		<dependency>
@@ -79,6 +98,66 @@
             <artifactId>snakeyaml</artifactId>
         </dependency>
         
+		<!-- apache ftp支持  -->
+       <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.3</version>
+        </dependency>
+    
+	    <!-- apache 连接池支持 -->   
+	     <dependency>
+	        <groupId>org.apache.commons</groupId>
+	        <artifactId>commons-pool2</artifactId>
+	        <version>2.5.0</version><!--$NO-MVN-MAN-VER$-->
+	    </dependency>  
+	    
+	    <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-core -->
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-core</artifactId>
+		    <version>1.3.2</version>
+		</dependency>
+	    
+	    <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-spring -->
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-spring</artifactId>
+		    <version>1.3.2</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.vladsch.flexmark</groupId>
+		    <artifactId>flexmark</artifactId>
+		    <version>0.26.4</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.vladsch.flexmark</groupId>
+		    <artifactId>flexmark-util</artifactId>
+		    <version>0.26.4</version>
+		</dependency>
+		<!--表格渲染插件-->
+		<dependency>
+		    <groupId>com.vladsch.flexmark</groupId>
+		    <artifactId>flexmark-ext-tables</artifactId>
+		    <version>0.26.4</version>
+		</dependency>
+	    
+		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>27.0.1-jre</version>
+		</dependency>
+
+	    
+	    
+	    <dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-devtools</artifactId>
+		    <optional>true</optional>
+		</dependency>
+
 	</dependencies>
 	
 

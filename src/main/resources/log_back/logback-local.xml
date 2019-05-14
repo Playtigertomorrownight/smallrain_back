@@ -7,11 +7,11 @@
 
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
 	<!-- 定义日志文件 输出位置 -->
-	<property name="log_dir" value="D:/wangyingdata/projectLogs/smallrainBack" />
+	<property name="log_dir" value="/wangying/smallrain/log/smallrainBack" />
 	 <!-- 日志最大的历史 30天 -->
 	<property name="maxHistory" value="30" />
 	 <!-- 日志输出级别 -->
-	<property name="logLevel" value="DEBUG" />
+	<property name="logLevel" value="INFO" />
 
     <!-- 动态日志级别 -->
     <jmxConfigurator />
