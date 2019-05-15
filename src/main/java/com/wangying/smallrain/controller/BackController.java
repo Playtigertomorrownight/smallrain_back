@@ -39,7 +39,7 @@ import com.wangying.smallrain.utils.ResultUtil;
  */
 @Controller
 @RequestMapping("/back/")
-public class BackManagerController {
+public class BackController {
 
   @Autowired
   private MenuService menuService;
@@ -50,7 +50,7 @@ public class BackManagerController {
   @Autowired
   private BaseConfig baseConfig;
   
-  private Logger log = LoggerFactory.getLogger(BackManagerController.class);
+  private Logger log = LoggerFactory.getLogger(BackController.class);
   
   /**
    * 后台首页,默认进入菜单管理
@@ -144,8 +144,8 @@ public class BackManagerController {
     mv.addObject("allResourceGroup",JSONObject.toJSONString(RgpageDate.getItems())); //所有按钮组数据
     if("list".equals(action)) {   //资源列表
       mv.addObject("title","资源管理-资源列表");
-      Result pageDate = getResourceList(new ResourceQueryEntity());
-      mv.addObject("pageData",JSONObject.toJSONString(pageDate.getData())); //资源数据
+      PageBean<Resource> pageDate = resourceService.getResourceList(new ResourceQueryEntity());
+      mv.addObject("pageData",JSONObject.toJSONString(pageDate)); //资源数据
       mv.addObject("resType",JSONObject.toJSONString(FileDataType.list())); //类型数据
       
     }else if("add".equals(action)){   //资源上传
@@ -161,34 +161,6 @@ public class BackManagerController {
     return mv;
   }
   
-  /**
-   * 后台资源管理
-   * @param current   当前按钮
-   * @return
-   */
-  @RequestMapping("/resource/addOrupdate")
-  @ResponseBody
-  public Result addOrUpdateResource(@RequestBody(required=true) Resource resource) {
-    return resourceService.addOrUpdateResource(resource);
-  }
-  
-  /**
-   * 后台资源管理
-   * @param platform  待编辑按钮平台
-   * @param current   当前按钮
-   * @return
-   */
-  @RequestMapping(value="/resource/list",method = RequestMethod.POST)
-  @ResponseBody
-  public Result  getResourceList(@RequestBody(required=false) ResourceQueryEntity resQuery) {
-    PageBean<Resource> pageDate = new PageBean<Resource>();
-    try {
-      pageDate = resourceService.getResourceList(resQuery);
-    }catch(Exception e) {
-      return ResultUtil.exception("查询资源列表失败："+e.getMessage());
-    }
-    return ResultUtil.success(pageDate);
-  }
   
   /**
    * 后台资源管理

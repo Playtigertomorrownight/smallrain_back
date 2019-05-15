@@ -338,7 +338,8 @@
             	resourceModalOk: function(){   //修改资源
             		let paramData = this.resourceModal.formData;   //表单数据
             		const that = this;
-                    sendRequest(this,"${domain}/back/resource/addOrupdate","POST",paramData,function (response) {
+            		let type = paramData.id?"PUT":"POST";
+                    sendRequest(this,"${domain}/api/resource",type,paramData,function (response) {
                         var resData = response.data;
                         console.log(resData)
                         if(resData&&resData.status == 0){   //添加成功
@@ -566,7 +567,7 @@
             	   params['pageSize']=pageSize;
             	   
             	   console.log(params);
-            	   sendRequest(this,"${domain}/back/resource/list","POST",params,function (response) {
+            	   sendRequest(this,"${domain}/api/resource/query","POST",params,function (response) {
                        const resData = response.data;
                        if(resData && resData.status == 0){   //查询成功
                            const data = resData.data;

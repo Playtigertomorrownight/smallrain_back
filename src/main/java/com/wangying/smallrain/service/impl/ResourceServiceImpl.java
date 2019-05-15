@@ -11,11 +11,9 @@ import com.wangying.smallrain.configs.BaseConfig;
 import com.wangying.smallrain.dao.extend.ResourceExtendMapper;
 import com.wangying.smallrain.entity.PageBean;
 import com.wangying.smallrain.entity.Resource;
-import com.wangying.smallrain.entity.Result;
 import com.wangying.smallrain.entity.query.ResourceQueryEntity;
 import com.wangying.smallrain.service.ResourceService;
 import com.wangying.smallrain.utils.BaseUtils;
-import com.wangying.smallrain.utils.ResultUtil;
 @Service
 @Transactional
 public class ResourceServiceImpl implements ResourceService {
@@ -25,6 +23,28 @@ public class ResourceServiceImpl implements ResourceService {
   
   @Autowired
   private BaseConfig baseConfig;
+  
+  @Override
+  public boolean add(Resource res) {
+    if(BaseUtils.isEmpty(res.getGroupId())) {   //设置组Id
+      res.setGroupId(baseConfig.getDefaultResourceGroup());
+    }
+    if(BaseUtils.isEmpty(res.getId())) {
+      res.setId(BaseUtils.createUUID());  //设置ID
+      return resourceMapper.insert(res)!=0;
+    }else {
+      return update(res);
+    }
+    
+  }
+
+  @Override
+  public boolean update(Resource res) {
+    Resource targetRes = resourceMapper.selectByPrimaryKey(res.getId());
+    BaseUtils.copyNotNullProperties(res, targetRes,"id");  //将出了ID的非空属性复制到原对象
+    return resourceMapper.updateByPrimaryKey(targetRes)!=0;
+  }
+  
   
   @Override
   public PageBean<Resource> getResourceList(ResourceQueryEntity query) {
@@ -43,35 +63,15 @@ public class ResourceServiceImpl implements ResourceService {
   }
 
   @Override
-  public Result addOrUpdateResource(Resource res) {
-    // TODO Auto-generated method stub
-    if(null==res||BaseUtils.isEmpty(res.getName())) {
-      return ResultUtil.fail("资源名称不能为空！");
-    }
-    if(BaseUtils.isEmpty(res.getGroupId())) {
-      res.setGroupId(baseConfig.getDefaultResourceGroup());
-    }
-    String operate = "新建资源成功！";
-    if(BaseUtils.isEmpty(res.getId())) {   //ID为空，新建资源
-       res.setId(BaseUtils.createUUID());
-       if(resourceMapper.insert(res)<=0) {
-         return ResultUtil.fail("新建资源信息是失败！");
-       }
-    }else {   //更新资源
-      Resource targetRes = resourceMapper.selectByPrimaryKey(res.getId());
-      BaseUtils.copyNotNullProperties(res, targetRes,"id");  //将出了ID的非空属性复制到原对象
-      if(resourceMapper.updateByPrimaryKey(targetRes)<=0) {
-        return ResultUtil.fail("新建资源信息成功！");
-      }
-      operate = "更新资源信息成功";
-    }
-    return ResultUtil.success(operate);
-  }
-
-  @Override
   public Resource getResourceById(String resId) {
     // TODO Auto-generated method stub
     return resourceMapper.selectByPrimaryKey(resId);
+  }
+
+  @Override
+  public boolean delete(String resId) {
+    // TODO Auto-generated method stub
+    return resourceMapper.deleteByPrimaryKey(resId)!=0;
   }
 
 }
