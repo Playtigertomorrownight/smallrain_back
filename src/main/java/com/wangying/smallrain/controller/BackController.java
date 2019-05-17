@@ -7,11 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -20,7 +17,6 @@ import com.wangying.smallrain.entity.Menu;
 import com.wangying.smallrain.entity.PageBean;
 import com.wangying.smallrain.entity.Resource;
 import com.wangying.smallrain.entity.ResourceGroup;
-import com.wangying.smallrain.entity.Result;
 import com.wangying.smallrain.entity.enums.FileDataType;
 import com.wangying.smallrain.entity.enums.MenuPlatform;
 import com.wangying.smallrain.entity.enums.WxMenuType;
@@ -30,7 +26,6 @@ import com.wangying.smallrain.service.MenuService;
 import com.wangying.smallrain.service.ResourceGroupService;
 import com.wangying.smallrain.service.ResourceService;
 import com.wangying.smallrain.utils.BaseUtils;
-import com.wangying.smallrain.utils.ResultUtil;
 
 /**
  * 后台管理控制器
@@ -152,76 +147,13 @@ public class BackController {
       mv.addObject("title","资源管理-资源上传");
     }else if("group".equals(action)){
       mv.addObject("title","资源管理-资源组管理");
-      Result pageDate = getResourceGroupList(new BaseQueryEntity(1,10));
-      mv.addObject("resourceGroupData",JSONObject.toJSONString(pageDate.getData())); //资源组数据
+      PageBean<ResourceGroup> pageDate = resourceGroupService.getResourceGroupList(new BaseQueryEntity(1,10));
+      mv.addObject("resourceGroupData",JSONObject.toJSONString(pageDate)); //资源组数据
     }else {
       
     }
     
     return mv;
   }
-  
-  
-  /**
-   * 后台资源管理
-   * @param platform  待编辑按钮平台
-   * @param current   当前按钮
-   * @return
-   */
-  @RequestMapping(value="/resource-group/list",method = RequestMethod.POST)
-  @ResponseBody
-  public Result  getResourceGroupList(@RequestBody(required=false) BaseQueryEntity resQuery) {
-    PageBean<ResourceGroup> pageDate = new PageBean<ResourceGroup>();
-    try {
-      pageDate = resourceGroupService.getResourceGroupList(resQuery);
-    }catch(Exception e) {
-      return ResultUtil.exception("查询资源列表失败："+e.getMessage());
-    }
-    return ResultUtil.success(pageDate);
-  }
-  
-  /**
-   * 后台资源管理
-   * @param platform  待编辑按钮平台
-   * @param current   当前按钮
-   * @return
-   */
-  @RequestMapping(value="/resource-group/addOrUpdate",method = RequestMethod.POST)
-  @ResponseBody
-  public Result  resourceGroupAdd(@RequestBody(required=true) ResourceGroup  resourceGroup) {
-    try {
-      if(null == resourceGroup) {
-        return ResultUtil.fail("添加资源组失败,接受到的参数为空！");
-      }
-      if(resourceGroupService.addOrupdateResourceGroup(resourceGroup)<=0) {
-        return ResultUtil.fail("添加资源组失败,数据库操作失败！");
-      }
-    }catch(Exception e) {
-      return ResultUtil.exception("添加资源组异常：" +e.getMessage());
-    }
-    return ResultUtil.success("添加资源组成功!");
-  }
-  
-  
-  /**
-   * 后台资源管理
-   * @param platform  待编辑按钮平台
-   * @param current   当前按钮
-   * @return
-   */
-  @RequestMapping(value="/resource-group/delete",method = RequestMethod.DELETE)
-  @ResponseBody
-  public Result  resourceGroupDelete(@RequestParam(value="resGroupId",required=true) String  resGroupId) {
-    try {
-      int count = resourceGroupService.deleteResourceGroup(resGroupId);
-      if(count<=0) {
-        return ResultUtil.fail("删除资源组失败！");
-      }
-    }catch(Exception e) {
-      return ResultUtil.exception("删除资源组异常：" +e.getMessage());
-    }
-    return ResultUtil.success("删除资源组成功!");
-  }
-  
   
 }

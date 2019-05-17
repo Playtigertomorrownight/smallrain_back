@@ -310,7 +310,8 @@
             			return ;
             		}
             		const that = this;
-            		sendRequest(this,"${domain}/back/resource-group/addOrUpdate","POST",paramData,function (response) {
+            		let type = paramData.id?"PUT":"POST";
+            		sendRequest(this,"${domain}/api/resourcegroup",type,paramData,function (response) {
                         var resData = response.data;
                         console.log(resData)
                         let rgModal = that.resourceGroupModal;
@@ -430,7 +431,7 @@
                 	const data = param.row;
                 console.log(data)
                     const that = this;
-                    sendRequest(this,"${domain}/back/resource-group/delete?resGroupId="+data.id,"DELETE",null,function (response) {
+                    sendRequest(this,"${domain}/api/resourcegroup/"+data.id,"DELETE",null,function (response) {
                         var resData = response.data;
                         console.log(resData)
                         if(resData&&resData.status == 0){   //删除成功

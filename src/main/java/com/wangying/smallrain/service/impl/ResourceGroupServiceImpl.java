@@ -37,33 +37,39 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
   }
 
   @Override
-  public int deleteResourceGroup(String resGroupId) {
+  public boolean deleteResourceGroup(String resGroupId) {
     // TODO Auto-generated method stub
-    return resourceGroupMapper.deleteByPrimaryKey(resGroupId);
+    return resourceGroupMapper.deleteByPrimaryKey(resGroupId)>0;
   }
 
   @Override
-  public int addOrupdateResourceGroup(ResourceGroup resourceGroup) {
-    // TODO Auto-generated method stub
-    if(BaseUtils.isEmpty(resourceGroup.getId())) {   //id为空，新建资源组
-      resourceGroup.setId(BaseUtils.createUUID());
-      resourceGroup.setResourceCount(0);
-      return resourceGroupMapper.insert(resourceGroup);
-    }else {    //id不为空，更新资源组
-      return resourceGroupMapper.updateByPrimaryKeySelective(resourceGroup);
-    }
+  public boolean add(ResourceGroup resourceGroup) {
+    resourceGroup.setId(BaseUtils.createUUID());
+    resourceGroup.setResourceCount(0);
+    return resourceGroupMapper.insert(resourceGroup)>0;
   }
 
   @Override
-  public int updateResourceGroupResCount(int addNum,String rgId) {
+  public boolean update(ResourceGroup resourceGroup) {
+    return resourceGroupMapper.updateByPrimaryKeySelective(resourceGroup)>0;
+  }
+  
+  @Override
+  public boolean updateResourceGroupResCount(int addNum,String rgId) {
     // TODO Auto-generated method stub
-    return resourceGroupMapper.addResourceCount(addNum, rgId);
+    return resourceGroupMapper.addResourceCount(addNum, rgId)>0;
   }
 
   @Override
   public List<ResourceGroup> selectResourceGroupWithIds(List<String> ids) {
     // TODO Auto-generated method stub
     return resourceGroupMapper.selectByIds(ids);
+  }
+
+  @Override
+  public ResourceGroup getResourceGroup(String resGroupId) {
+    // TODO Auto-generated method stub
+    return resourceGroupMapper.selectByPrimaryKey(resGroupId);
   }
 
 }

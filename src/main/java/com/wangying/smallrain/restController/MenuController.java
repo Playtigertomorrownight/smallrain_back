@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wangying.smallrain.configs.ConfigHelper;
 import com.wangying.smallrain.entity.Menu;
 import com.wangying.smallrain.entity.Result;
 import com.wangying.smallrain.service.MenuService;
@@ -81,7 +80,6 @@ public class MenuController {
 	      return ResultUtil.fail("删除菜单失败，接受到的 key 值为空！");
 	    }
 	    if(menuService.deleteByMenuiId(key)) {
-	      ConfigHelper.BASE_CONFIG_DB.remove(key);
 	      return ResultUtil.success("删除菜单成功",key);
 	    }
 	    return ResultUtil.fail("删除菜单失败，数据库操作异常");
