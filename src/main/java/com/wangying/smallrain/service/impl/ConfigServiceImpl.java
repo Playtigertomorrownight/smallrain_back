@@ -3,11 +3,13 @@ package com.wangying.smallrain.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.wangying.smallrain.dao.BaseConfigsMapper;
 import com.wangying.smallrain.entity.BaseConfigs;
 import com.wangying.smallrain.service.ConfigService;
 
+@Service
 public class ConfigServiceImpl implements ConfigService {
 
   @Autowired

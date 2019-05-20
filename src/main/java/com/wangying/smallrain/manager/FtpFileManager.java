@@ -8,7 +8,6 @@ import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.wangying.smallrain.entity.Resource;
@@ -18,9 +17,6 @@ import com.wangying.smallrain.utils.BaseUtils;
 
 @Component
 public class FtpFileManager {
-
-	@Value("${ftp.rootPath}")
-	private String ftpRootPath;
 	
 	@Autowired
 	private FTPClientHelper fTPClientHelper;

@@ -3,7 +3,7 @@ spring:
   application:
     name: smallrain-back
   profiles:
-    active: prod
+    active: local
   freemarker:
     # 设置模板后缀名
     suffix: .html

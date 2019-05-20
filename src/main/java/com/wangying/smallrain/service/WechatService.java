@@ -1,7 +1,8 @@
 package com.wangying.smallrain.service;
 
-import java.util.HashMap;
+import static com.wangying.smallrain.configs.ConfigHelper.getValue;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,8 +20,6 @@ import com.wangying.smallrain.entity.enums.ResultCode;
 import com.wangying.smallrain.utils.BaseUtils;
 import com.wangying.smallrain.utils.HttpUtil;
 import com.wangying.smallrain.utils.ResultUtil;
-
-import static com.wangying.smallrain.configs.ConfigHelper.getValue;
 
 @Service
 public class WechatService {

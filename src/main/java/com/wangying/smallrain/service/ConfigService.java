@@ -2,11 +2,8 @@ package com.wangying.smallrain.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.wangying.smallrain.entity.BaseConfigs;
 
-@Service
 public interface ConfigService {
 
    /**

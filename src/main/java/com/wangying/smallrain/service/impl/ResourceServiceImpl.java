@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.wangying.smallrain.configs.BaseConfig;
+import com.wangying.smallrain.dao.ResourceGroupMapper;
 import com.wangying.smallrain.dao.extend.ResourceExtendMapper;
 import com.wangying.smallrain.entity.PageBean;
 import com.wangying.smallrain.entity.Resource;
@@ -20,6 +21,9 @@ public class ResourceServiceImpl implements ResourceService {
 
   @Autowired
   private ResourceExtendMapper resourceMapper;
+
+  @Autowired
+  private ResourceGroupMapper resourceGroupMapper;
   
   @Autowired
   private BaseConfig baseConfig;
@@ -31,7 +35,11 @@ public class ResourceServiceImpl implements ResourceService {
     }
     if(BaseUtils.isEmpty(res.getId())) {
       res.setId(BaseUtils.createUUID());  //设置ID
-      return resourceMapper.insert(res)!=0;
+      if(resourceMapper.insert(res)!=0) {
+        resourceGroupMapper.addResourceCount(1, res.getGroupId());
+        return true;
+      }
+      return false;
     }else {
       return update(res);
     }
@@ -71,7 +79,13 @@ public class ResourceServiceImpl implements ResourceService {
   @Override
   public boolean delete(String resId) {
     // TODO Auto-generated method stub
-    return resourceMapper.deleteByPrimaryKey(resId)!=0;
+    Resource res = resourceMapper.selectByPrimaryKey(resId);
+    if(null == res) return true;
+    if(resourceMapper.deleteByPrimaryKey(res.getGroupId())!=0) {
+      resourceGroupMapper.addResourceCount(-1, res.getGroupId());
+      return true;
+    }
+    return false;
   }
 
 }

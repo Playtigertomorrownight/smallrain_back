@@ -15,7 +15,7 @@ public enum MenuPlatform {
  // fileds:  id,name,text,icon,clazz,url,parent,orderNum,type,media_id,appid,pagepath,platform,topref
   
   WECHAT(0,"wechat-menus","微信公众号","id,text,name,url,parent,orderNum,type,media_id,appid,pagepath,platform"),  //微信公众平台
-  WECHATWEB(1,"wechat-web-menus","微网站","id,name,text,icon,clazz,url,parent,orderNum,platform,topref"),  //微网站
+  WECHATWEB(1,"wechat-web-menus","微网站","id,name,text,icon,clazz,url,parent,orderNum,platform"),  //微网站
   BEFORETOP(2,"web-before-top-menus","网站前台头部","id,name,text,icon,clazz,url,parent,orderNum,platform"),  //网站前台头部分菜单
   BEFORELEFT(3,"web-before-left-menus","网站前台头左部","id,name,text,icon,clazz,url,parent,orderNum,platform,topref"),  //网站前台头左部分菜单
   BACKTOP(4,"web-back-top-menus","后台管理头部","id,name,text,icon,clazz,url,parent,orderNum,platform"),  //网站后台头部菜单

@@ -33,7 +33,6 @@ import com.wangying.smallrain.utils.BaseUtils;
  *
  */
 @Controller
-@RequestMapping("/back/")
 public class BackController {
 
   @Autowired
@@ -152,6 +151,26 @@ public class BackController {
     }else {
       
     }
+    
+    return mv;
+  }
+  
+  /**
+   * 后台资源管理
+   * @param current   当前按钮
+   * @return
+   */
+  @RequestMapping("/config")
+  public ModelAndView  config(@RequestParam(value = "current", required = false)String current) {
+    log.info("配置管理。。。。");
+    ModelAndView  mv = baseConfig.initModwlAndView("back/config_manager");  //指定viewname
+    mv.addObject("title","系统配置管理");
+    mv.addObject("topMenu","config-manager");   //顶部按钮名称
+    mv.addObject("currentMenu","");   //当前左部按钮名称
+    //根据顶部所菜单选取需要返回的菜单项
+    Map<String, Object>  menus = menuService.getMenuListBytop(MenuPlatform.BACKTOP.name(),"config-manager");
+    //加入菜单数据
+    mv.addObject("menus",JSONObject.toJSONString(menus));
     
     return mv;
   }

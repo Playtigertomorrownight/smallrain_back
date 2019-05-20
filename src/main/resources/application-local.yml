@@ -3,7 +3,7 @@ server:
   port: 8090
   address: 0.0.0.0
   servlet:
-    context-path: /sr-back
+    context-path: /back
 #本地环境，数据库配置
 spring:
   datasource:
@@ -18,8 +18,8 @@ logging:
 #自定义配置项
 app:
   smallrain:
-    dommainName: http://localhost:8090/sr-back  #服务域名
-    ftpFileDmain: http://www.smallrain.top/sr/resource/   #文件服务器域名
+    dommainName: http://localhost:8090/back  #服务域名
+    ftpFileDmain: http://www.smallrain.top/resource/   #文件服务器域名
     maxFileSize: 128 #最大文件上传大小
     maxRequestSize: 512 #总上传数据总大小
-    tempFileDir: C:\Users\16524\Desktop\temp-file\smallrain\   #临时文件存放目录
+    tempFileDir: C:\Users\wangying.dz3\Desktop\temp-file\smallrain\   #临时文件存放目录

@@ -1,4 +1,4 @@
-package com.wangying.smallrain.controller;
+package com.wangying.smallrain.restController;
 
 
 import java.util.List;
@@ -26,7 +26,7 @@ import com.wangying.smallrain.utils.ResultUtil;
  *
  */
 @RestController
-@RequestMapping("/file/")
+@RequestMapping("/api/")
 public class FileController {
 
   @Autowired
@@ -37,7 +37,7 @@ public class FileController {
    * @param files
    * @return
    */
-  @RequestMapping(value = "upload", method = RequestMethod.POST)
+  @RequestMapping(value = "file/upload", method = RequestMethod.POST)
   public Result uploadfile(@RequestParam("file") MultipartFile files,
                            @RequestParam(value="name", required=false) String name,
                            @RequestParam(value="description", required=false) String description,
@@ -53,7 +53,7 @@ public class FileController {
    * @param files
    * @return
    */
-  @RequestMapping(value = "upload/multiple", method = RequestMethod.POST)
+  @RequestMapping(value = "file/upload/multiple", method = RequestMethod.POST)
   public Result uploadfile(HttpServletRequest request) {
 
     List<MultipartFile> mfiles =((MultipartHttpServletRequest)request).getFiles("file"); 
@@ -69,7 +69,7 @@ public class FileController {
    * @param files
    * @return
    */
-  @RequestMapping(value = "load/{resId}", method = RequestMethod.GET)
+  @RequestMapping(value = "file/load/{resId}", method = RequestMethod.GET)
   @ResponseBody
   public Result loadFile(@PathVariable("resId") String resId) {
 
@@ -82,7 +82,7 @@ public class FileController {
    * @param files
    * @return
    */
-  @RequestMapping(value = "delete/{resId}", method = RequestMethod.DELETE)
+  @RequestMapping(value = "file/delete/{resId}", method = RequestMethod.DELETE)
   @ResponseBody
   public Result deleteFile(@PathVariable("resId") String resId) {
 
@@ -96,7 +96,7 @@ public class FileController {
    * @param response
    * @return
    */
-  @RequestMapping(value = "/image/{resId}", method = RequestMethod.GET)
+  @RequestMapping(value = "file/image/{resId}", method = RequestMethod.GET)
   public Result getImageData(@PathVariable("resId") String resId,HttpServletResponse response) {
   
     return ResultUtil.success("");

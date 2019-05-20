@@ -2,8 +2,6 @@ package com.wangying.smallrain.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.wangying.smallrain.entity.PageBean;
 import com.wangying.smallrain.entity.ResourceGroup;
 import com.wangying.smallrain.entity.query.BaseQueryEntity;
@@ -13,7 +11,6 @@ import com.wangying.smallrain.entity.query.BaseQueryEntity;
  * @author wangying.dz3
  *
  */
-@Service
 public interface ResourceGroupService {
 
   /**

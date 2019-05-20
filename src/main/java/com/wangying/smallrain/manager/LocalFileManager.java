@@ -6,13 +6,12 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.wangying.smallrain.entity.Resource;
 import com.wangying.smallrain.entity.enums.FileDataType;
 import com.wangying.smallrain.utils.BaseUtils;
-
+import static com.wangying.smallrain.configs.ConfigHelper.getValue;
 /**
  * 本地文件管理
  * 
@@ -21,9 +20,6 @@ import com.wangying.smallrain.utils.BaseUtils;
  */
 @Component
 public class LocalFileManager {
-
-	@Value("${ftp.rootPath}")
-	private String ftpRootPath;
 
 	private Logger log = LoggerFactory.getLogger(LocalFileManager.class);
 
@@ -43,7 +39,7 @@ public class LocalFileManager {
 		try {
 			FileDataType type = res.getType(); // 通过type枚举生成目录和文件名
 			String path = BaseUtils.joinString(type.getFtpDir(), "/", type.ftpfileName(res.getSuffix()));
-			String filePath = BaseUtils.joinString(ftpRootPath, "/", path);
+			String filePath = BaseUtils.joinString(getValue("FTP_ROOT_PATH"), "/", path);
 			FileUtils.copyFile(file, new File(filePath), false); // 复制文件
 			log.info(BaseUtils.joinString("上传文件：", res.getName(), " 到本地成功。"));
 			res.setPath(path);
@@ -61,7 +57,7 @@ public class LocalFileManager {
 	 * @throws IOException
 	 */
 	public String loadLocalFile(String path) throws IOException {
-		String filePath = BaseUtils.joinString(ftpRootPath, "/", path);
+		String filePath = BaseUtils.joinString(getValue("FTP_ROOT_PATH"), "/", path);
 		File file = new File(filePath);
 		if(!file.exists()) {
 			log.error("加载本地文件失败，文件不存在。。");
@@ -74,7 +70,7 @@ public class LocalFileManager {
 	 * @return
 	 */
 	public boolean deleteLocalFile(String path) {
-		String filePath = BaseUtils.joinString(ftpRootPath, "/", path);
+		String filePath = BaseUtils.joinString(getValue("FTP_ROOT_PATH"), "/", path);
 		File file = new File(filePath);
 		if(!file.exists()) {
 			log.error("删除本地文件失败，文件不存在。。");

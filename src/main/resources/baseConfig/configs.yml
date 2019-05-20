@@ -53,7 +53,7 @@ smallrain:
       value: wy16894255
     rootPath: 
       env: FTP_ROOT_PATH
-      value:  /www/wwwroot/smallrain
+      value: /www/wwwroot/smallrain
     connectTimeOut: #ftp 连接超时时间 毫秒
       env: FTP_CONNECT_TIMEOUT
       value:  5000  

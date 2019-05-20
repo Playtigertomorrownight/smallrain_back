@@ -109,7 +109,7 @@
 					    
 				    </div>
 				    <div v-if="action=='add'">
-				        <Upload v-cloak ref="upload" multiple paste  type="drag" max-size="10240" action="${domain}/file/upload" :on-success="uploadSuccess" :on-exceeded-size="handleMaxSize" :before-upload="addParam">
+				        <Upload v-cloak ref="upload" multiple paste  type="drag" max-size="10240" action="${domain}/api/file/upload" :on-success="uploadSuccess" :on-exceeded-size="handleMaxSize" :before-upload="addParam">
 							<div style="padding: 20px 0">
 							<Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
 							     <p v-cloak>Click or drag files here to upload</p>
@@ -318,7 +318,7 @@
                         if(resData&&resData.status == 0){   //添加成功
                             that.$Notice.success({
                                 title: '成功',
-                                desc:  '资源组 '+ paramData.name + rgModal.action=='edit'?'修改':'添加'+'成功'
+                                desc:  '资源组: '+ paramData.name + (rgModal.action=='edit'?'修改':'添加')+'成功'
                             });
                             that.resourceGroupModal.isShow=false;
                             paramData['resource_count'] = 0;
@@ -475,7 +475,7 @@
                 remove: function(param){   //移除列表
                 	const data = param.row;
                 	const that = this;
-                	sendRequest(this,"${domain}/file/delete/"+data.id,"DELETE",null,function (response) {
+                	sendRequest(this,"${domain}/api/file/delete/"+data.id,"DELETE",null,function (response) {
                         var resData = response.data;
                         console.log(resData)
                         if(resData&&resData.status == 0){   //删除成功
@@ -607,7 +607,7 @@
             		   this.resourceModalShow = true;
             	   }else{    //其他文件不能直接展示，只能有后台转换后展示
             		   const that = this;
-            		   sendRequest(this,"${domain}/file/load/"+data.id,"GET",null,function (response) {    //请求服务器加载资源
+            		   sendRequest(this,"${domain}/api/file/load/"+data.id,"GET",null,function (response) {    //请求服务器加载资源
                            var resData = response.data;
                            console.log(resData)
                           let content = {};

@@ -492,7 +492,7 @@
             	setTimeout(function(){
             		that.icons = iview_icons;   //图标下拉列表
             	}, 1000);
-            	this.menuFormData.topref = this.menuPlatform.name== 'WECHAT'?"":this.topref;
+            	this.menuFormData.topref = this.menuPlatform.name== 'BACKLEFT'?this.topref:"";
                 //初始化待编辑菜单
                 this.filterEditMenu(this.menuPlatform.name == 'BACKLEFT'?this.topref:"");
             }

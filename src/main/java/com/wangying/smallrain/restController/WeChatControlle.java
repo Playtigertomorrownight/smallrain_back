@@ -1,4 +1,6 @@
-package com.wangying.smallrain.controller;
+package com.wangying.smallrain.restController;
+
+import static com.wangying.smallrain.configs.ConfigHelper.getValue;
 
 import java.io.IOException;
 
@@ -8,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +20,6 @@ import com.wangying.smallrain.service.MessageService;
 import com.wangying.smallrain.service.WechatService;
 import com.wangying.smallrain.utils.WechatUtil;
 
-
 /**
  * 微信基本控制类
  * 
@@ -27,11 +27,8 @@ import com.wangying.smallrain.utils.WechatUtil;
  *
  */
 @RestController
-@RequestMapping("/v1/wx")
+@RequestMapping("/api/wx")
 public class WeChatControlle {
-
-  @Value("${wechat.token}")
-  private String wx_token;
   
   @Autowired
   private WechatService wechatService;
@@ -61,7 +58,7 @@ public class WeChatControlle {
       String timestamp = req.getParameter("timestamp");
       String signature = req.getParameter("signature");
       log.info("----微信接口验证 ------");
-      String thereString = WechatUtil.sha1(WechatUtil.sort(wx_token, timestamp, nonce));  //参数加密
+      String thereString = WechatUtil.sha1(WechatUtil.sort(getValue("WECHAT_API_TOKEN"), timestamp, nonce));  //参数加密
       log.info("----加密后的参数是 : "+thereString);
       if(!StringUtils.isEmpty(thereString)&&thereString.equals(signature)) {
         log.info("----微信接口验证成功，原样返回 echostr =="+echostr);

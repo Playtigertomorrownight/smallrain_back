@@ -27,7 +27,7 @@ public class MenuServiceImpl implements MenuService {
 	private LocalConfigDataDao localConfigDataDao;
 	@Autowired
 	private MenuExtendMapper menuMapper;
-
+	
 	@Override
 	public Menu getMenuById(String menuId) {
 		List<Menu> localList = localConfigDataDao.getlocalBackMenusList(); // 查看本地是否存在，否则直接查询数据库
@@ -88,6 +88,9 @@ public class MenuServiceImpl implements MenuService {
 	@Override
 	public boolean addMenu(Menu menu) {
 		// TODO Auto-generated method stub
+	  if(BaseUtils.isEmpty(menu.getId())) {
+	    menu.setId(BaseUtils.createUUID());
+	  }
 		return menuMapper.insert(menu) != 0;
 	}
 
