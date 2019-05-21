@@ -1,5 +1,8 @@
 package com.wangying.smallrain.configs;
 
+import static com.wangying.smallrain.configs.ConfigHelper.getValue;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,12 +13,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import com.wangying.smallrain.cache.MenuCache;
+import com.wangying.smallrain.dao.LocalConfigDataDao;
+import com.wangying.smallrain.dao.extend.MenuExtendMapper;
 import com.wangying.smallrain.entity.BaseConfigs;
+import com.wangying.smallrain.entity.Menu;
 import com.wangying.smallrain.ftp.FTPClientPool;
 import com.wangying.smallrain.service.ConfigService;
 import com.wangying.smallrain.service.WechatService;
 import com.wangying.smallrain.utils.BaseUtils;
-import static com.wangying.smallrain.configs.ConfigHelper.getValue;
 
 /**
  * @author wangying.dz3 程序启动初始化操作
@@ -36,6 +42,12 @@ public class SmallRainApplicationRunner implements CommandLineRunner {
   @Autowired
   private ConfigService ConfigService;
   
+  @Autowired
+  private LocalConfigDataDao localConfigDataDao;
+  
+  @Autowired
+  private MenuExtendMapper menuMapper;
+  
   private Logger log = LoggerFactory.getLogger(SmallRainApplicationRunner.class);
 
   @Override
@@ -52,8 +64,10 @@ public class SmallRainApplicationRunner implements CommandLineRunner {
       ftpClientPool.initPool();
       log.info("-- 初始化 ftp 连接池完毕 --");
     }
-    
+    //初始化配置文件缓存
     initDbConfigValues();
+    //初始化菜单数据缓存
+    initMenuCache();
   }
   
   /**
@@ -71,6 +85,22 @@ public class SmallRainApplicationRunner implements CommandLineRunner {
       log.info("初始化数据库中配置项的值完成");
     }else {
       log.info("初始化数据库中配置项的值为空！");
+    }
+  }
+  
+  private void  initMenuCache() {
+    List<Menu> allList = localConfigDataDao.getlocalBackMenusList(); // 加载本地配置的初始化菜单列表
+    if(BaseUtils.isEmpty(allList)) {
+      allList = new ArrayList<Menu>();
+    }
+    log.info("加载本地菜单完成");
+    allList.addAll(menuMapper.selectsAllMenus()); // 查询数据库里的菜单项
+    log.info("加载数据库菜单完成");
+    if(!BaseUtils.isEmpty(allList)) {
+      for(Menu menu: allList) {
+        MenuCache.addOrUpdateMenu(menu);
+      }
+      log.info("缓存菜单数据完成。。");
     }
   }
   

@@ -52,7 +52,15 @@ public class BackController {
    */
   @RequestMapping("/index")
   public ModelAndView  index() {
-    
+    return menu("","");
+  }
+  
+  /**
+   * 后台首页,默认进入菜单管理
+   * @return
+   */
+  @RequestMapping("/")
+  public ModelAndView  indexBlank() {
     return menu("","");
   }
   

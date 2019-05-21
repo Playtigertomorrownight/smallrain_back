@@ -39,4 +39,12 @@ public interface MenuExtendMapper extends MenuMapper {
    */
   List<Menu> selectsMenusByPlatform(@Param("platform") String platform);
   
+  /**
+   * 查询所有菜单
+   * @param topref
+   * @param platform
+   * @return
+   */
+  List<Menu> selectsAllMenus();
+  
 }

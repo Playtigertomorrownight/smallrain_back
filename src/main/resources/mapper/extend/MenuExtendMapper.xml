@@ -53,4 +53,11 @@
     where platform = #{platform,jdbcType=VARCHAR}
   </select>
   
+  <!-- 查询所有按钮列表 -->
+  <select id="selectsAllMenus" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from menu
+  </select>
+  
 </mapper>
