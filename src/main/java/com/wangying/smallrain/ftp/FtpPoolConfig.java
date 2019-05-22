@@ -21,8 +21,14 @@ public class FtpPoolConfig extends GenericObjectPoolConfig {
   private boolean useEPSVwithIPv4;
   private boolean passiveMode;// 是否启用被动模式
   
+  public static FtpPoolConfig getInstance() {
+    FtpPoolConfig result = new FtpPoolConfig();
+    result.init();
+    return result;
+  }
+  
   //初始化属性值
-  {
+  private void init(){
     this.host = getValue("FTP_HOST");
     this.port = Integer.parseInt(getValue("FTP_PORT"));
     this.username = getValue("FTP_USERNAME");

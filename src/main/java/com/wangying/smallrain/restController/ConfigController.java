@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wangying.smallrain.configs.ConfigHelper;
 import com.wangying.smallrain.entity.BaseConfigs;
 import com.wangying.smallrain.entity.Result;
+import com.wangying.smallrain.ftp.FTPClientPool;
 import com.wangying.smallrain.service.ConfigService;
 import com.wangying.smallrain.utils.BaseUtils;
 import com.wangying.smallrain.utils.ResultUtil;
@@ -33,6 +34,9 @@ public class ConfigController {
   @Autowired
   private ConfigService ConfigService;
   
+  @Autowired
+  private FTPClientPool ftpClientPool;
+  
   private Logger log = LoggerFactory.getLogger(ConfigController.class);
   
   /**
@@ -46,8 +50,12 @@ public class ConfigController {
     if(null == config || BaseUtils.isEmpty(config.getKey())) {
       return ResultUtil.fail("添加配置失败，接受到的配置信息为空！");
     }
+    BaseConfigs base = ConfigService.selectOneConfig(config.getKey());
+    if(null != base) {  //数据库已存在记录
+      return update(config);
+    }
     if(ConfigService.addConfig(config)) {
-      ConfigHelper.BASE_CONFIG_DB.put(config.getKey(), config.getValue());
+      ConfigHelper.BASE_CONFIG_DB.put(config.getKey(), config);
       return ResultUtil.success("添加配置成功",config);
     }
     return ResultUtil.fail("添加配置失败，保存到数据库异常");
@@ -65,7 +73,11 @@ public class ConfigController {
       return ResultUtil.fail("更新配置失败，接受到的配置信息为空！");
     }
     if(ConfigService.updateConfig(config)) {
-      ConfigHelper.BASE_CONFIG_DB.put(config.getKey(), config.getValue());
+      ConfigHelper.BASE_CONFIG_DB.put(config.getKey(), config);
+      String label = config.getLabel();
+      if(!BaseUtils.isEmpty(label)||label.toLowerCase().contains("ftp")) {
+        ftpClientPool.initPool();
+      }
       return ResultUtil.success("更新配置成功",config);
     }
     return ResultUtil.fail("更新配置失败，保存到数据库异常");

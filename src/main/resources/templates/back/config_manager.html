@@ -2,40 +2,84 @@
 <html>
 <head>
 <#include "/common/head.html"/>
-<link rel="stylesheet" type="text/css" href="${domain}/static/css/index.css">
+<link rel="stylesheet" type="text/css"
+	href="${domain}/static/css/index.css">
 <title>${title}</title>
 <style>
-  p.notice-menu-name{
-    width: 100%;
-    text-align: center;
-    font-size: 1.2em;
-    letter-spacing: 2px;
-    font-weight: 600;
-    padding: 11px;
-    background-color: #FFFFFF;
-    color: #000000;
-  }
+p.notice-menu-name {
+	width: 100%;
+	text-align: center;
+	font-size: 1.2em;
+	letter-spacing: 2px;
+	font-weight: 600;
+	padding: 11px;
+	background-color: #FFFFFF;
+	color: #000000;
+}
 </style>
 </head>
 <body>
-    <#include "/common/top-sider-header.html"/>
-    <div id="app"> 
-        <top-sider-bottom>
-            <Layout :style="{padding: 0}"> 
-                <Content :style="{padding: '24px', minHeight: '780px', background: '#fff'}">
-                    
-                 </Content>
-              </Layout>
-          </top-sider-bottom>
-    </div>
-    <script type="text/javascript"> 
+	<#include "/common/top-sider-header.html"/>
+	<div id="app">
+		<top-sider-bottom> <Layout :style="{padding: 0}">
+		<Content
+			:style="{padding: '24px', minHeight: '780px', background: '#fff'}">
+		<Card class="label-config" v-for="label in currentConfigs">
+		<p slot="title">
+			<Icon type="ios-settings-outline" /></Icon>
+			<strong style="">{{label.label}}相关配置</strong>
+		</p>
+		<div v-for="config in label.configs" class="config-list">
+			<div class="config-list-item">
+				<label>描述：</label><span>{{config.description}}</span>
+			</div>
+			<div class="config-list-item">
+				<label>键：</label><span>{{config.key}}</span>
+			</div>
+			<div class="config-list-item">
+				<label>值：</label><span><i-input search enter-button="Update" :placeholder="config.value" @on-search="updateConfig($event,config)" /></span>
+			</div>
+
+		</div>
+		</Card> </Content> </Layout> </top-sider-bottom>
+	</div>
+	<script type="text/javascript"> 
      new Vue({
             el: '#app',
             data: function(){
                 return {
+                	currentConfigs: ${currentConfigs}
                 }
             },
             methods: {
+            	updateConfig: function(event,config){
+            		if(config.value == event){
+            			that.$Notice.info({
+                            title: "tip",
+                            desc:  '配置值未发生改动'
+                        });
+            			return ;
+            		}
+            		//值发生变更
+            		config.value = event;
+            		console.log(config);
+            		let that = this;
+                    sendRequest(this,"${domain}/api/config","POST",config,function(response){
+                        var data = response.data;
+                        if(data.status == 0){  //提交数据成功
+                            that.$Notice.success({
+                                title: "success",
+                                desc:  '更新配置: '+config.key+' 的值成功！'
+                            });
+                            window.location.reload();
+                        }else{
+                            that.$Notice.error({
+                                title: "fail",
+                                desc:  '更新配置: '+config.key+' 的值失败！'
+                            });
+                        }
+                   });
+            	}
             },
             mounted : function() { //创建时
             	

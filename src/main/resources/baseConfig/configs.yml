@@ -5,73 +5,119 @@ smallrain:
     token: 
       env: WECHAT_API_TOKEN
       value: SMALL_RAIN_BACK_APPLICATION
+      description: 微信接口TOKEN，微信公众平台设置，用于验证服务
+      label: 微信
     appId: 
       env: WECHAT_API_APPID
       value: wxb126148c95009448
+      description: 微信接口 APPID,微信公众平台查询得到
+      label: 微信
     appsecret: 
       env:  WECHAT_API_APPSECRET
       value: 749abe2fc4af0c5f3f70d95d92c2fcc6
+      description: 微信接口 秘钥,微信公众平台查询得到
+      label: 微信
     accessTokenUrl: 
       env: WECHAT_API_ACCESSTOKENURL
       value: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
+      description: 微信接口accessToken 获取地址,微信公众平台查询得到
+      label: 微信
     menusCreateUrl: 
       env: WECHAT_API_MENUSCREATEURL
       value: https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN
+      description: 微信接口菜单创建地址,微信公众平台查询得到
+      label: 微信
     menusGetUrl: 
        env: WECHAT_API_MENUSGETURL
        value: https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN
+       description: 微信接口菜单查询地址,微信公众平台查询得到
+       label: 微信
     menusDeleteUrl: 
       env: WECHAT_API_MENUSDELETEURL
       value: https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN
+      description: 微信接口菜单删除地址,微信公众平台查询得到
+      label: 微信
  
   tuling:   #图灵机器人接口介入
     apiUrl: 
       env: TULING_API_URL
       value: http://openapi.tuling123.com/openapi/api/v2
+      description: 图灵机器人接口地址，用于调图灵机器人的接口
+      label: 图灵机器人
     apiKey: 
       env: TULING_API_KEY
       value: 6bb2f01f653e441887170ecdee3df869
+      description: 图灵机器人接口秘钥，从图灵官网获取
+      label: 图灵机器人
     userId: 
       env: TULING_API_USER
       value: 347456
+      description: 图灵机器人接口用户Id，从图灵官网获取
+      label: 图灵机器人
   #ftp 服务器配置
   ftp:
     localFtp: 
       env: FTP_ISLOCAL
       value: false
+      description: ftp 服务器是否部署在本地
+      label: FTP
     host: 
       env: FTP_HOST
       value: 106.12.204.7
+      description: ftp 服务器 IP地址
+      label: FTP
     port: 
       env: FTP_PORT
       value: 21
+      description: ftp 服务器 端口
+      label: FTP
     username: 
       env: FTP_USERNAME
       value: smallrain
+      description: ftp 服务器 用户名
+      label: FTP
     password: 
       env: FTP_PASSWORD
       value: wy16894255
+      description: ftp 服务器 密码
+      label: FTP
     rootPath: 
       env: FTP_ROOT_PATH
       value: /www/wwwroot/smallrain
+      description: ftp 服务器 文件根路径
+      label: FTP
     connectTimeOut: #ftp 连接超时时间 毫秒
       env: FTP_CONNECT_TIMEOUT
       value:  5000  
+      description: ftp 服务器 连接超时时间/毫秒
+      label: FTP
     bufferSize:  #缓冲区大小
       env: FTP_BUFFER_SIZE
       value:  1024  
+      description: ftp 服务器 缓冲区大小/k
+      label: FTP
     fileType:   #传输数据格式 2 --  binary 二进制数据
       env: FTP_FILE_TYPE
       value:  2 
+      description: ftp 服务器 传输数据格式 2 --  binary 二进制数据
+      label: FTP
     dateTimeOut: 
       env: FTP_DATA_TIMEOUT
       value: 5000
+      description: ftp 服务器 数据传输超时时间
+      label: FTP
     controlEncoding:
       env: FTP_ENCODING
       value:  utf-8
+      description: ftp 服务器 数据传输编码
+      label: FTP
     useEPSVwithIPv4: 
       env: FTP_ USE_EPSV_WITH_IPV4
       value:  false
+      description: ftp 服务器 是否IPV4
+      label: FTP
     passiveMode: 
       env: FTP_PASSIVE_MODE
       value:  true
+      description: ftp 服务器 是否启用被动模式
+      label: FTP

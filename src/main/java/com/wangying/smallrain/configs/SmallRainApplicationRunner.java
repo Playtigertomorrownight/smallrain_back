@@ -80,7 +80,7 @@ public class SmallRainApplicationRunner implements CommandLineRunner {
       for(BaseConfigs config: result) {
         if(BaseUtils.isEmpty(config)||BaseUtils.isEmpty(config.getKey()))  continue;  //无效的配置项
         log.info(BaseUtils.joinString("加载数据库配置项：",config.getKey(), "  --  ", config.getValue()));
-        ConfigHelper.BASE_CONFIG_DB.put(config.getKey(), config.getValue());
+        ConfigHelper.BASE_CONFIG_DB.put(config.getKey(), config);
       }
       log.info("初始化数据库中配置项的值完成");
     }else {

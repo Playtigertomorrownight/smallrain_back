@@ -10,14 +10,11 @@ import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FTPClientFactory extends BasePooledObjectFactory<FTPClient> {
 
-  @Autowired
-  private FtpPoolConfig ftpPoolConfig;
 
   private Logger logger = LoggerFactory.getLogger(FTPClientFactory.class);
   
@@ -26,6 +23,7 @@ public class FTPClientFactory extends BasePooledObjectFactory<FTPClient> {
    */
   @Override
   public FTPClient create() throws Exception {
+    FtpPoolConfig ftpPoolConfig = FtpPoolConfig.getInstance();
     FTPClient ftpClient = new FTPClient();
     ftpClient.setConnectTimeout(ftpPoolConfig.getConnectTimeOut());
     try {

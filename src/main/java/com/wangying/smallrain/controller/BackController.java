@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wangying.smallrain.configs.BaseConfig;
+import com.wangying.smallrain.configs.ConfigHelper;
 import com.wangying.smallrain.entity.Menu;
 import com.wangying.smallrain.entity.PageBean;
 import com.wangying.smallrain.entity.Resource;
@@ -179,7 +180,7 @@ public class BackController {
     Map<String, Object>  menus = menuService.getMenuListBytop(MenuPlatform.BACKTOP.name(),"config-manager");
     //加入菜单数据
     mv.addObject("menus",JSONObject.toJSONString(menus));
-    
+    mv.addObject("currentConfigs",JSONObject.toJSONString(ConfigHelper.getAllCurrentConfig()));
     return mv;
   }
   

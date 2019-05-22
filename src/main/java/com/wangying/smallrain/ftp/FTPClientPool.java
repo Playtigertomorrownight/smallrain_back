@@ -17,13 +17,9 @@ public class FTPClientPool {
    */
   @Autowired
   private FTPClientFactory clientFactory;
-
-  @Autowired
-  private FtpPoolConfig ftpPoolConfig;
-  
   
   public void initPool() {
-    pool = new GenericObjectPool<FTPClient>(clientFactory, ftpPoolConfig);
+    pool = new GenericObjectPool<FTPClient>(clientFactory, FtpPoolConfig.getInstance());
   }
 
   /**

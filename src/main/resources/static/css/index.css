@@ -74,6 +74,36 @@
 	font-size: 16px !important;
 }
 
+
+.label-config{
+    float: left;
+    width: 30%;
+    margin-left: 2.5%;
+}
+
+.config-list{
+    padding: 10px;
+    margin-bottom: 1em;
+    border: 1px solid aquamarine;
+    border-radius: 9px;
+}
+
+.config-list-item{
+    padding:1px;
+    margin-bottom: 5px;
+}
+
+.config-list-item label{
+    padding: 1px;
+    margin-right: 1rem;
+    font-weight: 600;
+}
+
+.config-list-item span{
+    padding: 1px;
+    color: #808080d9;
+}
+
 [v-cloak] {
 	display: none;
 }
