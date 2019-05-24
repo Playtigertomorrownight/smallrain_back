@@ -170,7 +170,7 @@ public class BackController {
    * @return
    */
   @RequestMapping("/config")
-  public ModelAndView  config(@RequestParam(value = "current", required = false)String current) {
+  public ModelAndView  config() {
     log.info("配置管理。。。。");
     ModelAndView  mv = baseConfig.initModwlAndView("back/config_manager");  //指定viewname
     mv.addObject("title","系统配置管理");
@@ -178,6 +178,26 @@ public class BackController {
     mv.addObject("currentMenu","");   //当前左部按钮名称
     //根据顶部所菜单选取需要返回的菜单项
     Map<String, Object>  menus = menuService.getMenuListBytop(MenuPlatform.BACKTOP.name(),"config-manager");
+    //加入菜单数据
+    mv.addObject("menus",JSONObject.toJSONString(menus));
+    mv.addObject("currentConfigs",JSONObject.toJSONString(ConfigHelper.getAllCurrentConfig()));
+    return mv;
+  }
+  
+  /**
+   * 写文章
+   * @param current   当前按钮
+   * @return
+   */
+  @RequestMapping("/write")
+  public ModelAndView  write() {
+    log.info("配置管理。。。。");
+    ModelAndView  mv = baseConfig.initModwlAndView("back/markdown_edit");  //指定viewname
+    mv.addObject("title","写文章");
+    mv.addObject("topMenu","markdown-edit");   //顶部按钮名称
+    mv.addObject("currentMenu","");   //当前左部按钮名称
+    //根据顶部所菜单选取需要返回的菜单项
+    Map<String, Object>  menus = menuService.getMenuListBytop(MenuPlatform.BACKTOP.name(),"markdown-edit");
     //加入菜单数据
     mv.addObject("menus",JSONObject.toJSONString(menus));
     mv.addObject("currentConfigs",JSONObject.toJSONString(ConfigHelper.getAllCurrentConfig()));

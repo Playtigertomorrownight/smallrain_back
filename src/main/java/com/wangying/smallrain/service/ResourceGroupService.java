@@ -35,6 +35,13 @@ public interface ResourceGroupService {
   ResourceGroup getResourceGroup(String resGroupId);
   
   /**
+   * 获取所有资源组
+   * @param resGroupId
+   * @return
+   */
+  List<ResourceGroup> getAllResourceGroup();
+  
+  /**
    * 添加一个资源组
    * @param resourceGroup
    * @return

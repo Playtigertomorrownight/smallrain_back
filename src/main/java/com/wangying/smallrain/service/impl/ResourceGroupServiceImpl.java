@@ -72,4 +72,10 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
     return resourceGroupMapper.selectByPrimaryKey(resGroupId);
   }
 
+  @Override
+  public  List<ResourceGroup> getAllResourceGroup() {
+    // TODO Auto-generated method stub
+    return resourceGroupMapper.selectAllRecords();
+  }
+
 }

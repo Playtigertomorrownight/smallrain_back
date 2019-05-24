@@ -12,10 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wangying.smallrain.entity.PageBean;
 import com.wangying.smallrain.entity.ResourceGroup;
 import com.wangying.smallrain.entity.Result;
-import com.wangying.smallrain.entity.query.ResourceQueryEntity;
 import com.wangying.smallrain.service.ResourceGroupService;
 import com.wangying.smallrain.utils.BaseUtils;
 import com.wangying.smallrain.utils.ResultUtil;
@@ -104,19 +102,14 @@ public class ResourceGroupController {
   }
   
   /**
-   * 获取查询资源组信息
+   * 获取所有资源组信息
    * @param config
    * @return
    */
-  @PostMapping("resourcegroup/query")
-  public Result get(@RequestBody(required=false) ResourceQueryEntity resQuery) {
-    PageBean<ResourceGroup> pageDate = new PageBean<ResourceGroup>();
-    try {
-      pageDate = resourceGroupService.getResourceGroupList(resQuery);
-    }catch(Exception e) {
-      return ResultUtil.exception("查询资源列表失败："+e.getMessage());
-    }
-    return ResultUtil.success("查询资源列表成功",pageDate);
+  @GetMapping("resourcegroups")
+  public Result getAll() {
+    log.info("获取所有资源组信息。。");
+    return ResultUtil.success("获取资源组成功",resourceGroupService.getAllResourceGroup());
   }
   
 }
