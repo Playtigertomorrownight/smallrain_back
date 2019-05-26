@@ -18,7 +18,7 @@ public enum FileDataType {
   TXT(0,"text","txt-","文本文件",".txt",".js",".css",".htm",".html",".java",".cpp",".xml",".yaml",".json",".conf"),//文本文件
   OFFICE(1,"office","ofe-","OFFICE 文件",".doc",".docx",".ppt",".pptx",".wps",".pdf"),//文件
   COMPRESS(2,"compress","cps-","压缩文件",".zip",".rar",".arj",".gz",".z"),//压缩文件
-  IMAGE(3,"image","img-","图片文件",".bmp",".gif",".jpg",".jpeg",".pic",".png",".tif"), //图片文件
+  IMAGE(3,"image","img-","图片文件",".bmp",".gif",".jpg",".jpeg",".pic",".png",".tif",".BMP",".GIF",".JPG",".JPEG",".PIC",".PNG",".TIF"), //图片文件
   VOICE(4,"voice","vic-","图片文件",".wav",".au",".aif",".mp3",".ram"),  //图片文件
   VIDEO(5,"video","vid-","视频文件",".mp4",".avi",".mpg",".nov",".swf"),
   MARKDOWN(6,"markdown","md-","MarkDown 文件",".md"),

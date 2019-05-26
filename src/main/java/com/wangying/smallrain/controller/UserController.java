@@ -54,8 +54,8 @@ public class UserController {
       // 获取返回的结果
       // User user = (User) subject.getPrincipal();
       SavedRequest savedRequest = WebUtils.getSavedRequest(request);
-      String savedRequestUrl = null==savedRequest?"/back/index":savedRequest.getRequestUrl();
-      savedRequestUrl = savedRequestUrl.length()<3?"/back/index":savedRequestUrl;
+      String savedRequestUrl = null==savedRequest?"/sr/back":savedRequest.getRequestUrl();
+      savedRequestUrl = savedRequestUrl.length()<3?"/sr/back":savedRequestUrl;
       // 返回原始页
       String domain = baseConfig.getDommainName();
       String latUrl = BaseUtils.joinString(domain.substring(0, domain.indexOf("/")), savedRequestUrl);

@@ -15,7 +15,7 @@ buttons:
       clazz: menu-manager
       icon: md-menu
       text: 菜单管理
-      url: /index
+      url: /back
       parent: -1
       platform: BACKTOP
       orderNum: 1

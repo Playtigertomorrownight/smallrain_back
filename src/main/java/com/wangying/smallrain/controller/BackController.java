@@ -34,6 +34,7 @@ import com.wangying.smallrain.utils.BaseUtils;
  *
  */
 @Controller
+@RequestMapping("/back")
 public class BackController {
 
   @Autowired
@@ -51,7 +52,7 @@ public class BackController {
    * 后台首页,默认进入菜单管理
    * @return
    */
-  @RequestMapping("/index")
+  @RequestMapping("/")
   public ModelAndView  index() {
     return menu("","");
   }
@@ -60,7 +61,7 @@ public class BackController {
    * 后台首页,默认进入菜单管理
    * @return
    */
-  @RequestMapping("/")
+  @RequestMapping("")
   public ModelAndView  indexBlank() {
     return menu("","");
   }
@@ -164,7 +165,8 @@ public class BackController {
     return mv;
   }
   
-  /**
+  
+	/**
    * 后台资源管理
    * @param current   当前按钮
    * @return
@@ -184,24 +186,6 @@ public class BackController {
     return mv;
   }
   
-  /**
-   * 写文章
-   * @param current   当前按钮
-   * @return
-   */
-  @RequestMapping("/write")
-  public ModelAndView  write() {
-    log.info("配置管理。。。。");
-    ModelAndView  mv = baseConfig.initModwlAndView("back/markdown_edit");  //指定viewname
-    mv.addObject("title","写文章");
-    mv.addObject("topMenu","markdown-edit");   //顶部按钮名称
-    mv.addObject("currentMenu","");   //当前左部按钮名称
-    //根据顶部所菜单选取需要返回的菜单项
-    Map<String, Object>  menus = menuService.getMenuListBytop(MenuPlatform.BACKTOP.name(),"markdown-edit");
-    //加入菜单数据
-    mv.addObject("menus",JSONObject.toJSONString(menus));
-    mv.addObject("currentConfigs",JSONObject.toJSONString(ConfigHelper.getAllCurrentConfig()));
-    return mv;
-  }
+
   
 }

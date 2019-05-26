@@ -1,0 +1,24 @@
+*{
+    margin: 0;
+	padding: 0;
+}
+
+.header {
+	display: block;
+    background-color: #515a6e;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 1.8em;
+    letter-spacing: 4px;
+}
+
+
+.split {
+	height: 200px;
+	border: 1px solid #dcdee2;
+}
+
+split-pane {
+	padding: 10px;
+}
