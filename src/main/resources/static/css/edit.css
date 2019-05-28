@@ -10,7 +10,6 @@ nav{
     padding: 8px;
     font-size: 1.4em;
     letter-spacing: 2px;
-    margin-bottom: 2px;
 }
 
 nav ul{
@@ -49,13 +48,22 @@ nav ul li{
 
 div.split {
     height: 700px;
-	border: 1px solid #dcdee2;
 }
 
 div.split-pane {
-	padding: 5px;
 }
 
 .right-pane .split-pane {
     padding-left: 11px;
+}
+
+textarea.text-editor{
+
+}
+
+.CodeMirror{
+  border:1px solid black;
+  font-size: 1.4em !important;
+  width: 100%;
+  height: 100% !important;
 }

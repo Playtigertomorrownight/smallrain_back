@@ -37,8 +37,36 @@ public class ConfigHelper {
    */
   public static Map<String, BaseConfigs> BASE_CONFIG_DB = new HashMap<>();
   
+  private static String [] EDITOR_THEMES = new String [] {"3024-day","3024-night","abcdef","ambiance-mobile","ambiance","base16-dark","base16-light","bespin","blackboard","cobalt","colorforth","darcula","dracula","duotone-dark","duotone-light","eclipse","elegant","erlang-dark","gruvbox-dark","hopscotch","icecoder","idea","isotope","lesser-dark","liquibyte","lucario","material","mbo","mdn-like","midnight","monokai","neat","neo","night","nord","oceanic-next","panda-syntax","paraiso-dark","paraiso-light","pastel-on-dark","railscasts","rubyblue","seti","shadowfox","solarized","ssms","the-matrix","tomorrow-night-bright","tomorrow-night-eighties","ttcn","twilight","vibrant-ink","xq-dark","xq-light","yeti","yonce","zenburn"};
+  private static String [] EDITOR_MODES = new String [] {"css","dart","dockerfile","go","htmlmixed","javascript","markdown","nginx","powershell","python","ruby","sass","shell","sql","vue","xml","yaml-frontmatter","yaml"};
+  private static String [] EDITOR_HINT = new String [] {"css","html","javascript","sql","xml"};
+  
+  
   static {
     initBaseConfig();
+  }
+  
+  public static String  checkEditorTheme(String theme) {
+	  for(String t:EDITOR_THEMES) {
+		  if(t.equals(theme)) return t;
+	  }
+	  return "idea";
+  }
+  
+  public static String  checkEditorMode(String mode) {
+	  for(String m:EDITOR_MODES) {
+		  if(m.equals(mode)) return m;
+	  }
+	  return "markdown";
+  }
+  
+  public static String  checkEditorHint(String mode) {
+	  if(!BaseUtils.isEmpty(mode)) {
+		  for(String h:EDITOR_HINT) {
+			  if(mode.contains(h)) return h;
+		  }
+	  }
+	  return "anyword";
   }
   
   /**

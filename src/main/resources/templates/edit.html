@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<#include "/common/head.html"/>
+<link rel="stylesheet" type="text/css" href="${domain}/static/css/edit.css">
+<!-- 代码编辑器相关的库 -->
+<link rel="stylesheet"  type="text/css" href="${domain}/static/codemirror/codemirror.css">
+<script type="text/javascript" src="${domain}/static/codemirror/codemirror.js"></script>
+
+<!-- 支持的语言库 -->
+<script type="text/javascript" src="${domain}/static/codemirror/mode/${mode}.js"></script>
+
+<!-- 主题 -->
+<link rel="stylesheet"  type="text/css" href="${domain}/static/codemirror/theme/${theme}.css">
+
+<!-- 代码自动补全 -->
+<link rel="stylesheet"  type="text/css" href="${domain}/static/codemirror/hint/show-hint.css">
+<script type="text/javascript" src="${domain}/static/codemirror/hint/show-hint.js"></script>
+<script type="text/javascript" src="${domain}/static/codemirror/hint/${hint}-hint.js"></script>
+
+<!-- markdown 解析相关库 -->
+<script type="text/javascript" src="${domain}/static/markdown/js/marked.js"></script>
+<script type="text/javascript" src="${domain}/static/markdown/js/mermaid.js"></script>
+
+
+
+<title>${title}</title>
+<style>
+p.notice-menu-name {
+	width: 100%;
+	text-align: center;
+	font-size: 1.2em;
+	letter-spacing: 2px;
+	font-weight: 600;
+	padding: 11px;
+	background-color: #FFFFFF;
+	color: #000000; . demo-split { height : 200px;
+	border: 1px solid #dcdee2;
+}
+</style>
+</head>
+<body>
+	<div id="app">
+		<!-- <header class="header">
+			Editor
+		</header> -->
+		<div class="editor">
+			<nav>
+			  <ul class="menu-left">
+			    <li>menu1</li>
+			   
+			  </ul>
+			  <ul class="menu-right">
+                <li>menu2</li>
+               
+              </ul>
+			</nav>
+			<div class="split" :style="{height: splitHeigh + 'px' }">
+				<Split v-model=split>
+				<div slot="left" class="split-pane" :style="{height: splitHeigh + 'px' }">
+                    <textarea class="test-editor" ref='textarea'></textarea>
+                </div>
+				<div slot="right" class="split-pane" :style="{height: splitHeigh + 'px' }"> 
+				    <div class="result">
+				      result 
+				    </div>
+				</div>
+				</Split>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	    new Vue({
+			el : '#app',
+			data : function() {
+				return {
+				    split: 0.6,
+					splitHeigh: 500,
+					CodeMirrorEdito: null
+				}
+			},
+			methods : {
+
+			},
+			mounted : function() { //创建时
+			    //计算面板高度
+				let height = window.screen.height;
+	            if (window.innerHeight) {  
+	            	height = window.innerHeight;
+	            } else if ((document.body)&& (document.body.clientHeight)) {
+	            	height = document.body.clientHeight;
+	            }
+	            this.splitHeigh = height*0.95;
+	            //初始化编辑区域
+	            let myTextarea = this.$refs['textarea'];
+	            console.log(myTextarea)
+	            this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
+	                mode : "${mode}",  // 模式
+	                theme: "${theme}", //编辑器主题
+	                indentUnit : 2,  // 缩进单位，默认2
+	                smartIndent : true,  // 是否智能缩进
+	                tabSize : 4,  // Tab缩进，默认4
+	                matchBrackets : true, //匹配括号
+	                readOnly : false,  // 是否只读，默认false
+	                showCursorWhenSelecting : true,
+	                lineNumbers : true , // 是否显示行号
+		            extraKeys: {
+		            	"Ctrl": "autocomplete",  //ctrl可以弹出选择项 
+		            	"Ctrl-Alt": function () {console.log("自定义事件");},	
+		            } 
+	            });
+	            console.log(this.CodeMirrorEditor);
+	            this.CodeMirrorEditor.focus();
+			}
+		});
+	</script>
+	
+</body>
+</html>
