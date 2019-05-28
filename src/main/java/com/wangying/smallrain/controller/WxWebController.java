@@ -95,7 +95,7 @@ public class WxWebController {
       mv.addObject("datas",result);
       return mv;
     }
-    mv.addObject("title", BaseUtils.joinString(resource.getName()," -- 预览"));
+    mv.addObject("title", BaseUtils.joinString(resource.getName()));
     Result resContent =  fileService.loadFile(resourceId,false);
     mv.addObject("datas",resContent);
     return mv;
