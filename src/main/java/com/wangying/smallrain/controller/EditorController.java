@@ -32,8 +32,8 @@ public class EditorController {
 	   */
 	  @RequestMapping("")
 	  public ModelAndView  write() {
-	    log.info("配置管理。。。。");
-	    ModelAndView  mv = baseConfig.initModwlAndView("back/markdown_edit");  //指定viewname
+	    log.info("文本编辑。。。。");
+	    ModelAndView  mv = baseConfig.initModwlAndView("markdown_edit");  //指定viewname
 	    mv.addObject("title","文本编辑");
 	    mv.addObject("currentConfigs",JSONObject.toJSONString(ConfigHelper.getAllCurrentConfig()));
 	    return mv;
