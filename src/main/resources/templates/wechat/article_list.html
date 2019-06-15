@@ -82,6 +82,7 @@
 		    			for(let i=0,len=this.resourceList.length;i<len;i++){
 			    			let res = this.resourceList[i];
 			    			if(!res) continue;
+			    			if(!this.showListData[res.groupId]) this.showListData[res.groupId] = [];
 			    			this.showListData[res.groupId].push(res);
 			    		}
 		    		}
